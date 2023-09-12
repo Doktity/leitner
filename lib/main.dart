@@ -29,13 +29,13 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-            title: [
+            title: const [
               Text("Leitner"),
               Text("Ajout"),
               Text("List")
             ][_index]
         ),
-        body: [
+        body: const [
           HomePage(),
           AddPage(),
           ListPage()
@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
           onTap: (index) => setCurrentIndex(index),
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.blue,
-          items: [
+          items: const [
             BottomNavigationBarItem(
                 icon: Icon(Icons.backspace),
                 label: "Retour"
