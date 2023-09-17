@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "569120086582",
+    "project_id": "leitner-71bd9",
+    "storage_bucket": "leitner-71bd9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569120086582:android:a9a110be4e2708204f1697",
+        "android_client_info": {
+          "package_name": "com.doktity.leitner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQAAaE1vm7cGXUOIBYayLxoBv-Q6J8Vsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

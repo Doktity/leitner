@@ -2,8 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:leitner/pages/AddPage.dart';
 import 'package:leitner/pages/HomePage.dart';
 import 'package:leitner/pages/ListPage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 

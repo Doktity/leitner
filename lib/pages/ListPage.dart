@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ListPage extends StatefulWidget {
@@ -9,44 +10,44 @@ class ListPage extends StatefulWidget {
 
 class _ListPageState extends State<ListPage> {
 
-  final list = [
-    {
-      "titre": "Titre 1",
-      "question": "q1",
-      "reponse": "r1",
-    },
-    {
-      "titre": "Titre 2",
-      "question": "q2",
-      "reponse": "r2",
-    },
-    {
-      "titre": "Titre 3",
-      "question": "q3",
-      "reponse": "r3",
-    }
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: ListView.builder(
-            itemCount: list.length,
-            itemBuilder: (context, index) {
-              final item = list[index];
-              final titre = item['titre'];
-              final question = item['question'];
-              final reponse = item['reponse'];
-
-              return Card(
-                child: ListTile(
-                  leading: FlutterLogo(size: 56.0),
-                  title: Text('$titre'),
-                  subtitle: Text('$question'),
-                  trailing: Icon(Icons.more_vert),
-                ),
-              );
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection("Cards").snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+            if (snapshot.connectionState == ConnectionState.waiting){
+              return CircularProgressIndicator();
             }
+
+            if (!snapshot.hasData){
+              return Text("Pas de données");
+            }
+
+            List<dynamic> cards = [];
+            snapshot.data!.docs.forEach((element) {
+              cards.add(element);
+            });
+
+            return ListView.builder(
+                itemCount: cards.length,
+                itemBuilder: (context, index) {
+                  final item = cards[index];
+                  final titre = item['questionImgPath'] ?? '';
+                  final question = item['question'] ?? '';
+                  final reponse = item['reponse'] ?? '';
+
+                  return Card(
+                    child: ListTile(
+                      leading: FlutterLogo(size: 56.0),
+                      title: Text('$titre'),
+                      subtitle: Text('$question'),
+                      trailing: Icon(Icons.more_vert),
+                    ),
+                  );
+                }
+            );
+          },
         )
     );
   }

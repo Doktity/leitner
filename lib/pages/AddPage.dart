@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 
@@ -122,7 +123,15 @@ class _AddPageState extends State<AddPage> {
                     );
                     FocusScope.of(context).requestFocus(FocusNode());
 
-                    print("Ajout de $question avec $reponse");
+                    // ajout dans la base de données
+                    CollectionReference cards = FirebaseFirestore.instance.collection("Cards");
+                    cards.add({
+                      "question" : question,
+                      "reponse" : reponse,
+                      "questionImgPath" : question,
+                      "reponseImgPath" : reponse,
+                      "date" : selectedDateTime
+                    });
                   }
                 },
                 child: Text("Envoyer")
