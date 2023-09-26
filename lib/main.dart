@@ -37,40 +37,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-            title: const [
-              Text("Leitner"),
-              Text("Ajout"),
-              Text("List")
-            ][_index]
-        ),
-        body: const [
-          HomePage(),
-          AddPage(),
-          ListPage()
-        ][_index],
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _index,
-          onTap: (index) => setCurrentIndex(index),
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.blue,
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.backspace),
-                label: "Retour"
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.add),
-                label: "Ajout"
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: "Maison"
-            ),
-          ],
-        ),
-      ),
+      home: HomePage(),
     );
   }
 }
