@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'AnswerPage.dart';
+import 'HomePage.dart';
 
 class DailyPage extends StatefulWidget {
   const DailyPage({super.key});
@@ -30,6 +31,16 @@ class _DailyPageState extends State<DailyPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Daily'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            // Navigate to HomePage
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => HomePage()),
+                  (Route<dynamic> route) => false,
+            );
+          },
+        ),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("Cards")
@@ -49,6 +60,8 @@ class _DailyPageState extends State<DailyPage> {
           final max = cards.length > 10 ? 10 : cards.length;
 
           final card = cards[Random().nextInt(max)];
+          final String cardId = card.id;
+          final int periode = card['periode'] ?? '';
           final String question = card['question'] ?? '';
           final String reponse = card['reponse'] ?? '';
 
@@ -92,7 +105,7 @@ class _DailyPageState extends State<DailyPage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => AnswerPage(reponseInput)
+                                      builder: (_) => AnswerPage(reponseInput, reponse, cardId, periode)
                                   )
                               );
                             }

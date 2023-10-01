@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'DailyPage.dart';
@@ -5,18 +6,58 @@ import 'HomePage.dart';
 
 class AnswerPage extends StatelessWidget {
   final String userInput;
+  final String reponse;
+  final String cardId;
+  final int periode;
 
-  AnswerPage(this.userInput);
+  AnswerPage(this.userInput, this.reponse, this.cardId, this.periode);
+
+  // Inside your AnswerPage class
+  void _updatePeriode(bool isCorrect) async {
+    int newPeriode = periode + 1;
+    if (isCorrect) {
+      await FirebaseFirestore.instance
+          .collection('Cards')
+          .doc(cardId) // Replace with your card's document ID
+          .update({'periode': newPeriode}); // Replace with the new period value
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    bool isCorrect = userInput == reponse;
+    _updatePeriode(isCorrect);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Réponse'),
         automaticallyImplyLeading: false,
       ),
       body: Center(
-        child: Text('User Input: $userInput'),
+        child: Container(
+          margin: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Text('User Input: $userInput, Card input: $reponse'),
+              Card(
+                color: isCorrect ? Colors.green : Colors.red,
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 200,
+                  child: Center(
+                    child: Text(
+                      isCorrect ? 'Good Job' : 'Too bad',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
