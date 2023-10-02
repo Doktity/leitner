@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'DailyPage.dart';
@@ -23,9 +24,16 @@ class AnswerPage extends StatelessWidget {
     }
   }
 
+  bool _isCorrect(String input, String reponse){
+    if(input.toLowerCase() == reponse.toLowerCase()){
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isCorrect = userInput == reponse;
+    bool isCorrect = _isCorrect(userInput, reponse);
     _updatePeriode(isCorrect);
 
     return Scaffold(
