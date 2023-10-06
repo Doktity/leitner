@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 
+import 'HomePage.dart';
+import 'ListPage.dart';
+
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
 
@@ -16,8 +19,10 @@ class _AddPageState extends State<AddPage> {
   final questionController = TextEditingController();
   final reponseKeyController = TextEditingController();
   final reponseTextController = TextEditingController();
+  final categorieController = TextEditingController();
   String selectedType = "truc";
   DateTime selectedDateTime = DateTime.now();
+  List<String> categories = [];
 
   @override
   void dispose() {
@@ -33,6 +38,16 @@ class _AddPageState extends State<AddPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Ajout"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            // Navigate to HomePage
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => HomePage()),
+                  (Route<dynamic> route) => false,
+            );
+          },
+        ),
       ),
       body: Container(
         margin: EdgeInsets.all(20),
@@ -77,26 +92,6 @@ class _AddPageState extends State<AddPage> {
                 ),
                 Container(
                   margin: EdgeInsets.only(bottom: 10),
-                  child: DropdownButtonFormField(
-                    items: [
-                      DropdownMenuItem(value: 'truc', child: Text("truc")),
-                      DropdownMenuItem(value: 'muche', child: Text("muche")),
-                      DropdownMenuItem(value: 'troc', child: Text("troc")),
-                      DropdownMenuItem(value: 'trac', child: Text("trac")),
-                    ],
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder()
-                    ),
-                    value: 'truc',
-                    onChanged: (value){
-                      setState(() {
-                        selectedType = value!;
-                      });
-                    }
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 10),
                   child: TextFormField(
                     decoration: InputDecoration(
                         labelText: "Informations supplémentaires",
@@ -106,6 +101,43 @@ class _AddPageState extends State<AddPage> {
                     controller: reponseTextController,
                   ),
                 ),
+                SizedBox(height: 20),
+                Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      labelText: "Ajouter une catégorie",
+                      hintText: "Entrez une catégorie pour la question",
+                      border: OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            categories.add(categorieController.text);
+                            categorieController.clear();
+                          });
+                        },
+                        icon: Icon(Icons.add),
+                      ),
+                    ),
+                    controller: categorieController,
+                  ),
+                ),
+                Wrap(
+                  spacing: 8.0,
+                  children: categories.map((categorie) {
+                    return Chip(
+                      label: Text(categorie),
+                      onDeleted: () {
+                        setState(() {
+                          categories.remove(categorie);
+                        });
+                      },
+                    );
+                  }).toList(),
+                ),
+/*
+@todo AJOUTER IMAGE WIP
+
                 Container(
                   margin: EdgeInsets.only(bottom: 10),
                   child: SizedBox(
@@ -119,6 +151,8 @@ class _AddPageState extends State<AddPage> {
                     ),
                   ),
                 ),
+*/
+                SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -138,12 +172,35 @@ class _AddPageState extends State<AddPage> {
                         cards.add({
                           "question" : question,
                           "reponseKey" : reponseKey,
+                          "reponseText" : reponseText,
                           "questionImgPath" : question,
                           "reponseImgPath" : reponseKey,
                           "dateCreation" : DateTime.now(),
-                          "categorie" : selectedType,
-                          "reponseText" : reponseText
+                          "categorie" : categories,
+                          "periode" : 1,
+                        }).then((_) {
+                          Future.delayed(Duration(seconds: 1), () {
+
+                            // Override the Snackbar
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "Carte envoyé",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+
+                            // Redirect to ListPage after a delay
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ListPage()),
+                            );
+                          });
                         });
+
                       }
                     },
                     child: Text("Envoyer")
@@ -157,6 +214,8 @@ class _AddPageState extends State<AddPage> {
     );
   }
 
+
+  /* MODAL POUR L'AJOUT DE L'IMAGE */
   @pragma('vm:entry-point')
   static Route<Object?> _dialogBuilder(
       BuildContext context, Object? arguments) {

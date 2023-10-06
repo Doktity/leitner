@@ -7,11 +7,12 @@ import 'HomePage.dart';
 
 class AnswerPage extends StatelessWidget {
   final String userInput;
-  final String reponse;
+  final String reponseKey;
+  final String reponseText;
   final String cardId;
   final int periode;
 
-  AnswerPage(this.userInput, this.reponse, this.cardId, this.periode);
+  AnswerPage(this.userInput, this.reponseKey, this.reponseText, this.cardId, this.periode);
 
   // Inside your AnswerPage class
   void _updatePeriode(bool isCorrect) async {
@@ -33,7 +34,7 @@ class AnswerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isCorrect = _isCorrect(userInput, reponse);
+    bool isCorrect = _isCorrect(userInput, reponseKey);
     _updatePeriode(isCorrect);
 
     return Scaffold(
@@ -46,7 +47,7 @@ class AnswerPage extends StatelessWidget {
           margin: EdgeInsets.all(20),
           child: Column(
             children: [
-              Text('User Input: $userInput, Card input: $reponse'),
+              Text('User Input: $userInput, Card input: $reponseKey'),
               Card(
                 color: isCorrect ? Colors.green : Colors.red,
                 child: SizedBox(
@@ -63,6 +64,24 @@ class AnswerPage extends StatelessWidget {
                   ),
                 ),
               ),
+              Card(
+                color: Color(0xFF7EB4FF),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 200,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'La réponse était $reponseKey'
+                        ),
+                        Text(reponseText)
+                      ],
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),

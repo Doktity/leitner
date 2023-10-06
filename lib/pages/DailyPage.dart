@@ -63,7 +63,8 @@ class _DailyPageState extends State<DailyPage> {
           final String cardId = card.id;
           final int periode = card['periode'] ?? '';
           final String question = card['question'] ?? '';
-          final String reponse = card['reponse'] ?? '';
+          final String reponseKey = card['reponseKey'] ?? '';
+          final String reponseText = card['reponseText'] ?? '';
 
           return Column(
             children: [
@@ -105,7 +106,7 @@ class _DailyPageState extends State<DailyPage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => AnswerPage(reponseInput, reponse, cardId, periode)
+                                      builder: (_) => AnswerPage(reponseInput, reponseKey, reponseText, cardId, periode)
                                   )
                               );
                             }
