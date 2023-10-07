@@ -12,6 +12,16 @@ class ListPage extends StatefulWidget {
 
 class _ListPageState extends State<ListPage> {
 
+  Map<String, bool> expandedStates = {}; // Map to store expanded states
+  List<String> uniqueCategories = [];
+  String selectedCategory = 'All';
+
+  void filterCards(String categorie) {
+    setState(() {
+      selectedCategory = categorie;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,25 +52,93 @@ class _ListPageState extends State<ListPage> {
           List<dynamic> cards = [];
           snapshot.data!.docs.forEach((element) {
             cards.add(element);
+            if (element['categorie'] != null) {
+              for (var categorie in element['categorie']) {
+                if (!uniqueCategories.contains(categorie)) {
+                  uniqueCategories.add(categorie);
+                }
+              }
+            }
           });
 
-          return ListView.builder(
-            itemCount: cards.length,
-            itemBuilder: (context, index) {
-              final item = cards[index];
-              final questionImgPath = item['questionImgPath'] ?? '';
-              final question = item['question'] ?? '';
-              final reponseKey = item['reponseKey'] ?? '';
-
-              return Card(
-                child: ListTile(
-                  leading: FlutterLogo(size: 56.0),
-                  title: Text('$question'),
-                  subtitle: Text('$reponseKey'),
-                  trailing: Icon(Icons.more_vert),
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    DropdownButton<String>(
+                      value: selectedCategory,
+                      onChanged: (String? newValue) {
+                        filterCards(newValue!);
+                      },
+                      items: ['All', ...uniqueCategories].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        filterCards('All');
+                      },
+                      child: Text('Clear Filter'),
+                    ),
+                  ],
                 ),
-              );
-            }
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: cards.length,
+                  itemBuilder: (context, index) {
+                    final item = cards[index];
+                    final questionImgPath = item['questionImgPath'] ?? '';
+                    final question = item['question'] ?? '';
+                    final reponseKey = item['reponseKey'] ?? '';
+                    final reponseText = item['reponseText'] ?? '';
+                    final categories = item['categorie'];
+
+                    // Apply filter
+                    if (selectedCategory != 'All' && !categories.contains(selectedCategory)) {
+                      return Container();
+                    }
+
+                    return Card(
+                      child: Column(
+                        children: [
+                          ExpansionTile(
+                            leading: FlutterLogo(size: 56.0),
+                            title: Text('$question'),
+                            subtitle: Text('$reponseKey'),
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      children: [
+                                        for (var categorie in categories)
+                                          Chip(
+                                            label: Text(categorie),
+                                          ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(reponseText),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         },
       )
