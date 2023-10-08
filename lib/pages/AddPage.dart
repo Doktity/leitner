@@ -36,6 +36,7 @@ class _AddPageState extends State<AddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
         title: Text("Ajout"),
         leading: IconButton(
@@ -57,9 +58,12 @@ class _AddPageState extends State<AddPage> {
             child: Column(
               children: [
                 Container(
+                  color: Colors.red.shade50,
                   margin: EdgeInsets.only(bottom: 10),
                   child: TextFormField(
                     decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
                       labelText: "Question",
                       hintText: "Entrez la question",
                       border: OutlineInputBorder()
@@ -74,9 +78,12 @@ class _AddPageState extends State<AddPage> {
                   ),
                 ),
                 Container(
+                  color: Colors.red.shade50,
                   margin: EdgeInsets.only(bottom: 10),
                   child: TextFormField(
                     decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
                         labelText: "Réponse",
                         hintText: "Entrez la réponse",
                         border: OutlineInputBorder()
@@ -91,9 +98,12 @@ class _AddPageState extends State<AddPage> {
                   ),
                 ),
                 Container(
+                  color: Colors.red.shade50,
                   margin: EdgeInsets.only(bottom: 10),
                   child: TextFormField(
                     decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
                         labelText: "Informations supplémentaires",
                         hintText: "Entrez des informations, des explications ...",
                         border: OutlineInputBorder()
@@ -103,9 +113,12 @@ class _AddPageState extends State<AddPage> {
                 ),
                 SizedBox(height: 20),
                 Container(
+                  color: Colors.red.shade50,
                   margin: EdgeInsets.only(bottom: 10),
                   child: TextFormField(
                     decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
                       labelText: "Ajouter une catégorie",
                       hintText: "Entrez une catégorie pour la question",
                       border: OutlineInputBorder(),
@@ -119,6 +132,12 @@ class _AddPageState extends State<AddPage> {
                         icon: Icon(Icons.add),
                       ),
                     ),
+                    validator: (value) {
+                      if (categories.isEmpty) {
+                        return "Ajoutez au moins une catégorie";
+                      }
+                      return null;
+                    },
                     controller: categorieController,
                   ),
                 ),

@@ -29,6 +29,7 @@ class _DailyPageState extends State<DailyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
         title: Text('Daily'),
         leading: IconButton(
@@ -70,8 +71,27 @@ class _DailyPageState extends State<DailyPage> {
             children: [
               Container(
                 margin: EdgeInsets.all(20),
-                child: Card(
-                  child: Text(question),
+                child: SizedBox(
+                  height: 300,
+                  width: double.infinity,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: Colors.black,
+                      ),
+                      borderRadius: const BorderRadius.all(Radius.circular(12)),
+                    ),
+                    child: Center(
+                        child: Text(
+                            question,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 24,
+                              fontFamily: "Mulish"
+                          ),
+                        )
+                    ),
+                  ),
                 ),
               ),
               Container(
@@ -82,6 +102,8 @@ class _DailyPageState extends State<DailyPage> {
                       key: _formKey,
                       child: TextFormField(
                         decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
                           labelText: "Réponse",
                           hintText: "Entrez votre réponse",
                           border: OutlineInputBorder(),
@@ -95,6 +117,7 @@ class _DailyPageState extends State<DailyPage> {
                         controller: reponseController,
                       ),
                     ),
+                    SizedBox(height: 20,),
                     SizedBox(
                       width: double.infinity,
                       height: 50,

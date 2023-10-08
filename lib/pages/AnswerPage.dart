@@ -38,6 +38,7 @@ class AnswerPage extends StatelessWidget {
     _updatePeriode(isCorrect);
 
     return Scaffold(
+      backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
         title: Text('Réponse'),
         automaticallyImplyLeading: false,
@@ -50,6 +51,13 @@ class AnswerPage extends StatelessWidget {
               Text('User Input: $userInput, Card input: $reponseKey'),
               Card(
                 color: isCorrect ? Colors.green : Colors.red,
+                shape: const RoundedRectangleBorder(
+                  side: BorderSide(
+                    width: 2,
+                    color: Colors.black,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                ),
                 child: SizedBox(
                   width: double.infinity,
                   height: 200,
@@ -65,7 +73,14 @@ class AnswerPage extends StatelessWidget {
                 ),
               ),
               Card(
-                color: Color(0xFF7EB4FF),
+                color: Colors.white,
+                shape: const RoundedRectangleBorder(
+                  side: BorderSide(
+                    width: 2,
+                    color: Colors.black,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                ),
                 child: SizedBox(
                   width: double.infinity,
                   height: 200,
