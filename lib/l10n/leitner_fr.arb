@@ -1,3 +1,5 @@
 {
+    "@@locale": "fr",
+
     "helloWorld": "Bonjour le Monde!"
 }
