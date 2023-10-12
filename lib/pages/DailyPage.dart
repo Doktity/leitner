@@ -67,80 +67,82 @@ class _DailyPageState extends State<DailyPage> {
           final String reponseKey = card['reponseKey'] ?? '';
           final String reponseText = card['reponseText'] ?? '';
 
-          return Column(
-            children: [
-              Container(
-                margin: EdgeInsets.all(20),
-                child: SizedBox(
-                  height: 300,
-                  width: double.infinity,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Colors.black,
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.all(20),
+                  child: SizedBox(
+                    height: 300,
+                    width: double.infinity,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Colors.black,
+                        ),
+                        borderRadius: const BorderRadius.all(Radius.circular(12)),
                       ),
-                      borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    ),
-                    child: Center(
-                        child: Text(
-                            question,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 24,
-                              fontFamily: "Mulish"
-                          ),
-                        )
+                      child: Center(
+                          child: Text(
+                              question,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontFamily: "Mulish"
+                            ),
+                          )
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Form(
-                      key: _formKey,
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          labelText: "Réponse",
-                          hintText: "Entrez votre réponse",
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Champs obligatoire";
-                          }
-                          return null;
-                        },
-                        controller: reponseController,
-                      ),
-                    ),
-                    SizedBox(height: 20,),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                          onPressed: (){
-                            if (_formKey.currentState!.validate()){
-                              final reponseInput = reponseController.text;
-
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => AnswerPage(reponseInput, reponseKey, reponseText, cardId, periode)
-                                  )
-                              );
+                Container(
+                  margin: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      Form(
+                        key: _formKey,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            labelText: "Réponse",
+                            hintText: "Entrez votre réponse",
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Champs obligatoire";
                             }
+                            return null;
                           },
-                          child: Text("Envoyer")
+                          controller: reponseController,
+                        ),
                       ),
-                    )
-                  ],
+                      SizedBox(height: 20,),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                            onPressed: (){
+                              if (_formKey.currentState!.validate()){
+                                final reponseInput = reponseController.text;
+
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => AnswerPage(reponseInput, reponseKey, reponseText, cardId, periode)
+                                    )
+                                );
+                              }
+                            },
+                            child: Text("Envoyer")
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         }
       ),

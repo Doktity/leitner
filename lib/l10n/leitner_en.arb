@@ -4,5 +4,25 @@
     "helloWorld": "Hello World!",
     "@helloWorld": {
         "description": "The conventional newborn programmer greeting"
+    },
+
+    "welcome": "Welcome to Leitner",
+    "@welcome": {
+        "description": "Welcome phrase"
+    },
+
+    "daily": "Daily",
+    "@daily": {
+        "description": "Daily button"
+    },
+
+    "add": "Add",
+    "@add": {
+        "description": "Add button"
+    },
+
+    "list": "List",
+    "@list": {
+        "description": "List button"
     }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leitner/pages/ListPage.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'AddPage.dart';
 import 'DailyPage.dart';
@@ -17,7 +18,7 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text("Bienvenue dans Leitner",
+              Text(AppLocalizations.of(context)!.welcome,
                 style: TextStyle(
                     fontSize: 36,
                     fontFamily: "Mulish"
@@ -38,7 +39,7 @@ class HomePage extends StatelessWidget {
                         )
                     );
                   },
-                  label: const Text("Daily",
+                  label: Text(AppLocalizations.of(context)!.daily,
                     style: TextStyle(
                         fontFamily: "Mulish",
                         fontSize: 24
@@ -61,7 +62,7 @@ class HomePage extends StatelessWidget {
                         )
                     );
                   },
-                  label: const Text("Add",
+                  label: Text(AppLocalizations.of(context)!.add,
                     style: TextStyle(
                         fontFamily: "Mulish",
                         fontSize: 24
@@ -84,7 +85,7 @@ class HomePage extends StatelessWidget {
                         )
                     );
                   },
-                  label: const Text("List",
+                  label: Text(AppLocalizations.of(context)!.list,
                     style: TextStyle(
                         fontFamily: "Mulish",
                         fontSize: 24

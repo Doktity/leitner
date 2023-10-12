@@ -1,5 +1,13 @@
 {
     "@@locale": "es",
 
-    "helloWorld": "¡Hola Mundo!"
+    "helloWorld": "¡Hola Mundo!",
+
+    "welcome": "Bienvenido a Leitner",
+
+    "daily": "Daily",
+
+    "add": "Agregar",
+
+    "list": "Lista"
 }

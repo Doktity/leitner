@@ -1,5 +1,13 @@
 {
     "@@locale": "fr",
 
-    "helloWorld": "Bonjour le Monde!"
+    "helloWorld": "Bonjour le Monde!",
+
+    "welcome": "Bienvenue dans Leitner",
+
+    "daily": "Daily",
+
+    "add": "Ajout",
+
+    "list": "Liste"
 }
