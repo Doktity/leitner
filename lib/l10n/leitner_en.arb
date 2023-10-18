@@ -24,5 +24,10 @@
     "list": "List",
     "@list": {
         "description": "List button"
+    },
+
+    "settings": "Settings",
+    "@settings": {
+        "description": "Settings button"
     }
 }

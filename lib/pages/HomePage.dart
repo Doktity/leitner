@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:leitner/pages/ListPage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:leitner/pages/SettingsPage.dart';
 
 import 'AddPage.dart';
 import 'DailyPage.dart';
@@ -68,7 +69,7 @@ class HomePage extends StatelessWidget {
                         fontSize: 24
                     ),
                   ),
-                  icon: const Icon(Icons.calendar_month)
+                  icon: const Icon(Icons.add)
               ),
               const Padding(padding: EdgeInsets.all(20)),
               ElevatedButton.icon(
@@ -91,7 +92,30 @@ class HomePage extends StatelessWidget {
                         fontSize: 24
                     ),
                   ),
-                  icon: const Icon(Icons.calendar_month)
+                  icon: const Icon(Icons.list_sharp)
+              ),
+              const Padding(padding: EdgeInsets.all(20)),
+              ElevatedButton.icon(
+                  style: const ButtonStyle(
+                      padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
+                      backgroundColor: MaterialStatePropertyAll(Colors.blue),
+                      fixedSize: MaterialStatePropertyAll(Size(300, 100))
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => SettingsPage(Localizations.localeOf(context).languageCode)
+                        )
+                    );
+                  },
+                  label: Text(AppLocalizations.of(context)!.settings,
+                    style: TextStyle(
+                        fontFamily: "Mulish",
+                        fontSize: 24
+                    ),
+                  ),
+                  icon: const Icon(Icons.settings)
               )
             ],
           )

@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:leitner/pages/HomePage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:leitner/pages/LoginPage.dart';
+import 'package:leitner/pages/SettingsPage.dart';
 import 'firebase_options.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 
 void main() async {
@@ -24,6 +23,31 @@ void main() async {
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  static void setLocale(BuildContext context, Locale newLocale) {
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>()!;
+    state.setLocale(newLocale);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Leitner',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      locale: Locale('en', 'US'), // Set the default locale
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: SettingsPage(Localizations.localeOf(context).languageCode),
+    );
+  }
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -31,6 +55,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 
   int _index = 0;
+  Locale? _locale;
+
+  void setLocale(Locale newLocale) {
+    setState(() {
+      _locale = newLocale;
+    });
+  }
 
   setCurrentIndex(int index){
     setState(() {
@@ -41,6 +72,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      locale: _locale, // Set the locale from state
       localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
