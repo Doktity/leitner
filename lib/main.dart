@@ -3,13 +3,14 @@ import 'package:leitner/pages/HomePage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:leitner/pages/LoginPage.dart';
 import 'package:leitner/pages/SettingsPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
-void main() async {
+Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -17,11 +18,16 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? selectedLanguage = prefs.getString('selectedLanguage');
+
+  runApp(MyApp(selectedLanguage: selectedLanguage));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final String? selectedLanguage;
+
+  const MyApp({super.key, this.selectedLanguage});
 
   static void setLocale(BuildContext context, Locale newLocale) {
     _MyAppState state = context.findAncestorStateOfType<_MyAppState>()!;
@@ -56,6 +62,13 @@ class _MyAppState extends State<MyApp> {
 
   int _index = 0;
   Locale? _locale;
+  String? _selectedLanguage;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedLanguage = widget.selectedLanguage;
+  }
 
   void setLocale(Locale newLocale) {
     setState(() {

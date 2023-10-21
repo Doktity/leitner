@@ -29,5 +29,20 @@
     "settings": "Settings",
     "@settings": {
         "description": "Settings button"
+    },
+
+    "no_data": "No data",
+    "@no_data": {
+        "description": "Message for no data"
+    },
+
+    "all": "All",
+    "@all": {
+        "description": "Message for all"
+    },
+
+    "clear_filter": "Clear Filter",
+    "@clear_filter": {
+        "description": "Message for clear filter"
     }
 }

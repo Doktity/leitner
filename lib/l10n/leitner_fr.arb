@@ -11,5 +11,11 @@
 
     "list": "Liste",
 
-    "settings": "Options"
+    "settings": "Options",
+
+    "no_data": "Pas de données",
+
+    "all": "Tous",
+
+    "clear_filter": "Retirer le filtre"
 }

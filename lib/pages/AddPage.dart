@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'HomePage.dart';
 import 'ListPage.dart';
@@ -38,7 +38,7 @@ class _AddPageState extends State<AddPage> {
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
-        title: Text("Ajout"),
+        title: Text(AppLocalizations.of(context)!.add),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {

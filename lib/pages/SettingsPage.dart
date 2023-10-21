@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../main.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -49,7 +51,8 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  void _changeLanguage(String language) {
+  void _changeLanguage(String language) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     Locale _newLocale = Locale('fr', 'FR');
 
     if (language == 'en') {
@@ -57,6 +60,9 @@ class _SettingsPageState extends State<SettingsPage> {
     } else if (language == 'es') {
       _newLocale = Locale('es', 'ES');
     }
+
+    // Save the selected language
+    await prefs.setString('selectedLanguage', language);
 
     // Change the language
     MyApp.setLocale(context, _newLocale);

@@ -1,9 +1,10 @@
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../business/CardRepository.dart';
 import 'AnswerPage.dart';
 import 'HomePage.dart';
 
@@ -15,14 +16,25 @@ class DailyPage extends StatefulWidget {
 }
 
 class _DailyPageState extends State<DailyPage> {
-
   final _formKey = GlobalKey<FormState>();
   final reponseController = TextEditingController();
+  final CardRepository _cardRepository = CardRepository();
+  dynamic card = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    card = await _cardRepository.getRandomCard();
+    setState(() {}); // Trigger a rebuild after data is loaded
+  }
 
   @override
   void dispose() {
     super.dispose();
-
     reponseController.dispose();
   }
 
@@ -31,7 +43,7 @@ class _DailyPageState extends State<DailyPage> {
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
-        title: Text('Daily'),
+        title: Text(AppLocalizations.of(context)!.daily),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -43,108 +55,90 @@ class _DailyPageState extends State<DailyPage> {
           },
         ),
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("Cards")
-            .orderBy('periode', descending: true)
-            .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting){
-            return CircularProgressIndicator();
-          }
-
-          if (!snapshot.hasData){
-            return Text("Pas de données");
-          }
-
-
-          List<dynamic> cards = snapshot.data!.docs;
-          final max = cards.length > 10 ? 10 : cards.length;
-
-          final card = cards[Random().nextInt(max)];
-          final String cardId = card.id;
-          final int periode = card['periode'] ?? '';
-          final String question = card['question'] ?? '';
-          final String reponseKey = card['reponseKey'] ?? '';
-          final String reponseText = card['reponseText'] ?? '';
-
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.all(20),
-                  child: SizedBox(
-                    height: 300,
-                    width: double.infinity,
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          color: Colors.black,
-                        ),
-                        borderRadius: const BorderRadius.all(Radius.circular(12)),
-                      ),
-                      child: Center(
-                          child: Text(
-                              question,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 24,
-                                fontFamily: "Mulish"
-                            ),
-                          )
+      body: SingleChildScrollView(
+        child: (card == {}) ?
+        const Center(child: CircularProgressIndicator())
+        : Column(
+          children: [
+            Container(
+              margin: EdgeInsets.all(20),
+              child: SizedBox(
+                height: 300,
+                width: double.infinity,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: Colors.black,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      card['question'] ?? '',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontFamily: "Mulish",
                       ),
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      Form(
-                        key: _formKey,
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            labelText: "Réponse",
-                            hintText: "Entrez votre réponse",
-                            border: OutlineInputBorder(),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Champs obligatoire";
-                            }
-                            return null;
-                          },
-                          controller: reponseController,
-                        ),
-                      ),
-                      SizedBox(height: 20,),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                            onPressed: (){
-                              if (_formKey.currentState!.validate()){
-                                final reponseInput = reponseController.text;
-
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => AnswerPage(reponseInput, reponseKey, reponseText, cardId, periode)
-                                    )
-                                );
-                              }
-                            },
-                            child: Text("Envoyer")
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
-          );
-        }
+            Container(
+              margin: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: "Réponse",
+                        hintText: "Entrez votre réponse",
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Champs obligatoire";
+                        }
+                        return null;
+                      },
+                      controller: reponseController,
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          final reponseInput = reponseController.text;
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => AnswerPage(
+                                reponseInput,
+                                card['reponseKey'] ?? '',
+                                card['reponseText'] ?? '',
+                                card.id,
+                                card['periode'] ?? '',
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      child: Text("Envoyer"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
