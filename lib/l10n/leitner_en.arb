@@ -44,5 +44,85 @@
     "clear_filter": "Clear Filter",
     "@clear_filter": {
         "description": "Message for clear filter"
+    },
+
+    "good_job": "Good Job",
+    "@good_job": {
+        "description": "Message for good answer"
+    },
+
+    "too_bad": "Too Bad",
+    "@too_bad": {
+        "description": "Message for wrong answer"
+    },
+
+    "language": "Language",
+    "@language": {
+        "description": "Message for language option"
+    },
+
+    "english": "English",
+    "@english": {
+        "description": "Message for english option"
+    },
+
+    "spanish": "Spanish",
+    "@spanish": {
+        "description": "Message for spanish option"
+    },
+
+    "french": "French",
+    "@french": {
+        "description": "Message for french option"
+    },
+
+    "answer": "Answer",
+    "@answer": {
+        "description": "Answer page"
+    },
+
+    "question": "Question",
+    "@question": {
+        "description": "Message for question"
+    },
+
+    "enter_question": "Enter your question",
+    "@enter_question": {
+        "description": "Message for enter question"
+    },
+
+    "enter_answer": "Enter your answer",
+    "@enter_answer": {
+        "description": "Message for enter answer"
+    },
+
+    "further_details": "Further details",
+    "@further_details": {
+        "description": "Message for further details"
+    },
+
+    "enter_further_details": "Enter further details, explanations...",
+    "@enter_further_details": {
+        "description": "Message for enter further details"
+    },
+
+    "required_fields": "Required fields",
+    "@required_fields": {
+        "description": "Message for required fields"
+    },
+
+    "send": "Send",
+    "@send": {
+        "description": "Send button"
+    },
+
+    "sending": "Sending...",
+    "@sending": {
+        "description" : "Sending message"
+    },
+
+    "card_sent": "Card sent",
+    "@card_sent": {
+        "description": "Message for card sent"
     }
 }

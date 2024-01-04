@@ -30,7 +30,8 @@ class HomePage extends StatelessWidget {
                   style: const ButtonStyle(
                       padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
                       backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                      fixedSize: MaterialStatePropertyAll(Size(300, 100))
+                      fixedSize: MaterialStatePropertyAll(Size(300, 100)),
+                      foregroundColor: MaterialStatePropertyAll(Colors.black)
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -53,7 +54,8 @@ class HomePage extends StatelessWidget {
                   style: const ButtonStyle(
                       padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
                       backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                      fixedSize: MaterialStatePropertyAll(Size(300, 100))
+                      fixedSize: MaterialStatePropertyAll(Size(300, 100)),
+                      foregroundColor: MaterialStatePropertyAll(Colors.black)
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -76,7 +78,8 @@ class HomePage extends StatelessWidget {
                   style: const ButtonStyle(
                       padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
                       backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                      fixedSize: MaterialStatePropertyAll(Size(300, 100))
+                      fixedSize: MaterialStatePropertyAll(Size(300, 100)),
+                      foregroundColor: MaterialStatePropertyAll(Colors.black)
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -99,7 +102,8 @@ class HomePage extends StatelessWidget {
                   style: const ButtonStyle(
                       padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
                       backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                      fixedSize: MaterialStatePropertyAll(Size(300, 100))
+                      fixedSize: MaterialStatePropertyAll(Size(300, 100)),
+                      foregroundColor: MaterialStatePropertyAll(Colors.black)
                   ),
                   onPressed: () {
                     Navigator.push(

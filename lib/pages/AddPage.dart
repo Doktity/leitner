@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:leitner/business/CardRepository.dart';
 
 import 'HomePage.dart';
 import 'ListPage.dart';
@@ -15,6 +16,7 @@ class AddPage extends StatefulWidget {
 class _AddPageState extends State<AddPage> {
 
   final _formKey = GlobalKey<FormState>();
+  final CardRepository _cardRepository = CardRepository();
 
   final questionController = TextEditingController();
   final reponseKeyController = TextEditingController();
@@ -22,7 +24,20 @@ class _AddPageState extends State<AddPage> {
   final categorieController = TextEditingController();
   String selectedType = "truc";
   DateTime selectedDateTime = DateTime.now();
+  String selectedCategorie = '';
   List<String> categories = [];
+  List<String> predefinedCategories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCategories();
+  }
+
+  fetchCategories() async {
+    predefinedCategories = await _cardRepository.getCategories();
+    setState(() {});
+  }
 
   @override
   void dispose() {
@@ -31,6 +46,7 @@ class _AddPageState extends State<AddPage> {
     questionController.dispose();
     reponseKeyController.dispose();
     reponseTextController.dispose();
+    categorieController.dispose();
   }
 
   @override
@@ -64,13 +80,13 @@ class _AddPageState extends State<AddPage> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      labelText: "Question",
-                      hintText: "Entrez la question",
+                      labelText: AppLocalizations.of(context)!.question,
+                      hintText: AppLocalizations.of(context)!.enter_question,
                       border: OutlineInputBorder()
                     ),
                     validator: (value){
                       if (value == null || value.isEmpty){
-                        return "Champs obligatoire";
+                        return AppLocalizations.of(context)!.required_fields;
                       }
                       return null;
                     },
@@ -84,13 +100,13 @@ class _AddPageState extends State<AddPage> {
                     decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
-                        labelText: "Réponse",
-                        hintText: "Entrez la réponse",
+                        labelText: AppLocalizations.of(context)!.answer,
+                        hintText: AppLocalizations.of(context)!.enter_answer,
                         border: OutlineInputBorder()
                     ),
                     validator: (value){
                       if (value == null || value.isEmpty){
-                        return "Champs obligatoire";
+                        return AppLocalizations.of(context)!.required_fields;
                       }
                       return null;
                     },
@@ -104,8 +120,8 @@ class _AddPageState extends State<AddPage> {
                     decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
-                        labelText: "Informations supplémentaires",
-                        hintText: "Entrez des informations, des explications ...",
+                        labelText: AppLocalizations.of(context)!.further_details,
+                        hintText: AppLocalizations.of(context)!.enter_further_details,
                         border: OutlineInputBorder()
                     ),
                     controller: reponseTextController,
@@ -115,30 +131,55 @@ class _AddPageState extends State<AddPage> {
                 Container(
                   color: Colors.red.shade50,
                   margin: EdgeInsets.only(bottom: 10),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      labelText: "Ajouter une catégorie",
-                      hintText: "Entrez une catégorie pour la question",
-                      border: OutlineInputBorder(),
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            categories.add(categorieController.text);
-                            categorieController.clear();
-                          });
-                        },
-                        icon: Icon(Icons.add),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (categories.isEmpty) {
-                        return "Ajoutez au moins une catégorie";
+                  child: Autocomplete<String>(
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      if(textEditingValue.text.isEmpty) {
+                        return const Iterable<String>.empty();
+                      } else {
+                        return predefinedCategories.where((String option) {
+                          return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
+                        });
                       }
-                      return null;
                     },
-                    controller: categorieController,
+                    fieldViewBuilder: (BuildContext context, categorieController, FocusNode fieldFocusNode, VoidCallback onFieldSubmitted) {
+                      return TextFormField(
+                        controller: categorieController,
+                        focusNode: fieldFocusNode,
+                        validator: (value) {
+                          if (categories.isEmpty) {
+                            return "Ajoutez au moins une catégorie";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          labelText: "Ajouter une catégorie",
+                          hintText: "Entrez une catégorie pour la question",
+                          border: OutlineInputBorder(),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              if(categorieController.text.isNotEmpty && !categories.contains(categorieController.text)) {
+                                setState(() {
+                                  categories.add(categorieController.text);
+                                  categorieController.clear();
+                                });
+                              };
+
+                            },
+                            icon: Icon(Icons.add),
+                          ),
+                        ),
+                      );
+                    },
+                    onSelected: (String selection) {
+                      setState(() {
+                        if (!categories.contains(selection)) {
+                          categories.add(selection);
+                        }
+                        categorieController.clear();
+                      });
+                    },
                   ),
                 ),
                 Wrap(
@@ -182,7 +223,9 @@ class _AddPageState extends State<AddPage> {
                         final reponseKey = reponseKeyController.text;
                         final reponseText = reponseTextController.text;
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Envoi en cours"))
+                            SnackBar(
+                                content: Text(AppLocalizations.of(context)!.sending)
+                            )
                         );
                         FocusScope.of(context).requestFocus(FocusNode());
 
@@ -205,7 +248,7 @@ class _AddPageState extends State<AddPage> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  "Carte envoyé",
+                                  AppLocalizations.of(context)!.card_sent,
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 backgroundColor: Colors.green,
@@ -222,7 +265,7 @@ class _AddPageState extends State<AddPage> {
 
                       }
                     },
-                    child: Text("Envoyer")
+                    child: Text(AppLocalizations.of(context)!.send)
                   ),
                 )
               ],

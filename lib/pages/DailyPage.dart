@@ -124,7 +124,7 @@ class _DailyPageState extends State<DailyPage> {
                                 reponseInput,
                                 card['reponseKey'] ?? '',
                                 card['reponseText'] ?? '',
-                                card.id,
+                                card['id'],
                                 card['periode'] ?? '',
                               ),
                             ),

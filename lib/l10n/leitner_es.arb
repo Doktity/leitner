@@ -17,5 +17,37 @@
 
     "all": "Todos",
 
-    "clear_filter": "Eliminar el filtro"
+    "clear_filter": "Eliminar el filtro",
+
+    "good_job": "Bravo",
+
+    "too_bad": "Ay Caramba",
+
+    "language": "Idioma",
+
+    "english": "Inglés",
+
+    "spanish": "Español",
+
+    "french": "Francés",
+
+    "answer": "Respuesta",
+
+    "question": "Pregunta",
+
+    "enter_question": "Escriba la pregunta",
+
+    "enter_answer": "Escriba la respuesta",
+
+    "further_details": "Para más información",
+
+    "enter_further_details": "Escriba información, explicaciones...",
+
+    "required_fields": "Campos obligatorios",
+
+    "send": "Enviar",
+
+    "sending": "Enviando...",
+
+    "card_sent": "Carta enviada"
 }

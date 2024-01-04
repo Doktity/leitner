@@ -19,7 +19,29 @@ class CardRepository {
     }
 
     DocumentSnapshot randomDoc = querySnapshot.docs[Random().nextInt(querySnapshot.docs.length)];
-    return randomDoc.data();
+    Map<String, dynamic> cardData = randomDoc.data() as Map<String, dynamic>;
+    cardData['id'] = randomDoc.id;
+    return cardData;
+  }
+
+  Future<List<String>> getCategories() async {
+    QuerySnapshot querySnapshot = await cards.get();
+
+    // Set of categories to avoid duplicates
+    var categories = <String>{};
+
+    // Add categories into set
+    for(var doc in querySnapshot.docs) {
+      var data = doc.data() as Map<String, dynamic>;
+      if(data.containsKey('categorie') && data['categorie'] is List) {
+        List<dynamic> cardCategories = data['categorie'];
+        categories.addAll(cardCategories.cast<String>());
+      }
+    }
+
+    // Change set into list
+    return categories.toList();
+
   }
 
 }

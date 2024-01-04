@@ -103,13 +103,13 @@ class _MyAppState extends State<MyApp> {
           if(snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator(); //Or a loading screen
           } else {
-            if(snapshot.hasData) {
+            /*if(snapshot.hasData) {*/
               print('User is signed in!');
               return HomePage(); // User is signed in!
-            } else {
+            /*} else {
               print('User is currently signed out!');
               return LoginPage(); // User is currently signed out!
-            }
+            }*/
           }
         },
       ),

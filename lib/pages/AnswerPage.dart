@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'DailyPage.dart';
 import 'HomePage.dart';
@@ -13,15 +14,18 @@ class AnswerPage extends StatelessWidget {
 
   AnswerPage(this.userInput, this.reponseKey, this.reponseText, this.cardId, this.periode);
 
-  // Inside your AnswerPage class
+
   void _updatePeriode(bool isCorrect) async {
-    int newPeriode = periode + 1;
-    if (isCorrect) {
-      await FirebaseFirestore.instance
-          .collection('Cards')
-          .doc(cardId) // Replace with your card's document ID
-          .update({'periode': newPeriode}); // Replace with the new period value
+    int newPeriode = periode;
+    if(isCorrect) {
+      newPeriode += 1;
+    } else {
+      newPeriode = newPeriode == 1 ? newPeriode : newPeriode - 1;
     }
+    await FirebaseFirestore.instance
+        .collection('Cards')
+        .doc(cardId) // Replace with your card's document ID
+        .update({'periode': newPeriode}); // Replace with the new period value
   }
 
   bool _isCorrect(String input, String reponse){
@@ -39,7 +43,7 @@ class AnswerPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
-        title: Text('Réponse'),
+        title: Text(AppLocalizations.of(context)!.answer),
         automaticallyImplyLeading: false,
       ),
       body: Center(
@@ -47,7 +51,6 @@ class AnswerPage extends StatelessWidget {
           margin: EdgeInsets.all(20),
           child: Column(
             children: [
-              Text('User Input: $userInput, Card input: $reponseKey'),
               Card(
                 color: isCorrect ? Colors.green : Colors.red,
                 shape: const RoundedRectangleBorder(
@@ -62,7 +65,7 @@ class AnswerPage extends StatelessWidget {
                   height: 200,
                   child: Center(
                     child: Text(
-                      isCorrect ? 'Good Job' : 'Too bad',
+                      isCorrect ? AppLocalizations.of(context)!.good_job : AppLocalizations.of(context)!.too_bad,
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

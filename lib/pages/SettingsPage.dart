@@ -16,6 +16,14 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   late String _selectedLanguage;
 
+  Map<String, String> get languageMap {
+    return {
+      'en': AppLocalizations.of(context)!.english,
+      'fr': AppLocalizations.of(context)!.french,
+      'es': AppLocalizations.of(context)!.spanish,
+    };
+  }
+
   @override
   void initState() {
     super.initState();
@@ -25,6 +33,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settings),
       ),
@@ -32,18 +41,46 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            DropdownButton<String>(
-              value: _selectedLanguage,
-              onChanged: (String? newValue) {
-                _changeLanguage(newValue!);
-              },
-              items: <String>['fr', 'en', 'es']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.75,
+              child: Card(
+                margin: EdgeInsets.all(20),
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: Colors.black,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(AppLocalizations.of(context)!.language + " : ",
+                        style: TextStyle(
+                            fontFamily: "Mulish",
+                            fontSize: 24
+                        ),
+                      ),
+                      SizedBox(
+                        width: 100,
+                        child: DropdownButton<String>(
+                          value: _selectedLanguage,
+                          onChanged: (String? newValue) {
+                            _changeLanguage(newValue!);
+                          },
+                          items: languageMap.keys.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(languageMap[value]!, textAlign: TextAlign.center),
+                            );
+                          }).toList(),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
         ),
