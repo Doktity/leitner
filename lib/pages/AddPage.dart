@@ -177,6 +177,7 @@ class _AddPageState extends State<AddPage> {
                         if (!categories.contains(selection)) {
                           categories.add(selection);
                         }
+                        categorieController.text = selection;
                         categorieController.clear();
                       });
                     },

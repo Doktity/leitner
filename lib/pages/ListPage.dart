@@ -57,7 +57,7 @@ class _ListPageState extends State<ListPage> {
           onPressed: () {
             // Navigate to HomePage
             Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const HomePage()),
+              MaterialPageRoute(builder: (context) => HomePage()),
                   (Route<dynamic> route) => false,
             );
           },

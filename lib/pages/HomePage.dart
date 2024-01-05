@@ -3,13 +3,17 @@ import 'package:leitner/pages/ListPage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/pages/SettingsPage.dart';
 
+import '../business/LoginRepository.dart';
 import 'AddPage.dart';
 import 'DailyPage.dart';
+import 'LoginPage.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({
+  HomePage({
     super.key,
   });
+
+  final LoginRepository _loginRepository = LoginRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -114,6 +118,32 @@ class HomePage extends StatelessWidget {
                     );
                   },
                   label: Text(AppLocalizations.of(context)!.settings,
+                    style: TextStyle(
+                        fontFamily: "Mulish",
+                        fontSize: 24
+                    ),
+                  ),
+                  icon: const Icon(Icons.settings)
+              ),
+              const Padding(padding: EdgeInsets.all(20)),
+              ElevatedButton.icon(
+                  style: const ButtonStyle(
+                      padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
+                      backgroundColor: MaterialStatePropertyAll(Colors.blue),
+                      fixedSize: MaterialStatePropertyAll(Size(300, 100)),
+                      foregroundColor: MaterialStatePropertyAll(Colors.black)
+                  ),
+                  onPressed: () async {
+                    String deco = await _loginRepository.signOutGoogle();
+                    print(deco);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => LoginPage()
+                        )
+                    );
+                  },
+                  label: Text("Deco",
                     style: TextStyle(
                         fontFamily: "Mulish",
                         fontSize: 24
