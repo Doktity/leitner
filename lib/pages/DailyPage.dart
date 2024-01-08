@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,6 +21,8 @@ class _DailyPageState extends State<DailyPage> {
   final reponseController = TextEditingController();
   final CardRepository _cardRepository = CardRepository();
   dynamic card = {};
+  int periode = 1;
+  final String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
 
   @override
   void initState() {
@@ -28,7 +31,8 @@ class _DailyPageState extends State<DailyPage> {
   }
 
   Future<void> _loadData() async {
-    card = await _cardRepository.getRandomCard();
+    card = await _cardRepository.getRandomCard(userId);
+    periode = await _cardRepository.getUserCardPeriode(userId, card['id']);
     setState(() {}); // Trigger a rebuild after data is loaded
   }
 
@@ -125,7 +129,8 @@ class _DailyPageState extends State<DailyPage> {
                                 card['reponseKey'] ?? '',
                                 card['reponseText'] ?? '',
                                 card['id'],
-                                card['periode'] ?? '',
+                                userId,
+                                periode,
                               ),
                             ),
                           );

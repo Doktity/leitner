@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'dart:js';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -19,12 +20,30 @@ class LoginRepository {
         idToken: googleAuth?.idToken,
       );
 
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      
+      if(userCredential.user != null) {
+        await saveUserToFirestore(userCredential.user);
+      }
+      
       // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      return userCredential;
     } catch (e) {
       print('Error signing in with Google: $e');
       return null;
     }
+  }
+  
+  Future<void> saveUserToFirestore(User? user) async {
+    if(user == null) return;
+
+    CollectionReference users = FirebaseFirestore.instance.collection('Users');
+
+    Map<String, dynamic> userData = {
+      'email': user.email
+    };
+
+    await users.doc(user.uid).set(userData, SetOptions(merge: true));
   }
 
   Future<String> signOutGoogle() async {

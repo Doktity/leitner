@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/business/CardRepository.dart';
@@ -31,7 +32,8 @@ class _ListPageState extends State<ListPage> {
   }
 
   Future<void> _loadData() async {
-    cards = await _cardRepository.getCards();
+    String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+    cards = await _cardRepository.getUserCards(userId);
 
     // Extract unique categories
     for (var card in cards) {

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:leitner/business/CardRepository.dart';
 
 import 'DailyPage.dart';
 import 'HomePage.dart';
@@ -10,23 +11,11 @@ class AnswerPage extends StatelessWidget {
   final String reponseKey;
   final String reponseText;
   final String cardId;
+  final String userId;
   final int periode;
+  final CardRepository _cardRepository = CardRepository();
 
-  AnswerPage(this.userInput, this.reponseKey, this.reponseText, this.cardId, this.periode);
-
-
-  void _updatePeriode(bool isCorrect) async {
-    int newPeriode = periode;
-    if(isCorrect) {
-      newPeriode += 1;
-    } else {
-      newPeriode = newPeriode == 1 ? newPeriode : newPeriode - 1;
-    }
-    await FirebaseFirestore.instance
-        .collection('Cards')
-        .doc(cardId) // Replace with your card's document ID
-        .update({'periode': newPeriode}); // Replace with the new period value
-  }
+  AnswerPage(this.userInput, this.reponseKey, this.reponseText, this.cardId, this.userId, this.periode);
 
   bool _isCorrect(String input, String reponse){
     if(input.toLowerCase() == reponse.toLowerCase()){
@@ -38,7 +27,7 @@ class AnswerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isCorrect = _isCorrect(userInput, reponseKey);
-    _updatePeriode(isCorrect);
+    _cardRepository.updatePeriode(isCorrect, periode, userId, cardId);
 
     return Scaffold(
       backgroundColor: Colors.blue.shade50,

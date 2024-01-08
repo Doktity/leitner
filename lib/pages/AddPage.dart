@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/business/CardRepository.dart';
@@ -218,7 +219,7 @@ class _AddPageState extends State<AddPage> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: (){
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()){
                         final question = questionController.text;
                         final reponseKey = reponseKeyController.text;
@@ -230,39 +231,47 @@ class _AddPageState extends State<AddPage> {
                         );
                         FocusScope.of(context).requestFocus(FocusNode());
 
+                        // Id de l'utilisateur connecté
+                        String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+
                         // ajout dans la base de données
                         CollectionReference cards = FirebaseFirestore.instance.collection("Cards");
-                        cards.add({
+                        DocumentReference newCard = await cards.add({
                           "question" : question,
                           "reponseKey" : reponseKey,
                           "reponseText" : reponseText,
                           "questionImgPath" : question,
                           "reponseImgPath" : reponseKey,
                           "dateCreation" : DateTime.now(),
-                          "categorie" : categories,
-                          "periode" : 1,
-                        }).then((_) {
-                          Future.delayed(Duration(seconds: 1), () {
-
-                            // Override the Snackbar
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  AppLocalizations.of(context)!.card_sent,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                backgroundColor: Colors.green,
-                              ),
-                            );
-
-                            // Redirect to ListPage after a delay
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => ListPage()),
-                            );
-                          });
+                          "categorie" : categories
                         });
+
+                        String cardId = newCard.id;
+
+                        CollectionReference liens = FirebaseFirestore.instance.collection("LiensUserCard");
+                        await liens.add({
+                          "userId": userId,
+                          "cardId": cardId,
+                          "periode": 1
+                        });
+
+                        // Override the Snackbar
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              AppLocalizations.of(context)!.card_sent,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+
+                        // Redirect to ListPage after a delay
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ListPage()),
+                        );
 
                       }
                     },

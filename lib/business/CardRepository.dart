@@ -4,21 +4,62 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CardRepository {
   final CollectionReference cards = FirebaseFirestore.instance.collection('Cards');
+  final CollectionReference liens = FirebaseFirestore.instance.collection('LiensUserCard');
 
-  Future<List<Map<String, dynamic>>> getCards() async {
+  Future<List<Map<String, dynamic>>> getAllCards() async {
     QuerySnapshot querySnapshot = await cards.get();
 
     return querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
   }
 
-  Future<dynamic> getRandomCard() async {
-    QuerySnapshot querySnapshot = await cards.where('periode', isEqualTo: 1).get();
+  Future<List<Map<String, dynamic>>> getUserCards(String userId) async {
+    QuerySnapshot liensSnapshot = await liens.where('userId', isEqualTo: userId).get();
 
-    if (querySnapshot.docs.isEmpty) {
-      throw Exception('No cards with periode set to 1 found.');
+    List<String> cardIds = liensSnapshot.docs.map((doc) {
+      var data = doc.data() as Map<String, dynamic>?;
+      return data != null ? data['cardId'] as String? : null;
+    }).where((id) => id != null).cast<String>().toList();
+
+
+    List<Map<String, dynamic>> userCards = [];
+    for(String cardId in cardIds) {
+      DocumentSnapshot cardSnapshot = await cards.doc(cardId).get();
+      if(cardSnapshot.exists) {
+        userCards.add(cardSnapshot.data() as Map<String, dynamic>);
+      }
     }
 
-    DocumentSnapshot randomDoc = querySnapshot.docs[Random().nextInt(querySnapshot.docs.length)];
+    return userCards;
+  }
+
+  Future<dynamic> getRandomCard(String userId) async {
+    QuerySnapshot liensSnapshot = await liens
+        .where('userId', isEqualTo: userId)
+        .where('periode', isEqualTo: 1)
+        .get();
+
+    if(liensSnapshot.docs.isEmpty) {
+      throw Exception('No linked cards with periode 1 for this user');
+    }
+
+    List<String> cardIds = liensSnapshot.docs.map((doc) {
+      var data = doc.data() as Map<String, dynamic>?;
+      return data != null ? data['cardId'] as String? : null;
+    }).where((id) => id != null).cast<String>().toList();
+
+    List<DocumentSnapshot> cardDocs = [];
+    for (String cardId in cardIds) {
+      DocumentSnapshot cardDoc = await cards.doc(cardId).get();
+      if (cardDoc.exists) {
+        cardDocs.add(cardDoc);
+      }
+    }
+
+    if (cardDocs.isEmpty) {
+      throw Exception('No cards found for the given card IDs.');
+    }
+
+    DocumentSnapshot randomDoc = cardDocs[Random().nextInt(cardDocs.length)];
     Map<String, dynamic> cardData = randomDoc.data() as Map<String, dynamic>;
     cardData['id'] = randomDoc.id;
     return cardData;
@@ -42,6 +83,41 @@ class CardRepository {
     // Change set into list
     return categories.toList();
 
+  }
+
+  Future<int> getUserCardPeriode(String userId, String cardId) async {
+    QuerySnapshot querySnapshot = await liens
+        .where('userId', isEqualTo: userId)
+        .where('cardId', isEqualTo: cardId)
+        .get();
+
+    if(querySnapshot.docs.isNotEmpty) {
+      var data = querySnapshot.docs.first.data() as dynamic;
+      return data['periode'];
+    } else {
+      return 1;
+    }
+  }
+
+  void updatePeriode(bool isCorrect, int periode, String userId, String cardId) async {
+    int newPeriode = periode;
+    if(isCorrect) {
+      newPeriode += 1;
+    } else {
+      newPeriode = newPeriode == 1 ? newPeriode : newPeriode - 1;
+    }
+    QuerySnapshot querySnapshot = await liens
+        .where('userId', isEqualTo: userId)
+        .where('cardId', isEqualTo: cardId)
+        .get();
+
+    if(querySnapshot.docs.isNotEmpty) {
+      String lienId = querySnapshot.docs.first.id;
+
+      await liens
+          .doc(lienId)
+          .update({'periode': newPeriode});
+    }
   }
 
 }
