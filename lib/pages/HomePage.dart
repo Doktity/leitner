@@ -143,13 +143,13 @@ class HomePage extends StatelessWidget {
                         )
                     );
                   },
-                  label: Text("Deco",
+                  label: Text(AppLocalizations.of(context)!.logout,
                     style: TextStyle(
                         fontFamily: "Mulish",
                         fontSize: 24
                     ),
                   ),
-                  icon: const Icon(Icons.settings)
+                  icon: const Icon(Icons.logout)
               )
             ],
           )

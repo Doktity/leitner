@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../business/LoginRepository.dart';
 import 'HomePage.dart';
@@ -20,13 +20,23 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login Page'),
+        title: Text(AppLocalizations.of(context)!.login,
+          style: TextStyle(
+            fontFamily: "Mulish",
+          ),
+        ),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
+            ElevatedButton.icon(
+              style: const ButtonStyle(
+                  padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
+                  backgroundColor: MaterialStatePropertyAll(Colors.blue),
+                  fixedSize: MaterialStatePropertyAll(Size(400, 100)),
+                  foregroundColor: MaterialStatePropertyAll(Colors.black)
+              ),
               onPressed: () async {
                 UserCredential? userCredential = await _loginRepository.signInWithGoogle();
                 if (userCredential != null && mounted) {
@@ -40,7 +50,13 @@ class _LoginPageState extends State<LoginPage> {
                   ); // Replace with the route for your home page.
                 }
               },
-              child: Text('Sign in with Google'),
+              label: Text(AppLocalizations.of(context)!.signin_google,
+                style: TextStyle(
+                    fontFamily: "Mulish",
+                    fontSize: 24
+                ),
+              ),
+              icon: const Icon(Icons.login)
             ),
           ],
         ),

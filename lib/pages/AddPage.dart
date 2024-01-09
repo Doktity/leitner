@@ -55,7 +55,11 @@ class _AddPageState extends State<AddPage> {
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.add),
+        title: Text(AppLocalizations.of(context)!.add,
+          style: TextStyle(
+            fontFamily: "Mulish",
+          ),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -87,7 +91,7 @@ class _AddPageState extends State<AddPage> {
                     ),
                     validator: (value){
                       if (value == null || value.isEmpty){
-                        return AppLocalizations.of(context)!.required_fields;
+                        return AppLocalizations.of(context)!.error_required_fields;
                       }
                       return null;
                     },
@@ -107,7 +111,7 @@ class _AddPageState extends State<AddPage> {
                     ),
                     validator: (value){
                       if (value == null || value.isEmpty){
-                        return AppLocalizations.of(context)!.required_fields;
+                        return AppLocalizations.of(context)!.error_required_fields;
                       }
                       return null;
                     },
@@ -148,15 +152,15 @@ class _AddPageState extends State<AddPage> {
                         focusNode: fieldFocusNode,
                         validator: (value) {
                           if (categories.isEmpty) {
-                            return "Ajoutez au moins une catégorie";
+                            return AppLocalizations.of(context)!.error_label_missing;
                           }
                           return null;
                         },
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          labelText: "Ajouter une catégorie",
-                          hintText: "Entrez une catégorie pour la question",
+                          labelText: AppLocalizations.of(context)!.add_label,
+                          hintText: AppLocalizations.of(context)!.enter_label,
                           border: OutlineInputBorder(),
                           suffixIcon: IconButton(
                             onPressed: () {

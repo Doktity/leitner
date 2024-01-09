@@ -43,11 +43,23 @@
 
     "enter_further_details": "Escriba información, explicaciones...",
 
-    "required_fields": "Campos obligatorios",
+    "error_required_fields": "Campos obligatorios",
 
     "send": "Enviar",
 
     "sending": "Enviando...",
 
-    "card_sent": "Carta enviada"
+    "card_sent": "Carta enviada",
+
+    "login": "Iniciar sesión",
+
+    "logout": "Cerrar sesión",
+
+    "signin_google": "Iniciar sesión con Google",
+
+    "add_label": "Añadir una etiqueta",
+
+    "enter_label": "Escriba una etiqueta para la tarjeta",
+
+    "error_label_missing": "Escriba al menos una etiqueta"
 }

@@ -53,7 +53,11 @@ class _ListPageState extends State<ListPage> {
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.list),
+        title: Text(AppLocalizations.of(context)!.list,
+          style: TextStyle(
+            fontFamily: "Mulish",
+          ),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

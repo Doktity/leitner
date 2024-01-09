@@ -32,7 +32,11 @@ class AnswerPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.answer),
+        title: Text(AppLocalizations.of(context)!.answer,
+          style: TextStyle(
+            fontFamily: "Mulish",
+          ),
+        ),
         automaticallyImplyLeading: false,
       ),
       body: Center(

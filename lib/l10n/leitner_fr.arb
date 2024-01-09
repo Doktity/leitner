@@ -43,11 +43,23 @@
 
     "enter_further_details": "Entrez des informations, des explications...",
 
-    "required_fields": "Champs obligatoires",
+    "error_required_fields": "Champs obligatoires",
 
     "send": "Envoyer",
 
     "sending": "Envoi en cours...",
 
-    "card_sent": "Carte envoyée"
+    "card_sent": "Carte envoyée",
+
+    "login": "Se connecter",
+
+    "logout": "Se déconnecter",
+
+    "signin_google": "Se connecter avec Google",
+
+    "add_label": "Ajouter une catégorie",
+
+    "enter_label": "Entrez une catégorie pour la carte",
+
+    "error_label_missing": "Ajoutez au moins une catégorie"
 }

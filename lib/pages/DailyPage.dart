@@ -47,7 +47,11 @@ class _DailyPageState extends State<DailyPage> {
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.daily),
+        title: Text(AppLocalizations.of(context)!.daily,
+          style: TextStyle(
+            fontFamily: "Mulish",
+          ),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {

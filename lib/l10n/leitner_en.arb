@@ -106,9 +106,9 @@
         "description": "Message for enter further details"
     },
 
-    "required_fields": "Required fields",
-    "@required_fields": {
-        "description": "Message for required fields"
+    "error_required_fields": "Required fields",
+    "@error_required_fields": {
+        "description": "Error Message for required fields"
     },
 
     "send": "Send",
@@ -124,5 +124,36 @@
     "card_sent": "Card sent",
     "@card_sent": {
         "description": "Message for card sent"
+    },
+
+    "login": "Login",
+    "@login": {
+        "description": "Login page"
+    },
+
+    "logout": "Logout",
+    "@logout": {
+        "description": "Logout button"
+    },
+
+    "signin_google": "Sign in with Google",
+    "@signin_google": {
+        "description": "Sign in with Google button"
+    },
+
+    "add_label": "Add a label",
+    "@add_label": {
+        "description": "Message for label input"
+    },
+
+    "enter_label": "Enter a label for the card",
+    "@enter_label": {
+        "description": "Message for entering a label"
+    },
+
+    "error_label_missing": "Please enter at least one label",
+    "@error_label_missing": {
+        "description": "Error message for the label"
     }
+
 }

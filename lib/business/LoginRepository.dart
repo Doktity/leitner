@@ -40,7 +40,8 @@ class LoginRepository {
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
 
     Map<String, dynamic> userData = {
-      'email': user.email
+      'email': user.email,
+      'lastConnection': DateTime.timestamp(),
     };
 
     await users.doc(user.uid).set(userData, SetOptions(merge: true));
