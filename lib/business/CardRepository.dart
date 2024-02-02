@@ -33,13 +33,14 @@ class CardRepository {
   }
 
   Future<dynamic> getRandomCard(String userId) async {
+    DateTime today = DateTime.now();
     QuerySnapshot liensSnapshot = await liens
         .where('userId', isEqualTo: userId)
-        .where('periode', isEqualTo: 1)
+        .where('nextPlay', isLessThanOrEqualTo: Timestamp.fromDate(today))
         .get();
 
     if(liensSnapshot.docs.isEmpty) {
-      throw Exception('No linked cards with periode 1 for this user');
+      throw Exception('No linked cards available today for this user');
     }
 
     List<String> cardIds = liensSnapshot.docs.map((doc) {
@@ -100,12 +101,10 @@ class CardRepository {
   }
 
   void updatePeriode(bool isCorrect, int periode, String userId, String cardId) async {
-    int newPeriode = periode;
-    if(isCorrect) {
-      newPeriode += 1;
-    } else {
-      newPeriode = newPeriode == 1 ? newPeriode : newPeriode - 1;
-    }
+    int newPeriode = isCorrect ? periode + 1 : max(1, periode - 1);
+    DateTime today = DateTime.now();
+    DateTime nextPlay = today.add(Duration(days: newPeriode));
+
     QuerySnapshot querySnapshot = await liens
         .where('userId', isEqualTo: userId)
         .where('cardId', isEqualTo: cardId)
@@ -116,7 +115,11 @@ class CardRepository {
 
       await liens
           .doc(lienId)
-          .update({'periode': newPeriode});
+          .update({
+            'periode': newPeriode,
+            'lastPlayed': Timestamp.fromDate(today),
+            'nextPlay': Timestamp.fromDate(nextPlay)
+          });
     }
   }
 

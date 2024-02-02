@@ -256,7 +256,9 @@ class _AddPageState extends State<AddPage> {
                         await liens.add({
                           "userId": userId,
                           "cardId": cardId,
-                          "periode": 1
+                          "periode": 1,
+                          "lastPlayed": DateTime.now(),
+                          "nextPlay": DateTime.now()
                         });
 
                         // Override the Snackbar
