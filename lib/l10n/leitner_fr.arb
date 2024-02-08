@@ -13,6 +13,8 @@
 
     "settings": "Options",
 
+    "home": "Accueil",
+
     "no_data": "Pas de données",
 
     "all": "Tous",
@@ -61,5 +63,13 @@
 
     "enter_label": "Entrez une catégorie pour la carte",
 
-    "error_label_missing": "Ajoutez au moins une catégorie"
+    "error_label_missing": "Ajoutez au moins une catégorie",
+
+    "no_cards": "Pas de carte disponible aujourd'hui",
+
+    "come_back": "Revenez demain !",
+
+    "replay": "Rejouer",
+
+    "answer_is": "La réponse est {anwser}"
 }

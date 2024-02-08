@@ -22,6 +22,7 @@ class _DailyPageState extends State<DailyPage> {
   int periode = 1;
   final String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
   bool noCardsAvailable = false;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -36,6 +37,7 @@ class _DailyPageState extends State<DailyPage> {
     } catch (e) {
       noCardsAvailable = true;
     }
+    isLoading = false;
     setState(() {}); // Trigger a rebuild after data is loaded
   }
 
@@ -50,13 +52,9 @@ class _DailyPageState extends State<DailyPage> {
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.daily,
-          style: TextStyle(
-            fontFamily: "Mulish",
-          ),
-        ),
+        title: Text(AppLocalizations.of(context)!.daily),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Navigate to HomePage
             Navigator.of(context).pushAndRemoveUntil(
@@ -67,82 +65,122 @@ class _DailyPageState extends State<DailyPage> {
         ),
       ),
       body: SingleChildScrollView(
-        child: (card == {}) ?
-        const Center(child: CircularProgressIndicator())
+        child: (isLoading) ?
+        Container(
+          margin: EdgeInsets.all(20),
+          child: const SizedBox(
+            height: 300,
+            width: double.infinity,
+            child: Card(
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Colors.black,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+              ),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ),
+        )
         : noCardsAvailable ?
           Column(
             children: [
               Container(
-                margin: EdgeInsets.all(20),
-                child: Center(
+                margin: const EdgeInsets.all(20),
+                child: SizedBox(
+                  height: 300,
+                  width: double.infinity,
                   child: Card(
-                    child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            "There is no card available today",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: "Mulish",
-                            ),
-                          ),
-                          SizedBox(height: 10,),
-                          Text(
-                            "Come back tomorrow!",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: "Mulish",
-                            ),
-                          ),
-                          SizedBox(height: 20,),
-                          ElevatedButton(
-                            onPressed: () {
-                              // Navigate to HomePage
-                              Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(builder: (context) => HomePage()),
-                                    (Route<dynamic> route) => false,
-                              );
-                            },
-                            child: Text("Home"),
-                          ),
-                          SizedBox(height: 10), // Spacing
-                          ElevatedButton(
-                            onPressed: () {
-                              // Navigate to ListPage (replace 'ListPage()' with your actual ListPage class)
-                              Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => ListPage()),
-                              );
-                            },
-                            child: Text("List"),
-                          ),
-                        ],
+                    shape: const RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: Colors.black,
                       ),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.no_cards,
+                          style: const TextStyle(
+                              fontSize: 24,
+                              fontFamily: "Mulish",
+                          ),
+                        ),
+                        const SizedBox(height: 10,),
+                        Text(
+                          AppLocalizations.of(context)!.come_back,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontFamily: "Mulish",
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                                (Route<dynamic> route) => false,
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 50),
+                        ),
+                        child: Text(AppLocalizations.of(context)!.home),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => const ListPage()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 50),
+                        ),
+                        child: Text(AppLocalizations.of(context)!.list),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           )
           : Column(
             children: [
               Container(
-                margin: EdgeInsets.all(20),
+                margin: const EdgeInsets.all(20),
                 child: SizedBox(
                   height: 300,
                   width: double.infinity,
                   child: Card(
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                       side: BorderSide(
                         color: Colors.black,
                       ),
-                      borderRadius: const BorderRadius.all(Radius.circular(12)),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
                     child: Center(
                       child: Text(
                         card['question'] ?? '',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 24,
                           fontFamily: "Mulish",
                         ),
@@ -152,7 +190,7 @@ class _DailyPageState extends State<DailyPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.all(20),
+                margin: const EdgeInsets.all(20),
                 child: Column(
                   children: [
                     Form(
@@ -161,20 +199,20 @@ class _DailyPageState extends State<DailyPage> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          labelText: "Réponse",
-                          hintText: "Entrez votre réponse",
-                          border: OutlineInputBorder(),
+                          labelText: AppLocalizations.of(context)!.answer,
+                          hintText: AppLocalizations.of(context)!.enter_answer,
+                          border: const OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Champs obligatoire";
+                            return AppLocalizations.of(context)!.error_required_fields;
                           }
                           return null;
                         },
                         controller: reponseController,
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -198,7 +236,7 @@ class _DailyPageState extends State<DailyPage> {
                             );
                           }
                         },
-                        child: Text("Envoyer"),
+                        child: Text(AppLocalizations.of(context)!.send),
                       ),
                     ),
                   ],

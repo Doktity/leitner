@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/business/CardRepository.dart';
@@ -32,16 +31,12 @@ class AnswerPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.answer,
-          style: TextStyle(
-            fontFamily: "Mulish",
-          ),
-        ),
+        title: Text(AppLocalizations.of(context)!.answer),
         automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Container(
-          margin: EdgeInsets.all(20),
+          margin: const EdgeInsets.all(20),
           child: Column(
             children: [
               Card(
@@ -83,9 +78,7 @@ class AnswerPage extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          'La réponse était $reponseKey'
-                        ),
+                        Text(AppLocalizations.of(context)!.answer_is("answer", reponseKey)),
                         Text(reponseText)
                       ],
                     ),
@@ -99,14 +92,14 @@ class AnswerPage extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
         type: BottomNavigationBarType.fixed,
-        items: const [
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.replay_outlined),
-            label: "Rejouer",
+            label: AppLocalizations.of(context)!.replay,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: "Maison"
+            label: AppLocalizations.of(context)!.home,
           ),
         ],
         onTap: (index) {

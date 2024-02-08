@@ -39,6 +39,7 @@ class MyApp extends StatefulWidget {
     return MaterialApp(
       title: 'Leitner',
       theme: ThemeData(
+        fontFamily: "Mulish",
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),

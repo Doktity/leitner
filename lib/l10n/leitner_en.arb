@@ -31,6 +31,11 @@
         "description": "Settings button"
     },
 
+    "home": "Home",
+    "@home": {
+        "description": "Home button"
+    },
+
     "no_data": "No data",
     "@no_data": {
         "description": "Message for no data"
@@ -154,6 +159,28 @@
     "error_label_missing": "Please enter at least one label",
     "@error_label_missing": {
         "description": "Error message for the label"
-    }
+    },
 
+    "no_cards": "There is no card available today",
+    "@no_cards": {
+        "description": "Message when no cards available"
+    },
+
+    "come_back": "Come back tomorrow !",
+    "@come_back": {
+        "description": "Message to come back"
+    },
+
+    "replay": "Replay",
+    "@replay": {
+        "description": "Replay button"
+    },
+
+    "answer_is": "The answer is {answer}",
+    "@answer_is": {
+        "description": "Answer text",
+        "placeholders": {
+            "answer": {}
+        }
+    }
 }

@@ -13,6 +13,8 @@
 
     "settings": "Configuración",
 
+    "home": "Inicio",
+
     "no_data": "No hay datos",
 
     "all": "Todos",
@@ -61,5 +63,13 @@
 
     "enter_label": "Escriba una etiqueta para la tarjeta",
 
-    "error_label_missing": "Escriba al menos una etiqueta"
+    "error_label_missing": "Escriba al menos una etiqueta",
+
+    "no_cards": "No hay ninguna carta disponible hoy",
+
+    "come_back": "¡Vuelve mañana!",
+
+    "replay": "Rejugar",
+
+    "answer_is": "La pregunta es {answer}"
 }
