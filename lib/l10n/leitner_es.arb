@@ -71,5 +71,21 @@
 
     "replay": "Rejugar",
 
-    "answer_is": "La pregunta es {answer}"
+    "answer_is": "La pregunta es {answer}",
+
+    "add_question_image": "Añadir una imagen para la pregunta",
+
+    "add_reponse_image": "Añadir una imagen para la respuesta",
+
+    "add_image": "Añadir una imagen",
+
+    "take_photo": "Tomar una foto",
+
+    "choose_gallery": "Seleccionar de la galería",
+
+    "cancel": "Cancelar",
+
+    "confirm": "Confirmar",
+
+    "image_name": "Nombre de la imagen"
 }

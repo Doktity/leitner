@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:leitner/business/CardRepository.dart';
 
+import '../utils/ImageHandler.dart';
 import 'HomePage.dart';
 import 'ListPage.dart';
 
@@ -23,11 +25,16 @@ class _AddPageState extends State<AddPage> {
   final reponseKeyController = TextEditingController();
   final reponseTextController = TextEditingController();
   final categorieController = TextEditingController();
+  final imageNameController = TextEditingController();
   String selectedType = "truc";
   DateTime selectedDateTime = DateTime.now();
   String selectedCategorie = '';
   List<String> categories = [];
   List<String> predefinedCategories = [];
+  String questionPath = "";
+  String reponsePath = "";
+  CustomImageInfo? questionImageInfo;
+  CustomImageInfo? reponseImageInfo;
 
   @override
   void initState() {
@@ -48,6 +55,7 @@ class _AddPageState extends State<AddPage> {
     reponseKeyController.dispose();
     reponseTextController.dispose();
     categorieController.dispose();
+    imageNameController.dispose();
   }
 
   @override
@@ -201,24 +209,37 @@ class _AddPageState extends State<AddPage> {
                     );
                   }).toList(),
                 ),
-/*
-@todo AJOUTER IMAGE WIP
-
                 Container(
                   margin: EdgeInsets.only(bottom: 10),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: OutlinedButton(
-                      onPressed: (){
-                        Navigator.of(context).restorablePush(_dialogBuilder);
-                      },
-                      child: Text("Ajouter une image"),
-                    ),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Open dialog for selecting question image
+                            Navigator.of(context).restorablePush(_dialogBuilder, arguments: {'imagePathType': 'question' });
+                          },
+                          child: Text(AppLocalizations.of(context)!.add_question_image),
+                        ),
+                      ),
+                      const SizedBox(height: 10), // Spacing
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Open dialog for selecting response image
+                            Navigator.of(context).restorablePush(_dialogBuilder, arguments: {'imagePathType': 'response'});
+                          },
+                          child: Text(AppLocalizations.of(context)!.add_reponse_image),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-*/
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -238,14 +259,21 @@ class _AddPageState extends State<AddPage> {
                         // Id de l'utilisateur connecté
                         String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
 
+                        if(questionImageInfo != null){
+                          questionPath = await _cardRepository.uploadImageToFirebase(questionImageInfo);
+                        }
+                        if(reponseImageInfo != null){
+                          reponsePath = await _cardRepository.uploadImageToFirebase(reponseImageInfo);
+                        }
+
                         // ajout dans la base de données
                         CollectionReference cards = FirebaseFirestore.instance.collection("Cards");
                         DocumentReference newCard = await cards.add({
                           "question" : question,
                           "reponseKey" : reponseKey,
                           "reponseText" : reponseText,
-                          "questionImgPath" : question,
-                          "reponseImgPath" : reponseKey,
+                          "questionImgPath" : questionPath,
+                          "reponseImgPath" : reponsePath,
                           "dateCreation" : DateTime.now(),
                           "categorie" : categories
                         });
@@ -295,62 +323,92 @@ class _AddPageState extends State<AddPage> {
 
   /* MODAL POUR L'AJOUT DE L'IMAGE */
   @pragma('vm:entry-point')
-  static Route<Object?> _dialogBuilder(
-      BuildContext context, Object? arguments) {
+  Route<Object?> _dialogBuilder(BuildContext context, Object? arguments) {
+    final args = arguments as Map;
+    final String imagePathType = args['imagePathType'];
+    CustomImageInfo? selectedImage = null;
+
     return DialogRoute<void>(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Ajouter une image'),
-          content: Column(
-            children: [
-              DropdownButtonFormField(
-                  items: [
-                    DropdownMenuItem(value: 'question', child: Text("question")),
-                    DropdownMenuItem(value: 'reponse', child: Text("reponse")),
-                  ],
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder()
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setStateDialog) {
+            return AlertDialog(
+              title: Text(AppLocalizations.of(context)!.add_image),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                      controller: imageNameController,
+                      decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          labelText: AppLocalizations.of(context)!.image_name,
+                          border: OutlineInputBorder()
+                      )
                   ),
-                  value: 'question',
-                  onChanged: (value){
-                  }
+                  const SizedBox(height: 20,),
+                  ElevatedButton(
+                    onPressed: () async {
+                      String customImageName = imageNameController.text.isNotEmpty ? imageNameController.text : imagePathType;
+                      selectedImage = await pickImage(ImageSource.camera, customImageName);
+                      setStateDialog(() {});
+                    },
+                    child: Text(AppLocalizations.of(context)!.take_photo),
+                  ),
+                  const SizedBox(height: 20,),
+                  ElevatedButton(
+                    onPressed: () async {
+                      String customImageName = imageNameController.text.isNotEmpty ? imageNameController.text : imagePathType;
+                      selectedImage = await pickImage(ImageSource.gallery, customImageName);
+                      setStateDialog(() {});
+                    },
+                    child: Text(AppLocalizations.of(context)!.choose_gallery),
+                  ),
+                  const SizedBox(height: 20,),
+                  if(selectedImage != null)
+                     Image.memory(
+                       selectedImage!.file,
+                       fit: BoxFit.contain,
+                       height: 200,
+                       width: 200,
+                       frameBuilder: ((context, child, frame, wasSynchronouslyLoaded) {
+                         if(wasSynchronouslyLoaded) return child;
+                         return AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 200),
+                            child: frame != null ? child : const CircularProgressIndicator(),
+                         );
+                       }),
+                     )
+                ],
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                    labelText: "Lien de l'image",
-                    hintText: "Entrez le lien",
-                    border: OutlineInputBorder()
+              actions: <Widget>[
+                TextButton(
+                  child: Text(AppLocalizations.of(context)!.cancel),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme
-                  .of(context)
-                  .textTheme
-                  .labelLarge,
-              ),
-              child: const Text('Annuler'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme
-                  .of(context)
-                  .textTheme
-                  .labelLarge,
-              ),
-              child: const Text('Confirmer'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+                TextButton(
+                  child: Text(AppLocalizations.of(context)!.confirm),
+                  onPressed: () {
+                    if (selectedImage != null) {
+                      if(imageNameController.text.isNotEmpty && imageNameController.text != selectedImage!.customName) {
+                        selectedImage!.customName = imageNameController.text;
+                      }
+                      if (imagePathType == "question") {
+                        questionImageInfo = selectedImage;
+                      } else {
+                        reponseImageInfo = selectedImage;
+                      }
+                      setState(() {}); // Update the main page state
+                    }
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
         );
       },
     );

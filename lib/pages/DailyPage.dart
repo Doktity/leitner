@@ -69,7 +69,7 @@ class _DailyPageState extends State<DailyPage> {
         Container(
           margin: EdgeInsets.all(20),
           child: const SizedBox(
-            height: 300,
+            height: 500,
             width: double.infinity,
             child: Card(
               shape: RoundedRectangleBorder(
@@ -90,7 +90,7 @@ class _DailyPageState extends State<DailyPage> {
               Container(
                 margin: const EdgeInsets.all(20),
                 child: SizedBox(
-                  height: 300,
+                  height: 500,
                   width: double.infinity,
                   child: Card(
                     shape: const RoundedRectangleBorder(
@@ -167,7 +167,7 @@ class _DailyPageState extends State<DailyPage> {
               Container(
                 margin: const EdgeInsets.all(20),
                 child: SizedBox(
-                  height: 300,
+                  height: 500,
                   width: double.infinity,
                   child: Card(
                     shape: const RoundedRectangleBorder(
@@ -176,15 +176,34 @@ class _DailyPageState extends State<DailyPage> {
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
-                    child: Center(
-                      child: Text(
-                        card['question'] ?? '',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontFamily: "Mulish",
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Center(
+                          child: Text(
+                            card['question'] ?? '',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontFamily: "Mulish",
+                            ),
+                          ),
                         ),
-                      ),
+                        if(card['questionImgPath'] != null && card['questionImgPath'].isNotEmpty)
+                          Image.network(
+                              card['questionImgPath'],
+                              fit: BoxFit.contain,
+                              height: 300,
+                              width: double.infinity,
+                              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return const Center(child: CircularProgressIndicator());
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return const SizedBox();
+                              },
+                          ),
+                      ],
                     ),
                   ),
                 ),
@@ -228,6 +247,7 @@ class _DailyPageState extends State<DailyPage> {
                                   reponseInput,
                                   card['reponseKey'] ?? '',
                                   card['reponseText'] ?? '',
+                                  card['reponseImgPath'] ?? '',
                                   card['id'],
                                   userId,
                                   periode,

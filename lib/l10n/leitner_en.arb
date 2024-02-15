@@ -182,5 +182,45 @@
         "placeholders": {
             "answer": {}
         }
+    },
+
+    "add_question_image": "Add an image for the question",
+    "@add_question_image": {
+        "description": "Question image button"
+    },
+
+    "add_reponse_image": "Add an image for the response",
+    "@add_reponse_image": {
+        "description": "Response image button"
+    },
+
+    "add_image": "Add an image",
+    "@add_image": {
+        "description": "Modal image title"
+    },
+
+    "take_photo": "Take a photo",
+    "@take_photo": {
+        "description": "Photo take button"
+    },
+
+    "choose_gallery": "Choose from gallery",
+    "@choose_gallery": {
+        "description": "Gallery choose button"
+    },
+
+    "cancel": "Cancel",
+    "@cancel": {
+        "description": "Cancel button"
+    },
+
+    "confirm": "Confirm",
+    "@confirm": {
+        "description": "Confirm button"
+    },
+
+    "image_name": "Image name",
+    "@image_name": {
+        "description": "Image name field"
     }
 }

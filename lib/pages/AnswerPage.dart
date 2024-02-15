@@ -9,12 +9,13 @@ class AnswerPage extends StatelessWidget {
   final String userInput;
   final String reponseKey;
   final String reponseText;
+  final String reponseImgPath;
   final String cardId;
   final String userId;
   final int periode;
   final CardRepository _cardRepository = CardRepository();
 
-  AnswerPage(this.userInput, this.reponseKey, this.reponseText, this.cardId, this.userId, this.periode);
+  AnswerPage(this.userInput, this.reponseKey, this.reponseText, this.reponseImgPath, this.cardId, this.userId, this.periode);
 
   bool _isCorrect(String input, String reponse){
     if(input.toLowerCase() == reponse.toLowerCase()){
@@ -73,13 +74,27 @@ class AnswerPage extends StatelessWidget {
                 ),
                 child: SizedBox(
                   width: double.infinity,
-                  height: 200,
+                  height: 500,
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(AppLocalizations.of(context)!.answer_is("answer", reponseKey)),
-                        Text(reponseText)
+                        Text(reponseText),
+                        if(reponseImgPath.isNotEmpty)
+                          Image.network(
+                            reponseImgPath,
+                            fit: BoxFit.contain,
+                            height: 300,
+                            width: double.infinity,
+                            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return const Center(child: CircularProgressIndicator());
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return const SizedBox();
+                            },
+                          ),
                       ],
                     ),
                   ),

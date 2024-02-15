@@ -71,5 +71,21 @@
 
     "replay": "Rejouer",
 
-    "answer_is": "La réponse est {anwser}"
+    "answer_is": "La réponse est {anwser}",
+
+    "add_question_image": "Ajouter une image pour la question",
+
+    "add_reponse_image": "Ajouter une image pour la réponse",
+
+    "add_image": "Ajouter une image",
+
+    "take_photo": "Prendre une photo",
+
+    "choose_gallery": "Prendre depuis la gallerie",
+
+    "cancel": "Annuler",
+
+    "confirm": "Confirmer",
+
+    "image_name": "Nom de l'image"
 }
