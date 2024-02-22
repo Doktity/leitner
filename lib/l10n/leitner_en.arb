@@ -222,5 +222,13 @@
     "image_name": "Image name",
     "@image_name": {
         "description": "Image name field"
+    },
+
+    "cards_number": "Number of cards : {number}",
+    "@cards_number": {
+        "description": "Cards number text",
+        "placeholders": {
+            "number": {}
+        }
     }
 }

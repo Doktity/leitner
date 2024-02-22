@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/business/CardRepository.dart';
+import 'package:leitner/utils/EnumData.dart';
 
 import 'HomePage.dart';
 
@@ -18,6 +19,7 @@ class _ListPageState extends State<ListPage> {
   String selectedCategory = 'All';
   final CardRepository _cardRepository = CardRepository();
   List<Map<String, dynamic>> cards = List.empty();
+  DataState dataState = DataState.loading;
 
   @override
   void initState() {
@@ -45,6 +47,11 @@ class _ListPageState extends State<ListPage> {
         }
       }
     }
+    if(cards.isEmpty) {
+      dataState = DataState.empty;
+    } else {
+      dataState = DataState.loaded;
+    }
     setState(() {}); // Trigger a rebuild after data is loaded
   }
 
@@ -71,8 +78,8 @@ class _ListPageState extends State<ListPage> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          if(dataState == DataState.loaded)  Padding(
+            padding: const EdgeInsets.all(20.0),
             child: Row(
               children: [
                 DropdownButton<String>(
@@ -102,9 +109,9 @@ class _ListPageState extends State<ListPage> {
             ),
           ),
           Expanded(
-            child: (cards.isEmpty) ?
-            const Center(child: CircularProgressIndicator())
-            : ListView.builder(
+            child: (dataState == DataState.loading) ?
+            Center(child: CircularProgressIndicator())
+            : (dataState == DataState.empty) ? Text("Pas de cartes") : ListView.builder(
               itemCount: cards.length,
               itemBuilder: (context, index) {
                 final item = cards[index];

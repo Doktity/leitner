@@ -61,7 +61,7 @@
 
     "add_label": "Añadir una etiqueta",
 
-    "enter_label": "Escriba una etiqueta para la tarjeta",
+    "enter_label": "Escriba una etiqueta para la carta",
 
     "error_label_missing": "Escriba al menos una etiqueta",
 
@@ -87,5 +87,7 @@
 
     "confirm": "Confirmar",
 
-    "image_name": "Nombre de la imagen"
+    "image_name": "Nombre de la imagen",
+
+    "cards_number": "Número de cartas : {number}"
 }

@@ -87,5 +87,7 @@
 
     "confirm": "Confirmer",
 
-    "image_name": "Nom de l'image"
+    "image_name": "Nom de l'image",
+
+    "cards_number": "Nombre de cartes : {number}"
 }

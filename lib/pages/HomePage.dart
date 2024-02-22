@@ -7,6 +7,7 @@ import '../business/LoginRepository.dart';
 import 'AddPage.dart';
 import 'DailyPage.dart';
 import 'LoginPage.dart';
+import 'PackPage.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({
@@ -94,6 +95,30 @@ class HomePage extends StatelessWidget {
                     );
                   },
                   label: Text(AppLocalizations.of(context)!.list,
+                    style: TextStyle(
+                        fontFamily: "Mulish",
+                        fontSize: 24
+                    ),
+                  ),
+                  icon: const Icon(Icons.list_sharp)
+              ),
+              const Padding(padding: EdgeInsets.all(20)),
+              ElevatedButton.icon(
+                  style: const ButtonStyle(
+                      padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
+                      backgroundColor: MaterialStatePropertyAll(Colors.blue),
+                      fixedSize: MaterialStatePropertyAll(Size(300, 100)),
+                      foregroundColor: MaterialStatePropertyAll(Colors.black)
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => PackPage()
+                        )
+                    );
+                  },
+                  label: Text("Pack",
                     style: TextStyle(
                         fontFamily: "Mulish",
                         fontSize: 24

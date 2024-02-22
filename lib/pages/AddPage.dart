@@ -286,7 +286,9 @@ class _AddPageState extends State<AddPage> {
                           "cardId": cardId,
                           "periode": 1,
                           "lastPlayed": DateTime.now(),
-                          "nextPlay": DateTime.now()
+                          "nextPlay": DateTime.now(),
+                          "isDownloaded": false,
+                          "packId": ""
                         });
 
                         // Override the Snackbar

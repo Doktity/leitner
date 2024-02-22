@@ -34,7 +34,6 @@ class MyApp extends StatefulWidget {
     state.setLocale(newLocale);
   }
 
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Leitner',

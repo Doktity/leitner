@@ -150,4 +150,18 @@ class CardRepository {
     }
   }
 
+  Future<List<Map<String, dynamic>>> getListCards(List<String> cardIds) async {
+    List<Map<String, dynamic>> cardsList = [];
+
+    for(String cardId in cardIds) {
+      DocumentSnapshot cardSnapshot = await cards.doc(cardId).get();
+      if(cardSnapshot.exists) {
+        Map<String, dynamic> card = cardSnapshot.data() as Map<String, dynamic>;
+        card['id'] = cardSnapshot.id;
+        cardsList.add(card);
+      }
+    }
+    return cardsList;
+  }
+
 }
