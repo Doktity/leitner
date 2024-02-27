@@ -6,17 +6,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:leitner/business/CardRepository.dart';
 
 import '../utils/ImageHandler.dart';
-import 'HomePage.dart';
-import 'ListPage.dart';
+import 'CardPage.dart';
 
-class AddPage extends StatefulWidget {
-  const AddPage({super.key});
+class AddCardPage extends StatefulWidget {
+  const AddCardPage({super.key});
 
   @override
-  State<AddPage> createState() => _AddPageState();
+  State<AddCardPage> createState() => _AddCardPageState();
 }
 
-class _AddPageState extends State<AddPage> {
+class _AddCardPageState extends State<AddCardPage> {
 
   final _formKey = GlobalKey<FormState>();
   final CardRepository _cardRepository = CardRepository();
@@ -69,11 +68,11 @@ class _AddPageState extends State<AddPage> {
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Navigate to HomePage
             Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (context) => const CardPage()),
                   (Route<dynamic> route) => false,
             );
           },
@@ -88,14 +87,14 @@ class _AddPageState extends State<AddPage> {
               children: [
                 Container(
                   color: Colors.red.shade50,
-                  margin: EdgeInsets.only(bottom: 10),
+                  margin: const EdgeInsets.only(bottom: 10),
                   child: TextFormField(
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       labelText: AppLocalizations.of(context)!.question,
                       hintText: AppLocalizations.of(context)!.enter_question,
-                      border: OutlineInputBorder()
+                      border: const OutlineInputBorder()
                     ),
                     validator: (value){
                       if (value == null || value.isEmpty){
@@ -306,7 +305,7 @@ class _AddPageState extends State<AddPage> {
                         // Redirect to ListPage after a delay
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ListPage()),
+                          MaterialPageRoute(builder: (context) => CardPage()),
                         );
 
                       }

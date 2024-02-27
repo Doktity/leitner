@@ -89,5 +89,23 @@
 
     "image_name": "Nom de l'image",
 
-    "cards_number": "Nombre de cartes : {number}"
+    "cards_number": "Nombre de cartes : {number}",
+
+    "cards": "Cartes",
+
+    "packs": "Packs",
+
+    "dares": "Gages",
+
+    "cards_list": "Liste des cartes",
+
+    "subscribe": "S'abonner",
+
+    "unsubscribe": "Se désabonner",
+
+    "sure_question": "Etes vous sûr(e) ?",
+
+    "wait": "Veuillez patienter",
+
+    "view": "Voir"
 }

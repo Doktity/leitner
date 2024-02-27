@@ -20,17 +20,29 @@ class CardRepository {
   Future<List<Map<String, dynamic>>> getUserCards(String userId) async {
     QuerySnapshot liensSnapshot = await liens.where('userId', isEqualTo: userId).get();
 
-    List<String> cardIds = liensSnapshot.docs.map((doc) {
+    List<Map<String, String>> liensData = [];
+    for(var doc in liensSnapshot.docs) {
       var data = doc.data() as Map<String, dynamic>?;
-      return data != null ? data['cardId'] as String? : null;
-    }).where((id) => id != null).cast<String>().toList();
-
+      if(data != null) {
+        String? cardId = data['cardId'] as String?;
+        String? packId = data['packId'] as String?;
+        Map<String, String> lData = {};
+        if(cardId != null) {
+          lData['cardId'] = cardId;
+          lData['packId'] = packId ?? '';
+          liensData.add(lData);
+        }
+      }
+    }
 
     List<Map<String, dynamic>> userCards = [];
-    for(String cardId in cardIds) {
-      DocumentSnapshot cardSnapshot = await cards.doc(cardId).get();
+    for(Map<String, String> data in liensData) {
+      DocumentSnapshot cardSnapshot = await cards.doc(data['cardId']).get();
       if(cardSnapshot.exists) {
-        userCards.add(cardSnapshot.data() as Map<String, dynamic>);
+        Map<String, dynamic> cardData = cardSnapshot.data() as Map<String, dynamic>;
+        cardData['cardId'] = data['cardId'];
+        cardData['packId'] = data['packId'];
+        userCards.add(cardData);
       }
     }
 

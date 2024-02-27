@@ -89,5 +89,23 @@
 
     "image_name": "Nombre de la imagen",
 
-    "cards_number": "Número de cartas : {number}"
+    "cards_number": "Número de cartas : {number}",
+
+    "cards": "Cartas",
+
+    "packs": "Paquetes",
+
+    "dares": "Penitencias",
+
+    "cards_list": "Lista de cartas",
+
+    "subscribe": "Suscribirse",
+
+    "unsubscribe": "Darse de baja",
+
+    "sure_question": "¿Está seguro?",
+
+    "wait": "Por favor, espera",
+
+    "view": "Ver"
 }

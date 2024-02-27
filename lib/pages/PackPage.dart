@@ -37,8 +37,8 @@ class _PackPageState extends State<PackPage> {
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
-        title: Text("Pack",
-          style: TextStyle(
+        title: Text(AppLocalizations.of(context)!.packs,
+          style: const TextStyle(
             fontFamily: "Mulish",
           ),
         ),
@@ -59,6 +59,7 @@ class _PackPageState extends State<PackPage> {
             child: (packs.isEmpty) ?
             const Center(child: CircularProgressIndicator())
                 : ListView.builder(
+                  padding: const EdgeInsets.all(10),
                   itemCount: packs.length,
                   itemBuilder: (context, index) {
                   final item = packs[index];
@@ -82,27 +83,33 @@ class _PackPageState extends State<PackPage> {
                             ],
                           ),
                           children: <Widget>[
-                            Row(
-                              children: [
-                                for (var categorie in categories)
-                                  Chip(
-                                    label: Text(categorie),
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      for (var categorie in categories)
+                                        Chip(
+                                          label: Text(categorie),
+                                        ),
+                                    ],
                                   ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => DetailPackPage(pack: item)
-                                      )
-                                  );
-                                },
-                                child: Text("View")
-                            ),
-                            const SizedBox(height: 20)
+                                  const SizedBox(height: 20),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => DetailPackPage(pack: item)
+                                            )
+                                        );
+                                      },
+                                      child: Text(AppLocalizations.of(context)!.view)
+                                  ),
+                                ],
+                              ),
+                            )
                           ],
                         ),
                       ],

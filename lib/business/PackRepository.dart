@@ -34,6 +34,15 @@ class PackRepository {
     return null;
   }
 
+  Future<String> getPackName(String packId) async {
+    DocumentSnapshot documentSnapshot = await packs.doc(packId).get();
+    if(documentSnapshot.exists) {
+      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+      return data['name'];
+    }
+    return '';
+  }
+
   Future<void> addLien(String userId, String packId) async {
     Map<String, dynamic>? pack  = await getPack(packId);
     print(pack);

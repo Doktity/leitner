@@ -97,7 +97,7 @@ class _DetailPackPageState extends State<DetailPackPage> {
                       child: Column(
                         children: [
                           Text(
-                            "Liste des cartes",
+                            AppLocalizations.of(context)!.cards_list,
                             style: TextStyle(
                               fontSize: 24
                             ),
@@ -144,7 +144,7 @@ class _DetailPackPageState extends State<DetailPackPage> {
                     Navigator.of(context).restorablePush(_dialogBuilder, arguments: {'imagePathType': 'question' });
                   },
                   child: Text(
-                      isSubscribed ? 'Unsubscribed' : 'Subscribe',
+                      isSubscribed ? AppLocalizations.of(context)!.unsubscribe : AppLocalizations.of(context)!.subscribe,
                       style: TextStyle(
                         fontSize: 24
                       ),
@@ -170,13 +170,13 @@ class _DetailPackPageState extends State<DetailPackPage> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setStateDialog) {
             return AlertDialog(
-              title: Text("T'es sur ?"),
+              title: Text(AppLocalizations.of(context)!.sure_question),
               content: isLoading
                 ? Row(
                     children: [
                       CircularProgressIndicator(),
                       SizedBox(width: 20,),
-                      Text("Please wait"),
+                      Text(AppLocalizations.of(context)!.wait),
                     ],
                   )
                 : null,

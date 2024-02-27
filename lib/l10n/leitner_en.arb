@@ -230,5 +230,50 @@
         "placeholders": {
             "number": {}
         }
+    },
+
+    "cards": "Cards",
+    "@cards": {
+        "description": "Cards button"
+    },
+
+    "packs": "Packs",
+    "@packs": {
+        "description": "Packs button"
+    },
+
+    "dares": "Dares",
+    "@dares": {
+        "description": "Dares button"
+    },
+
+    "cards_list": "Cards list",
+    "@cards_list": {
+        "description": "Cards list text"
+    },
+
+    "subscribe": "Subscribe",
+    "@subscribe": {
+        "description": "Subscribe button"
+    },
+
+    "unsubscribe": "Unsubscribe",
+    "@unsubscribe": {
+        "description": "Unsubscribe button"
+    },
+
+    "sure_question": "Are you sure ?",
+    "@sure_question": {
+        "description": "Confirmation question"
+    },
+
+    "wait": "Please wait",
+    "@wait": {
+        "description": "Waiting message"
+    },
+
+    "view": "View",
+    "@view": {
+        "description": "View button"
     }
 }

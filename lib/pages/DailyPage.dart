@@ -6,7 +6,7 @@ import 'package:leitner/utils/EnumData.dart';
 import '../business/CardRepository.dart';
 import 'AnswerPage.dart';
 import 'HomePage.dart';
-import 'ListPage.dart';
+import 'CardPage.dart';
 
 class DailyPage extends StatefulWidget {
   const DailyPage({super.key});
@@ -218,7 +218,7 @@ class _DailyPageState extends State<DailyPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const ListPage()),
+                      MaterialPageRoute(builder: (context) => const CardPage()),
                     );
                   },
                   style: ElevatedButton.styleFrom(

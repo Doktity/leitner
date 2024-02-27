@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:leitner/pages/ListPage.dart';
+import 'package:leitner/pages/CardPage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/pages/SettingsPage.dart';
 
 import '../business/LoginRepository.dart';
-import 'AddPage.dart';
 import 'DailyPage.dart';
+import 'DarePage.dart';
 import 'LoginPage.dart';
 import 'PackPage.dart';
 
@@ -66,41 +66,17 @@ class HomePage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => const AddPage()
+                            builder: (_) => const CardPage()
                         )
                     );
                   },
-                  label: Text(AppLocalizations.of(context)!.add,
+                  label: Text(AppLocalizations.of(context)!.cards,
                     style: TextStyle(
                         fontFamily: "Mulish",
                         fontSize: 24
                     ),
                   ),
-                  icon: const Icon(Icons.add)
-              ),
-              const Padding(padding: EdgeInsets.all(20)),
-              ElevatedButton.icon(
-                  style: const ButtonStyle(
-                      padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
-                      backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                      fixedSize: MaterialStatePropertyAll(Size(300, 100)),
-                      foregroundColor: MaterialStatePropertyAll(Colors.black)
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const ListPage()
-                        )
-                    );
-                  },
-                  label: Text(AppLocalizations.of(context)!.list,
-                    style: TextStyle(
-                        fontFamily: "Mulish",
-                        fontSize: 24
-                    ),
-                  ),
-                  icon: const Icon(Icons.list_sharp)
+                  icon: const Icon(Icons.library_books)
               ),
               const Padding(padding: EdgeInsets.all(20)),
               ElevatedButton.icon(
@@ -118,13 +94,37 @@ class HomePage extends StatelessWidget {
                         )
                     );
                   },
-                  label: Text("Pack",
+                  label: Text(AppLocalizations.of(context)!.packs,
                     style: TextStyle(
                         fontFamily: "Mulish",
                         fontSize: 24
                     ),
                   ),
-                  icon: const Icon(Icons.list_sharp)
+                  icon: const Icon(Icons.collections_bookmark)
+              ),
+              const Padding(padding: EdgeInsets.all(20)),
+              ElevatedButton.icon(
+                  style: const ButtonStyle(
+                      padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
+                      backgroundColor: MaterialStatePropertyAll(Colors.blue),
+                      fixedSize: MaterialStatePropertyAll(Size(300, 100)),
+                      foregroundColor: MaterialStatePropertyAll(Colors.black)
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => DarePage()
+                        )
+                    );
+                  },
+                  label: Text(AppLocalizations.of(context)!.dares,
+                    style: TextStyle(
+                        fontFamily: "Mulish",
+                        fontSize: 24
+                    ),
+                  ),
+                  icon: const Icon(Icons.local_fire_department_sharp)
               ),
               const Padding(padding: EdgeInsets.all(20)),
               ElevatedButton.icon(
@@ -149,35 +149,23 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   icon: const Icon(Icons.settings)
-              ),
-              const Padding(padding: EdgeInsets.all(20)),
-              ElevatedButton.icon(
-                  style: const ButtonStyle(
-                      padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
-                      backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                      fixedSize: MaterialStatePropertyAll(Size(300, 100)),
-                      foregroundColor: MaterialStatePropertyAll(Colors.black)
-                  ),
-                  onPressed: () async {
-                    String deco = await _loginRepository.signOutGoogle();
-                    print(deco);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => LoginPage()
-                        )
-                    );
-                  },
-                  label: Text(AppLocalizations.of(context)!.logout,
-                    style: TextStyle(
-                        fontFamily: "Mulish",
-                        fontSize: 24
-                    ),
-                  ),
-                  icon: const Icon(Icons.logout)
               )
             ],
           )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          String deco = await _loginRepository.signOutGoogle();
+          print(deco);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => LoginPage()
+              )
+          );
+        },
+        backgroundColor: Colors.blue,
+        child: const Icon(Icons.logout)
       ),
     );
   }
