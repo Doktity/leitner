@@ -21,10 +21,11 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.login,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: "Mulish",
           ),
         ),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(

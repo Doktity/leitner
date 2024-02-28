@@ -42,7 +42,7 @@ class _SettingsPageState extends State<SettingsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.75,
+              width: MediaQuery.of(context).size.width * 0.9,
               child: Card(
                 margin: EdgeInsets.all(20),
                 shape: RoundedRectangleBorder(

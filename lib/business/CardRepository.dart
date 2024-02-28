@@ -26,10 +26,12 @@ class CardRepository {
       if(data != null) {
         String? cardId = data['cardId'] as String?;
         String? packId = data['packId'] as String?;
+        String? creatorId = data['creatorId'] as String?;
         Map<String, String> lData = {};
         if(cardId != null) {
           lData['cardId'] = cardId;
           lData['packId'] = packId ?? '';
+          lData['creatorId'] = creatorId ?? '';
           liensData.add(lData);
         }
       }
@@ -42,6 +44,7 @@ class CardRepository {
         Map<String, dynamic> cardData = cardSnapshot.data() as Map<String, dynamic>;
         cardData['cardId'] = data['cardId'];
         cardData['packId'] = data['packId'];
+        cardData['creatorId'] = data['creatorId'];
         userCards.add(cardData);
       }
     }
@@ -174,6 +177,75 @@ class CardRepository {
       }
     }
     return cardsList;
+  }
+
+  Future<void> deleteCard(String cardId) async {
+    try {
+      // Start a batch write
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+
+      // Delete the card from Cards collection
+      DocumentReference cardRef = cards.doc(cardId);
+      batch.delete(cardRef);
+
+      // Find and delete all lienCardUser of that card
+      QuerySnapshot liensSnapshot = await liens
+        .where('cardId', isEqualTo: cardId)
+        .get();
+      for(DocumentSnapshot lien in liensSnapshot.docs) {
+        batch.delete(lien.reference);
+      }
+
+      // Commit batch
+      await batch.commit();
+    } catch(e) {
+      print('Error deleting card: $e');
+    }
+  }
+
+  Future<void> addCard(String userId, Map<String, dynamic> card) async {
+
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    DocumentReference newCardRef = cards.doc();
+    batch.set(newCardRef, card);
+
+    DocumentReference newLienRef = liens.doc();
+    Map<String, dynamic> lienData = {
+      "userId": userId,
+      "cardId": newCardRef.id,
+      "periode": 1,
+      "lastPlayed": DateTime.now(),
+      "nextPlay": DateTime.now(),
+      "isDownloaded": false,
+      "packId": "",
+      "creatorId" : userId
+    };
+    batch.set(newLienRef, lienData);
+
+    await batch.commit();
+  }
+
+  Future<void> updateCard(String cardId, Map<String, dynamic> card) async {
+
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    DocumentReference cardRef = cards.doc(cardId);
+    batch.update(cardRef, card);
+
+    QuerySnapshot liensSnapshot = await liens
+      .where('cardId', isEqualTo: cardId)
+      .get();
+    for(var doc in liensSnapshot.docs) {
+      DocumentReference lienRef = doc.reference;
+      Map<String, dynamic> updateData = {
+        'periode': 1,
+        'nextPlay': DateTime.now()
+      };
+      batch.update(lienRef, updateData);
+    }
+
+    await batch.commit();
   }
 
 }

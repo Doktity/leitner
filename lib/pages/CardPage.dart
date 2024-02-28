@@ -27,6 +27,7 @@ class _CardPageState extends State<CardPage> {
   Map<String, List<Map<String, dynamic>>> groupedCards = {};
   List<String> sortedPackIds = [];
   List<String> sortedPackNames = [];
+  String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
 
   @override
   void initState() {
@@ -41,7 +42,7 @@ class _CardPageState extends State<CardPage> {
   }
 
   Future<void> _loadData() async {
-    String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+    dataState = DataState.loading;
     cards = await _cardRepository.getUserCards(userId);
 
     groupedCards = groupItemsByPackId(cards);
@@ -204,6 +205,37 @@ class _CardPageState extends State<CardPage> {
                                           ),
                                           const SizedBox(height: 10),
                                           Text(reponseText),
+                                          const SizedBox(height: 20),
+                                          if(item['creatorId'] == userId)
+                                            Row(
+                                              children: [
+                                                ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) => AddCardPage(card: item)
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Text("Update"),
+                                                    style: const ButtonStyle(
+                                                        backgroundColor: MaterialStatePropertyAll(Colors.lightBlue),
+                                                        foregroundColor: MaterialStatePropertyAll(Colors.black)
+                                                    )
+                                                ),
+                                                ElevatedButton(
+                                                    onPressed: () {
+                                                      removeDialog(item["cardId"]);
+                                                    },
+                                                    child: Text("Remove"),
+                                                    style: const ButtonStyle(
+                                                      backgroundColor: MaterialStatePropertyAll(Colors.red),
+                                                      foregroundColor: MaterialStatePropertyAll(Colors.black)
+                                                    ),
+                                                )
+                                              ],
+                                            )
                                         ],
                                       ),
                                     ),
@@ -234,6 +266,50 @@ class _CardPageState extends State<CardPage> {
         backgroundColor: Colors.blue,
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  void removeDialog(String cardId) {
+    bool isLoading = false;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setStateDialog) {
+                return AlertDialog(
+                  title: Text("Remove"),
+                  content: isLoading
+                    ? Row(
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(width: 20,),
+                        Text(AppLocalizations.of(context)!.wait),
+                      ],
+                    )
+                    : Text(AppLocalizations.of(context)!.sure_question),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text(AppLocalizations.of(context)!.cancel),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: Text(AppLocalizations.of(context)!.confirm),
+                      onPressed: () async {
+                        isLoading = true;
+                        setStateDialog(() {});
+                        await _cardRepository.deleteCard(cardId);
+                        _loadData();
+                        setState(() {});
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              }
+          );
+        }
     );
   }
 }

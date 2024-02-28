@@ -141,7 +141,7 @@ class _DetailPackPageState extends State<DetailPackPage> {
             child: (dataState == DataState.loaded) 
                 ? ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).restorablePush(_dialogBuilder, arguments: {'imagePathType': 'question' });
+                    _showDialog();
                   },
                   child: Text(
                       isSubscribed ? AppLocalizations.of(context)!.unsubscribe : AppLocalizations.of(context)!.subscribe,
@@ -161,10 +161,9 @@ class _DetailPackPageState extends State<DetailPackPage> {
     );
   }
 
-  @pragma('vm:entry-point')
-  Route<Object?> _dialogBuilder(BuildContext context, Object? arguments) {
+  void _showDialog() {
     bool isLoading = false;
-    return DialogRoute<void>(
+    showDialog(
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(

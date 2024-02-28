@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:leitner/pages/HomePage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:leitner/pages/LoginPage.dart';
@@ -21,6 +22,7 @@ Future<void> main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? selectedLanguage = prefs.getString('selectedLanguage');
 
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   runApp(MyApp(selectedLanguage: selectedLanguage));
 }
 
@@ -32,26 +34,6 @@ class MyApp extends StatefulWidget {
   static void setLocale(BuildContext context, Locale newLocale) {
     _MyAppState state = context.findAncestorStateOfType<_MyAppState>()!;
     state.setLocale(newLocale);
-  }
-
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Leitner',
-      theme: ThemeData(
-        fontFamily: "Mulish",
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      locale: Locale('en', 'US'), // Set the default locale
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: SettingsPage(Localizations.localeOf(context).languageCode),
-    );
   }
 
   @override
@@ -85,6 +67,12 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Leitner',
+      theme: ThemeData(
+        fontFamily: "Mulish",
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       locale: _locale, // Set the locale from state
       localizationsDelegates: [
         AppLocalizations.delegate,

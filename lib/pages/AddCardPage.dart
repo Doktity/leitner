@@ -9,7 +9,9 @@ import '../utils/ImageHandler.dart';
 import 'CardPage.dart';
 
 class AddCardPage extends StatefulWidget {
-  const AddCardPage({super.key});
+  final Map<String, dynamic>? card;
+
+  const AddCardPage({Key? key, this.card}) : super(key: key);
 
   @override
   State<AddCardPage> createState() => _AddCardPageState();
@@ -19,6 +21,7 @@ class _AddCardPageState extends State<AddCardPage> {
 
   final _formKey = GlobalKey<FormState>();
   final CardRepository _cardRepository = CardRepository();
+  bool isCreation = true;
 
   final questionController = TextEditingController();
   final reponseKeyController = TextEditingController();
@@ -38,6 +41,18 @@ class _AddCardPageState extends State<AddCardPage> {
   @override
   void initState() {
     super.initState();
+    if(widget.card != null) {
+      isCreation = false;
+      questionController.text = widget.card!['question'];
+      reponseKeyController.text = widget.card!['reponseKey'];
+      reponseTextController.text = widget.card!['reponseText'];
+      questionPath = widget.card!['questionImgPath'];
+      reponsePath = widget.card!['reponseImgPath'];
+      for(String cat in widget.card!['categorie']) {
+        categories.add(cat);
+      }
+      setState(() {});
+    }
     fetchCategories();
   }
 
@@ -62,11 +77,7 @@ class _AddCardPageState extends State<AddCardPage> {
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.add,
-          style: TextStyle(
-            fontFamily: "Mulish",
-          ),
-        ),
+        title: isCreation ? Text(AppLocalizations.of(context)!.add) : Text("Update"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -218,7 +229,7 @@ class _AddCardPageState extends State<AddCardPage> {
                         child: ElevatedButton(
                           onPressed: () {
                             // Open dialog for selecting question image
-                            Navigator.of(context).restorablePush(_dialogBuilder, arguments: {'imagePathType': 'question' });
+                            _showDialog('question');
                           },
                           child: Text(AppLocalizations.of(context)!.add_question_image),
                         ),
@@ -230,7 +241,7 @@ class _AddCardPageState extends State<AddCardPage> {
                         child: ElevatedButton(
                           onPressed: () {
                             // Open dialog for selecting response image
-                            Navigator.of(context).restorablePush(_dialogBuilder, arguments: {'imagePathType': 'response'});
+                            _showDialog('response');
                           },
                           child: Text(AppLocalizations.of(context)!.add_reponse_image),
                         ),
@@ -265,9 +276,8 @@ class _AddCardPageState extends State<AddCardPage> {
                           reponsePath = await _cardRepository.uploadImageToFirebase(reponseImageInfo);
                         }
 
-                        // ajout dans la base de données
-                        CollectionReference cards = FirebaseFirestore.instance.collection("Cards");
-                        DocumentReference newCard = await cards.add({
+                        // Data model pour Card
+                        Map<String, dynamic> cardData = {
                           "question" : question,
                           "reponseKey" : reponseKey,
                           "reponseText" : reponseText,
@@ -275,20 +285,16 @@ class _AddCardPageState extends State<AddCardPage> {
                           "reponseImgPath" : reponsePath,
                           "dateCreation" : DateTime.now(),
                           "categorie" : categories
-                        });
+                        };
 
-                        String cardId = newCard.id;
+                        if(isCreation) {
+                          // ajout dans la base de données
+                          _cardRepository.addCard(userId, cardData);
+                        } else {
+                          // update dans la base de données
+                          _cardRepository.updateCard(widget.card!['cardId'], cardData);
+                        }
 
-                        CollectionReference liens = FirebaseFirestore.instance.collection("LiensUserCard");
-                        await liens.add({
-                          "userId": userId,
-                          "cardId": cardId,
-                          "periode": 1,
-                          "lastPlayed": DateTime.now(),
-                          "nextPlay": DateTime.now(),
-                          "isDownloaded": false,
-                          "packId": ""
-                        });
 
                         // Override the Snackbar
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -323,17 +329,13 @@ class _AddCardPageState extends State<AddCardPage> {
 
 
   /* MODAL POUR L'AJOUT DE L'IMAGE */
-  @pragma('vm:entry-point')
-  Route<Object?> _dialogBuilder(BuildContext context, Object? arguments) {
-    final args = arguments as Map;
-    final String imagePathType = args['imagePathType'];
+  void _showDialog(String imagePathType) {
     CustomImageInfo? selectedImage = null;
-
-    return DialogRoute<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setStateDialog) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder (
+            builder: (BuildContext context, StateSetter setStateDialog) {
             return AlertDialog(
               title: Text(AppLocalizations.of(context)!.add_image),
               content: Column(
@@ -351,8 +353,12 @@ class _AddCardPageState extends State<AddCardPage> {
                   const SizedBox(height: 20,),
                   ElevatedButton(
                     onPressed: () async {
-                      String customImageName = imageNameController.text.isNotEmpty ? imageNameController.text : imagePathType;
-                      selectedImage = await pickImage(ImageSource.camera, customImageName);
+                      String customImageName = imageNameController.text
+                          .isNotEmpty
+                          ? imageNameController.text
+                          : imagePathType;
+                      selectedImage =
+                      await pickImage(ImageSource.camera, customImageName);
                       setStateDialog(() {});
                     },
                     child: Text(AppLocalizations.of(context)!.take_photo),
@@ -360,27 +366,34 @@ class _AddCardPageState extends State<AddCardPage> {
                   const SizedBox(height: 20,),
                   ElevatedButton(
                     onPressed: () async {
-                      String customImageName = imageNameController.text.isNotEmpty ? imageNameController.text : imagePathType;
-                      selectedImage = await pickImage(ImageSource.gallery, customImageName);
+                      String customImageName = imageNameController.text
+                          .isNotEmpty
+                          ? imageNameController.text
+                          : imagePathType;
+                      selectedImage =
+                      await pickImage(ImageSource.gallery, customImageName);
                       setStateDialog(() {});
                     },
                     child: Text(AppLocalizations.of(context)!.choose_gallery),
                   ),
                   const SizedBox(height: 20,),
                   if(selectedImage != null)
-                     Image.memory(
-                       selectedImage!.file,
-                       fit: BoxFit.contain,
-                       height: 200,
-                       width: 200,
-                       frameBuilder: ((context, child, frame, wasSynchronouslyLoaded) {
-                         if(wasSynchronouslyLoaded) return child;
-                         return AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 200),
-                            child: frame != null ? child : const CircularProgressIndicator(),
-                         );
-                       }),
-                     )
+                    Image.memory(
+                      selectedImage!.file,
+                      fit: BoxFit.contain,
+                      height: 200,
+                      width: 200,
+                      frameBuilder: ((context, child, frame,
+                          wasSynchronouslyLoaded) {
+                        if (wasSynchronouslyLoaded) return child;
+                        return AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 200),
+                          child: frame != null
+                              ? child
+                              : const CircularProgressIndicator(),
+                        );
+                      }),
+                    )
                 ],
               ),
               actions: <Widget>[
@@ -394,7 +407,9 @@ class _AddCardPageState extends State<AddCardPage> {
                   child: Text(AppLocalizations.of(context)!.confirm),
                   onPressed: () {
                     if (selectedImage != null) {
-                      if(imageNameController.text.isNotEmpty && imageNameController.text != selectedImage!.customName) {
+                      if (imageNameController.text.isNotEmpty &&
+                          imageNameController.text !=
+                              selectedImage!.customName) {
                         selectedImage!.customName = imageNameController.text;
                       }
                       if (imagePathType == "question") {
@@ -409,9 +424,8 @@ class _AddCardPageState extends State<AddCardPage> {
                 ),
               ],
             );
-          },
-        );
-      },
+          });
+        }
     );
   }
 }

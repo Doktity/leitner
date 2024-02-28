@@ -12,7 +12,20 @@
           "package_name": "com.doktity.leitner"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "569120086582-k5f933vodlo7m9m1eeni18tq00gcfq0c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.doktity.leitner",
+            "certificate_hash": "4ae13cfefbaf9e9538c0e5e27d907ad051fff2fe"
+          }
+        },
+        {
+          "client_id": "569120086582-6g6prnknf17n0mns3ds67gi4pk9voe19.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDQAAaE1vm7cGXUOIBYayLxoBv-Q6J8Vsg"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "569120086582-6g6prnknf17n0mns3ds67gi4pk9voe19.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "569120086582-7fccggnmr8trvldopubvr65j3lpd3l1g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.doktity.leitner"
+              }
+            }
+          ]
         }
       }
     }

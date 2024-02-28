@@ -29,107 +29,112 @@ class AnswerPage extends StatelessWidget {
     bool isCorrect = _isCorrect(userInput, reponseKey);
     _cardRepository.updatePeriode(isCorrect, periode, userId, cardId);
 
-    return Scaffold(
-      backgroundColor: Colors.blue.shade50,
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.answer),
-        automaticallyImplyLeading: false,
-      ),
-      body: Center(
-        child: Container(
-          margin: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              Card(
-                color: isCorrect ? Colors.green : Colors.red,
-                shape: const RoundedRectangleBorder(
-                  side: BorderSide(
-                    width: 2,
-                    color: Colors.black,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 200,
-                  child: Center(
-                    child: Text(
-                      isCorrect ? AppLocalizations.of(context)!.good_job : AppLocalizations.of(context)!.too_bad,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: Colors.blue.shade50,
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.answer),
+          automaticallyImplyLeading: false,
+        ),
+        body: Center(
+          child: Container(
+            margin: const EdgeInsets.all(20),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Card(
+                    color: isCorrect ? Colors.green : Colors.red,
+                    shape: const RoundedRectangleBorder(
+                      side: BorderSide(
+                        width: 2,
+                        color: Colors.black,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      child: Center(
+                        child: Text(
+                          isCorrect ? AppLocalizations.of(context)!.good_job : AppLocalizations.of(context)!.too_bad,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              Card(
-                color: Colors.white,
-                shape: const RoundedRectangleBorder(
-                  side: BorderSide(
-                    width: 2,
-                    color: Colors.black,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 500,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(AppLocalizations.of(context)!.answer_is("answer", reponseKey)),
-                        Text(reponseText),
-                        if(reponseImgPath.isNotEmpty)
-                          Image.network(
-                            reponseImgPath,
-                            fit: BoxFit.contain,
-                            height: 300,
-                            width: double.infinity,
-                            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return const Center(child: CircularProgressIndicator());
-                            },
-                            errorBuilder: (context, error, stackTrace) {
-                              return const SizedBox();
-                            },
-                          ),
-                      ],
+                  Card(
+                    color: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      side: BorderSide(
+                        width: 2,
+                        color: Colors.black,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
-                  ),
-                ),
-              )
-            ],
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(AppLocalizations.of(context)!.answer_is("answer", reponseKey)),
+                            Text(reponseText),
+                            if(reponseImgPath.isNotEmpty)
+                              Image.network(
+                                reponseImgPath,
+                                fit: BoxFit.contain,
+                                height: MediaQuery.of(context).size.height * 0.3,
+                                width: double.infinity,
+                                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return const Center(child: CircularProgressIndicator());
+                                },
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const SizedBox();
+                                },
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.replay_outlined),
-            label: AppLocalizations.of(context)!.replay,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: AppLocalizations.of(context)!.home,
-          ),
-        ],
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => DailyPage()),
-            );
-          } else if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          }
-        },
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 0,
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.replay_outlined),
+              label: AppLocalizations.of(context)!.replay,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: AppLocalizations.of(context)!.home,
+            ),
+          ],
+          onTap: (index) {
+            if (index == 0) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DailyPage()),
+              );
+            } else if (index == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            }
+          },
+        ),
       ),
     );
   }
