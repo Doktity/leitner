@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:leitner/pages/CardPage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:leitner/pages/GameModePage.dart';
 import 'package:leitner/pages/SettingsPage.dart';
 
 import '../business/LoginRepository.dart';
@@ -42,7 +43,7 @@ class HomePage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => const DailyPage()
+                            builder: (_) => GameModePage()
                         )
                     );
                   },

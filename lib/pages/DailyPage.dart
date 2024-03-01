@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/utils/EnumData.dart';
+import 'package:leitner/utils/DailyMetrics.dart';
 
 import '../business/CardRepository.dart';
 import 'AnswerPage.dart';
@@ -9,7 +10,8 @@ import 'HomePage.dart';
 import 'CardPage.dart';
 
 class DailyPage extends StatefulWidget {
-  const DailyPage({super.key});
+  final DailyMetrics dailyMetrics;
+  const DailyPage({super.key, required this.dailyMetrics});
 
   @override
   State<DailyPage> createState() => _DailyPageState();
@@ -268,6 +270,7 @@ class _DailyPageState extends State<DailyPage> {
                         context,
                         MaterialPageRoute(
                           builder: (_) => AnswerPage(
+                            widget.dailyMetrics,
                             reponseInput,
                             card['reponseKey'] ?? '',
                             card['reponseText'] ?? '',

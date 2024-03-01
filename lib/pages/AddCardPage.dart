@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:leitner/business/CardRepository.dart';
 
+import '../utils/FirebaseStorageService.dart';
 import '../utils/ImageHandler.dart';
 import 'CardPage.dart';
 
@@ -21,6 +22,7 @@ class _AddCardPageState extends State<AddCardPage> {
 
   final _formKey = GlobalKey<FormState>();
   final CardRepository _cardRepository = CardRepository();
+  final FirebaseStorageService _storageService = FirebaseStorageService();
   bool isCreation = true;
 
   final questionController = TextEditingController();
@@ -270,10 +272,10 @@ class _AddCardPageState extends State<AddCardPage> {
                         String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
 
                         if(questionImageInfo != null){
-                          questionPath = await _cardRepository.uploadImageToFirebase(questionImageInfo);
+                          questionPath = await _storageService.uploadImageToFirebase(questionImageInfo);
                         }
                         if(reponseImageInfo != null){
-                          reponsePath = await _cardRepository.uploadImageToFirebase(reponseImageInfo);
+                          reponsePath = await _storageService.uploadImageToFirebase(reponseImageInfo);
                         }
 
                         // Data model pour Card

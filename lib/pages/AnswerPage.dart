@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/business/CardRepository.dart';
+import 'package:leitner/utils/DailyMetrics.dart';
 
+import '../business/DareRepository.dart';
 import 'DailyPage.dart';
 import 'HomePage.dart';
 
-class AnswerPage extends StatelessWidget {
+class AnswerPage extends StatefulWidget {
+  final DailyMetrics dailyMetrics;
   final String userInput;
   final String reponseKey;
   final String reponseText;
@@ -13,9 +16,18 @@ class AnswerPage extends StatelessWidget {
   final String cardId;
   final String userId;
   final int periode;
-  final CardRepository _cardRepository = CardRepository();
 
-  AnswerPage(this.userInput, this.reponseKey, this.reponseText, this.reponseImgPath, this.cardId, this.userId, this.periode);
+  AnswerPage(this.dailyMetrics, this.userInput, this.reponseKey, this.reponseText, this.reponseImgPath, this.cardId, this.userId, this.periode);
+
+  @override
+  State<AnswerPage> createState() => _AnswerPageState();
+}
+
+class _AnswerPageState extends State<AnswerPage> {
+  final CardRepository _cardRepository = CardRepository();
+  final DareRepository dareRepository = DareRepository();
+
+  Map<String, dynamic> dare = {};
 
   bool _isCorrect(String input, String reponse){
     if(input.toLowerCase() == reponse.toLowerCase()){
@@ -25,9 +37,24 @@ class AnswerPage extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  void _loadData() async {
+    var fetchedDare = await dareRepository.getRandomDare(widget.userId);
+    if(mounted) {
+      setState(() {
+        dare = fetchedDare;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    bool isCorrect = _isCorrect(userInput, reponseKey);
-    _cardRepository.updatePeriode(isCorrect, periode, userId, cardId);
+    bool isCorrect = _isCorrect(widget.userInput, widget.reponseKey);
+    _cardRepository.updatePeriode(isCorrect, widget.periode, widget.userId, widget.cardId);
 
     return PopScope(
       canPop: false,
@@ -82,11 +109,11 @@ class AnswerPage extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(AppLocalizations.of(context)!.answer_is("answer", reponseKey)),
-                            Text(reponseText),
-                            if(reponseImgPath.isNotEmpty)
+                            Text(AppLocalizations.of(context)!.answer_is("answer", widget.reponseKey)),
+                            Text(widget.reponseText),
+                            if(widget.reponseImgPath.isNotEmpty)
                               Image.network(
-                                reponseImgPath,
+                                widget.reponseImgPath,
                                 fit: BoxFit.contain,
                                 height: MediaQuery.of(context).size.height * 0.3,
                                 width: double.infinity,
@@ -121,11 +148,17 @@ class AnswerPage extends StatelessWidget {
               label: AppLocalizations.of(context)!.home,
             ),
           ],
-          onTap: (index) {
-            if (index == 0) {
+          onTap: (index) async {
+
+            // Handle gamemode logic
+            if(dare.isNotEmpty && widget.dailyMetrics.handleGamemodeLogic(isCorrect, context)) {
+              await _showDareDialog(context, dare, index);
+            }
+
+            else if (index == 0) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DailyPage()),
+                MaterialPageRoute(builder: (context) => DailyPage(dailyMetrics: widget.dailyMetrics)),
               );
             } else if (index == 1) {
               Navigator.push(
@@ -136,6 +169,45 @@ class AnswerPage extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  Future<void> _showDareDialog(BuildContext context, Map<String, dynamic> dare, int index) async {
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(dare['name']),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  Text(dare['description']),
+                  if(dare['imgPath'].isNotEmpty)
+                    Image.network(dare['imgPath']),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.confirm),
+                onPressed: () {
+                  if (index == 0) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DailyPage(dailyMetrics: widget.dailyMetrics)),
+                    );
+                  } else if (index == 1) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  }
+                },
+              )
+            ],
+          );
+        }
     );
   }
 }
