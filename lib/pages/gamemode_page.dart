@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:leitner/utils/DailyMetrics.dart';
-import 'package:leitner/utils/StyledTooltip.dart';
+import 'package:leitner/utils/daily_metrics.dart';
+import 'package:leitner/utils/styled_tooltip.dart';
 
-import 'DailyPage.dart';
-import 'HomePage.dart';
+import 'daily_page.dart';
+import 'home_page.dart';
 
 class GameModePage extends StatelessWidget {
   GameModePage({super.key});
@@ -52,8 +52,8 @@ class GameModePage extends StatelessWidget {
                           )
                       );
                     },
-                    label: Text("Chill",
-                      style: TextStyle(
+                    label: Text(AppLocalizations.of(context)!.chill,
+                      style: const TextStyle(
                           fontFamily: "Mulish",
                           fontSize: 24
                       ),
@@ -61,7 +61,7 @@ class GameModePage extends StatelessWidget {
                     icon: const Icon(Icons.beach_access_sharp)
                 ),
                 const SizedBox(width: 10),
-                const StyledTooltip(message: "A relaxed, no-pressure quiz experience.")
+                StyledTooltip(message: AppLocalizations.of(context)!.chill_desc)
               ],
             ),
             const Padding(padding: EdgeInsets.all(20)),
@@ -84,8 +84,8 @@ class GameModePage extends StatelessWidget {
                           )
                       );
                     },
-                    label: Text("Classic",
-                      style: TextStyle(
+                    label: Text(AppLocalizations.of(context)!.classic,
+                      style: const TextStyle(
                           fontFamily: "Mulish",
                           fontSize: 24
                       ),
@@ -93,7 +93,7 @@ class GameModePage extends StatelessWidget {
                     icon: const Icon(Icons.school_sharp)
                 ),
                 const SizedBox(width: 10),
-                const StyledTooltip(message: "Challenge yourself with a balanced mix of questions. Receive a dare if more than half are answered incorrectly.")
+                StyledTooltip(message: AppLocalizations.of(context)!.classic_desc)
               ],
             ),
             const Padding(padding: EdgeInsets.all(20)),
@@ -116,7 +116,7 @@ class GameModePage extends StatelessWidget {
                           )
                       );
                     },
-                    label: Text("Sudden death",
+                    label: Text(AppLocalizations.of(context)!.sudden_death,
                       style: const TextStyle(
                           fontFamily: "Mulish",
                           fontSize: 24
@@ -125,7 +125,7 @@ class GameModePage extends StatelessWidget {
                     icon: const Icon(Icons.local_fire_department_sharp)
                 ),
                 const SizedBox(width: 10),
-                const StyledTooltip(message: "High stakes for every question! Get a dare for each incorrect answer. Perfect for those who love a challenge.")
+                StyledTooltip(message: AppLocalizations.of(context)!.sudden_death_desc)
               ],
             ),
             const Padding(padding: EdgeInsets.all(20)),
@@ -148,8 +148,8 @@ class GameModePage extends StatelessWidget {
                           )
                       );
                     },
-                    label: Text("Marathon",
-                      style: TextStyle(
+                    label: Text(AppLocalizations.of(context)!.marathon,
+                      style: const TextStyle(
                           fontFamily: "Mulish",
                           fontSize: 24
                       ),
@@ -157,7 +157,7 @@ class GameModePage extends StatelessWidget {
                     icon: const Icon(Icons.emoji_events_sharp)
                 ),
                 const SizedBox(width: 10),
-                const StyledTooltip(message: "Endurance is key! Face a dare after every question, regardless of your answer. A true test of persistence and resilience.")
+                StyledTooltip(message: AppLocalizations.of(context)!.marathon_desc)
               ],
             ),
           ],

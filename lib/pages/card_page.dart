@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:leitner/business/CardRepository.dart';
-import 'package:leitner/business/PackRepository.dart';
-import 'package:leitner/utils/EnumData.dart';
+import 'package:leitner/services/card_service.dart';
+import 'package:leitner/services/pack_service.dart';
+import 'package:leitner/utils/enum_data.dart';
 import 'package:collection/collection.dart';
 
-import 'AddCardPage.dart';
-import 'HomePage.dart';
+import 'add_card_page.dart';
+import 'home_page.dart';
 
 class CardPage extends StatefulWidget {
   const CardPage({super.key});
@@ -20,8 +20,8 @@ class _CardPageState extends State<CardPage> {
   Map<String, bool> expandedStates = {}; // Map to store expanded states
   List<String> uniqueCategories = [];
   String selectedCategory = 'All';
-  final CardRepository _cardRepository = CardRepository();
-  final PackRepository _packRepository = PackRepository();
+  final CardService _cardService = CardService();
+  final PackService _packService = PackService();
   List<Map<String, dynamic>> cards = List.empty();
   DataState dataState = DataState.loading;
   Map<String, List<Map<String, dynamic>>> groupedCards = {};
@@ -43,13 +43,13 @@ class _CardPageState extends State<CardPage> {
 
   Future<void> _loadData() async {
     dataState = DataState.loading;
-    cards = await _cardRepository.getUserCards(userId);
+    cards = await _cardService.getUserCards(userId);
 
     groupedCards = groupItemsByPackId(cards);
     sortedPackIds = groupedCards.keys.toList()..sort((a, b) => a.length.compareTo(b.length));
     for(String id in sortedPackIds) {
       if(id.isNotEmpty) {
-        String name = await _packRepository.getPackName(id);
+        String name = await _packService.getPackName(id);
         sortedPackNames.add(name);
       } else {
         sortedPackNames.add('No packs');
@@ -299,7 +299,7 @@ class _CardPageState extends State<CardPage> {
                       onPressed: () async {
                         isLoading = true;
                         setStateDialog(() {});
-                        await _cardRepository.deleteCard(cardId);
+                        await _cardService.deleteCard(cardId);
                         _loadData();
                         setState(() {});
                         Navigator.of(context).pop();

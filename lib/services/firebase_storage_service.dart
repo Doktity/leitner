@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
-import 'ImageHandler.dart';
+import '../utils/image_handler.dart';
 
 class FirebaseStorageService {
 

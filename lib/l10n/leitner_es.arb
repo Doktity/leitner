@@ -107,5 +107,21 @@
 
     "wait": "Por favor, espera",
 
-    "view": "Ver"
+    "view": "Ver",
+
+    "chill": "Relajado",
+
+    "classic": "Clásico",
+
+    "sudden_death": "Muerte Súbita",
+
+    "marathon": "Maratón",
+
+    "chill_desc": "Una experiencia de cuestionario relajada y sin presiones.",
+
+    "classic_desc": "Desafíate a ti mismo con una mezcla equilibrada de preguntas. Recibe una penitencia si pierdes todos tus puntos de vida.",
+
+    "sudden_death_desc": "¡Alto riesgo en cada pregunta! Obtén una penitencia por cada respuesta incorrecta. Perfecto para los que aman los desafíos.",
+
+    "marathon_desc": "¡La resistencia es clave! Enfrenta una penitencia después de cada pregunta, independientemente de tu respuesta. Una verdadera prueba de persistencia y resistencia."
 }

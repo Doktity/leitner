@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:leitner/pages/HomePage.dart';
+import 'package:leitner/pages/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:leitner/pages/LoginPage.dart';
-import 'package:leitner/pages/SettingsPage.dart';
+import 'package:leitner/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -2,11 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:leitner/services/dare_service.dart';
 
-import '../business/DareRepository.dart';
-import '../utils/FirebaseStorageService.dart';
-import '../utils/ImageHandler.dart';
-import 'DarePage.dart';
+import '../services/firebase_storage_service.dart';
+import '../utils/image_handler.dart';
+import 'dare_page.dart';
 
 class AddDarePage extends StatefulWidget {
   final Map<String, dynamic>? dare;
@@ -31,7 +31,7 @@ class _AddDarePageState extends State<AddDarePage> {
   CustomImageInfo? imageInfo;
   String imgPath = "";
 
-  final DareRepository _dareRepository = DareRepository();
+  final DareService _dareService = DareService();
   final FirebaseStorageService _storageService = FirebaseStorageService();
 
   @override
@@ -51,7 +51,7 @@ class _AddDarePageState extends State<AddDarePage> {
   }
 
   fetchCategories() async {
-    predefinedCategories = await _dareRepository.getCategories();
+    predefinedCategories = await _dareService.getCategories();
     setState(() {});
   }
 
@@ -246,10 +246,10 @@ class _AddDarePageState extends State<AddDarePage> {
 
                             if(isCreation) {
                               // ajout dans la base de données
-                              _dareRepository.addDare(userId, dareData);
+                              _dareService.addDare(userId, dareData);
                             } else {
                               // update dans la base de données
-                              _dareRepository.updateDare(widget.dare!['id'], dareData);
+                              _dareService.updateDare(widget.dare!['id'], dareData);
                             }
 
 

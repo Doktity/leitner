@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:leitner/utils/EnumData.dart';
+import 'package:leitner/services/card_service.dart';
+import 'package:leitner/services/pack_service.dart';
+import 'package:leitner/utils/enum_data.dart';
 
-import '../business/CardRepository.dart';
-import '../business/PackRepository.dart';
-import '../business/UserRepository.dart';
+import '../business/user_repository.dart';
 
 class DetailPackPage extends StatefulWidget {
   final Map<String, dynamic> pack;
@@ -19,8 +19,8 @@ class DetailPackPage extends StatefulWidget {
 class _DetailPackPageState extends State<DetailPackPage> {
   bool isSubscribed = false;
   final String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
-  final CardRepository _cardRepository = CardRepository();
-  final PackRepository _packRepository = PackRepository();
+  final CardService _cardService = CardService();
+  final PackService _packService = PackService();
   final UserRepository _userRepository = UserRepository();
   List<Map<String, dynamic>> cards = [];
   String username = "";
@@ -35,9 +35,9 @@ class _DetailPackPageState extends State<DetailPackPage> {
   void _loadData() async {
     try{
       username = await _userRepository.getUserName(userId);
-      List<String> cardIds = widget.pack['cards'].cast<String>();
-      cards = await _cardRepository.getListCards(cardIds);
-      isSubscribed = await _packRepository.isUserSubscribed(userId, widget.pack['id']);
+      List<String> cardIds = widget.pack['ids'].cast<String>();
+      cards = await _cardService.getListCards(cardIds);
+      isSubscribed = await _packService.isUserSubscribed(userId, widget.pack['id']);
     } catch(e) {
       dataState = DataState.empty;
     }
@@ -49,9 +49,9 @@ class _DetailPackPageState extends State<DetailPackPage> {
 
   Future<void> toggleSubscription() async {
     if(isSubscribed) {
-      await _packRepository.removeLien(userId, widget.pack['id']);
+      await _packService.removeLienCard(userId, widget.pack['id']);
     } else {
-      await _packRepository.addLien(userId, widget.pack['id']);
+      await _packService.addLienCard(userId, widget.pack['id']);
     }
     setState(() {
       isSubscribed = !isSubscribed;

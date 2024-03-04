@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:leitner/business/CardRepository.dart';
-import 'package:leitner/utils/DailyMetrics.dart';
+import 'package:leitner/pages/stat_page.dart';
+import 'package:leitner/services/dare_service.dart';
+import 'package:leitner/utils/daily_metrics.dart';
 
-import '../business/DareRepository.dart';
-import 'DailyPage.dart';
-import 'HomePage.dart';
+import '../services/card_service.dart';
+import 'daily_page.dart';
 
 class AnswerPage extends StatefulWidget {
   final DailyMetrics dailyMetrics;
@@ -24,10 +24,12 @@ class AnswerPage extends StatefulWidget {
 }
 
 class _AnswerPageState extends State<AnswerPage> {
-  final CardRepository _cardRepository = CardRepository();
-  final DareRepository dareRepository = DareRepository();
+  final CardService _cardService = CardService();
+  final DareService _dareService = DareService();
 
   Map<String, dynamic> dare = {};
+  bool showDareButton = false;
+  late bool isCorrect;
 
   bool _isCorrect(String input, String reponse){
     if(input.toLowerCase() == reponse.toLowerCase()){
@@ -39,11 +41,14 @@ class _AnswerPageState extends State<AnswerPage> {
   @override
   void initState() {
     super.initState();
+    isCorrect = _isCorrect(widget.userInput, widget.reponseKey);
+    showDareButton = widget.dailyMetrics.handleGamemodeLogic(isCorrect);
+    _manageMetrics();
     _loadData();
   }
 
   void _loadData() async {
-    var fetchedDare = await dareRepository.getRandomDare(widget.userId);
+    var fetchedDare = await _dareService.getRandomDare(widget.userId);
     if(mounted) {
       setState(() {
         dare = fetchedDare;
@@ -51,10 +56,15 @@ class _AnswerPageState extends State<AnswerPage> {
     }
   }
 
+  void _manageMetrics() {
+    widget.dailyMetrics.cardAnswered(isCorrect);
+    widget.dailyMetrics.addCardId(widget.cardId);
+    if(showDareButton) widget.dailyMetrics.addDareId(dare["id"]);
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isCorrect = _isCorrect(widget.userInput, widget.reponseKey);
-    _cardRepository.updatePeriode(isCorrect, widget.periode, widget.userId, widget.cardId);
+    _cardService.updatePeriode(isCorrect, widget.periode, widget.userId, widget.cardId);
 
     return PopScope(
       canPop: false,
@@ -135,44 +145,12 @@ class _AnswerPageState extends State<AnswerPage> {
             ),
           ),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 0,
-          type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.replay_outlined),
-              label: AppLocalizations.of(context)!.replay,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: AppLocalizations.of(context)!.home,
-            ),
-          ],
-          onTap: (index) async {
-
-            // Handle gamemode logic
-            if(dare.isNotEmpty && widget.dailyMetrics.handleGamemodeLogic(isCorrect, context)) {
-              await _showDareDialog(context, dare, index);
-            }
-
-            else if (index == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DailyPage(dailyMetrics: widget.dailyMetrics)),
-              );
-            } else if (index == 1) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
-            }
-          },
-        ),
+        bottomNavigationBar: showDareButton ? _buildDareButton() : _buildBottomNavigationBar(),
       ),
     );
   }
 
-  Future<void> _showDareDialog(BuildContext context, Map<String, dynamic> dare, int index) async {
+  Future<void> _showDareDialog(BuildContext context, Map<String, dynamic> dare) async {
 
     showDialog(
         context: context,
@@ -192,22 +170,57 @@ class _AnswerPageState extends State<AnswerPage> {
               TextButton(
                 child: Text(AppLocalizations.of(context)!.confirm),
                 onPressed: () {
-                  if (index == 0) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => DailyPage(dailyMetrics: widget.dailyMetrics)),
-                    );
-                  } else if (index == 1) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  }
+                  Navigator.of(context).pop();
                 },
               )
             ],
           );
         }
+    );
+  }
+
+  Widget _buildDareButton() {
+    return FloatingActionButton(
+      child: Icon(Icons.local_fire_department_sharp),
+      tooltip: AppLocalizations.of(context)!.dares,
+      onPressed: () async {
+        await _showDareDialog(context, dare);
+        setState(() {
+          showDareButton = false;
+        });
+      },
+    );
+  }
+  
+  Widget _buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      currentIndex: 0,
+      type: BottomNavigationBarType.fixed,
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.replay_outlined),
+          label: AppLocalizations.of(context)!.replay,
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: AppLocalizations.of(context)!.home,
+        ),
+      ],
+      onTap: (index) async {
+        
+        if (index == 0) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => DailyPage(dailyMetrics: widget.dailyMetrics)),
+          );
+        } else if (index == 1) {
+          widget.dailyMetrics.endSession();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => StatPage(dailyMetrics: widget.dailyMetrics)),
+          );
+        }
+      },
     );
   }
 }

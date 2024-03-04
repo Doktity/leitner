@@ -107,5 +107,21 @@
 
     "wait": "Veuillez patienter",
 
-    "view": "Voir"
+    "view": "Voir",
+
+    "chill": "Détente",
+
+    "classic": "Classique",
+
+    "sudden_death": "Mort subite",
+
+    "marathon": "Marathon",
+
+    "chill_desc": "Une expérience de quiz détendue et sans pression.",
+
+    "classic_desc": "Mettez-vous au défi avec un mélange équilibré de questions. Recevez un gage si vous perdez tous vos points de vie.",
+
+    "sudden_death_desc": "Enjeux élevés pour chaque question ! Recevez un gage pour chaque réponse incorrecte. Parfait pour ceux qui aiment les défis.",
+
+    "marathon_desc": "L'endurance est clé ! Recevez un gage après chaque question, quelle que soit votre réponse. Un véritable test de persévérance et de résilience."
 }

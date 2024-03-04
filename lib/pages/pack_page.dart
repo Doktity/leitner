@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:leitner/services/pack_service.dart';
 
-import '../business/PackRepository.dart';
-import '../business/UserRepository.dart';
-import 'DetailPackPage.dart';
-import 'HomePage.dart';
+import '../business/user_repository.dart';
+import 'detail_pack_page.dart';
+import 'home_page.dart';
 
 class PackPage extends StatefulWidget {
   const PackPage({super.key});
@@ -14,7 +14,7 @@ class PackPage extends StatefulWidget {
 }
 
 class _PackPageState extends State<PackPage> {
-  final PackRepository _packRepository = PackRepository();
+  final PackService _packService = PackService();
   final UserRepository _userRepository = UserRepository();
   List<Map<String, dynamic>> packs = List.empty();
 
@@ -25,7 +25,7 @@ class _PackPageState extends State<PackPage> {
   }
 
   Future<void> _loadData() async {
-    packs = await _packRepository.getAllPacks();
+    packs = await _packService.getAllPacks();
     for(Map<String, dynamic> pack in packs) {
       pack['username'] = await _userRepository.getUserName(pack['userId']);
     }
@@ -66,7 +66,7 @@ class _PackPageState extends State<PackPage> {
                   final name = item['name'] ?? '';
                   final description = item['description'] ?? '';
                   final categories = item['categories'];
-                  final cardsNumber = item['cards'].length;
+                  final cardsNumber = item['ids'].length;
                   final username = item['username'];
 
                   return Card(

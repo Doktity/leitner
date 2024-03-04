@@ -1,13 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:leitner/business/CardRepository.dart';
+import 'package:leitner/services/card_service.dart';
 
-import '../utils/FirebaseStorageService.dart';
-import '../utils/ImageHandler.dart';
-import 'CardPage.dart';
+import '../services/firebase_storage_service.dart';
+import '../utils/image_handler.dart';
+import 'card_page.dart';
 
 class AddCardPage extends StatefulWidget {
   final Map<String, dynamic>? card;
@@ -21,7 +20,7 @@ class AddCardPage extends StatefulWidget {
 class _AddCardPageState extends State<AddCardPage> {
 
   final _formKey = GlobalKey<FormState>();
-  final CardRepository _cardRepository = CardRepository();
+  final CardService _cardService = CardService();
   final FirebaseStorageService _storageService = FirebaseStorageService();
   bool isCreation = true;
 
@@ -59,7 +58,7 @@ class _AddCardPageState extends State<AddCardPage> {
   }
 
   fetchCategories() async {
-    predefinedCategories = await _cardRepository.getCategories();
+    predefinedCategories = await _cardService.getCategories();
     setState(() {});
   }
 
@@ -291,10 +290,10 @@ class _AddCardPageState extends State<AddCardPage> {
 
                         if(isCreation) {
                           // ajout dans la base de données
-                          _cardRepository.addCard(userId, cardData);
+                          _cardService.addCard(userId, cardData);
                         } else {
                           // update dans la base de données
-                          _cardRepository.updateCard(widget.card!['cardId'], cardData);
+                          _cardService.updateCard(widget.card!['cardId'], cardData);
                         }
 
 

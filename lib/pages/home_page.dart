@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:leitner/pages/CardPage.dart';
+import 'package:leitner/pages/card_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:leitner/pages/GameModePage.dart';
-import 'package:leitner/pages/SettingsPage.dart';
+import 'package:leitner/pages/gamemode_page.dart';
+import 'package:leitner/pages/settings_page.dart';
 
-import '../business/LoginRepository.dart';
-import 'DailyPage.dart';
-import 'DarePage.dart';
-import 'LoginPage.dart';
-import 'PackPage.dart';
+import '../business/login_repository.dart';
+import 'dare_page.dart';
+import 'login_page.dart';
+import 'pack_page.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({

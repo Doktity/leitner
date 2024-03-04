@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:leitner/services/dare_service.dart';
 
-import '../business/DareRepository.dart';
-import '../business/UserRepository.dart';
-import 'AddDarePage.dart';
-import 'HomePage.dart';
+import '../business/user_repository.dart';
+import 'add_dare_page.dart';
+import 'home_page.dart';
 
 class DarePage extends StatefulWidget {
   const DarePage({super.key});
@@ -15,7 +15,7 @@ class DarePage extends StatefulWidget {
 }
 
 class _DarePageState extends State<DarePage> {
-  final DareRepository _dareRepository = DareRepository();
+  final DareService _dareService = DareService();
   final UserRepository _userRepository = UserRepository();
   List<Map<String, dynamic>> dares = List.empty();
 
@@ -28,7 +28,7 @@ class _DarePageState extends State<DarePage> {
   }
 
   Future<void> _loadData() async {
-    dares = await _dareRepository.getAllDares();
+    dares = await _dareService.getAllDares();
     setState(() {}); // Trigger a rebuild after data is loaded
   }
 
@@ -108,7 +108,7 @@ class _DarePageState extends State<DarePage> {
                                         ),
                                         ElevatedButton(
                                           onPressed: () {
-                                            removeDialog(item["dareId"]);
+                                            removeDialog(item["id"]);
                                           },
                                           child: Text("Remove"),
                                           style: const ButtonStyle(
@@ -177,7 +177,7 @@ class _DarePageState extends State<DarePage> {
                             onPressed: () async {
                               isLoading = true;
                               setStateDialog(() {});
-                              await _dareRepository.deleteDare(dareId);
+                              await _dareService.deleteDare(dareId);
                               _loadData();
                               setState(() {});
                               Navigator.of(context).pop();

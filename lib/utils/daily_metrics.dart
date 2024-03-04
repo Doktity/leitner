@@ -13,7 +13,7 @@ class DailyMetrics {
   DateTime sessionStartTime;
   DateTime? sessionEndTime;
   List<String> cardIds = [];
-  List<String> gageIds = [];
+  List<String> dareIds = [];
   int lifePoint = 5;
   // Other fields as required
 
@@ -22,7 +22,7 @@ class DailyMetrics {
     required this.gameMode,
     DateTime? date,
   }) : this.date = date ?? DateTime.now(),
-        this.sessionStartTime = DateTime.now();
+        sessionStartTime = DateTime.now();
 
   void cardAnswered(bool isCorrect) {
     totalCards++;
@@ -42,18 +42,18 @@ class DailyMetrics {
     cardIds.add(cardId);
   }
 
-  void addGageId(String gageId) {
-    gageIds.add(gageId);
+  void addDareId(String dareId) {
+    dareIds.add(dareId);
   }
 
-  bool handleGamemodeLogic(bool isCorrect, BuildContext context) {
+  bool handleGamemodeLogic(bool isCorrect) {
     switch(gameMode) {
       case GameMode.chill:
         // nothing happens
         return false;
       case GameMode.classic:
         // Dare if no lifePoint
-        lifePoint--;
+        if(!isCorrect) lifePoint--;
         if(lifePoint == 0) {
           lifePoint = 5;
           return true;
@@ -65,6 +65,19 @@ class DailyMetrics {
       case GameMode.marathon:
         // Always dare
         return true;
+    }
+  }
+
+  String getGameMode(BuildContext context) {
+    switch(gameMode) {
+      case GameMode.chill:
+        return AppLocalizations.of(context)!.chill;
+      case GameMode.classic:
+        return AppLocalizations.of(context)!.classic;
+      case GameMode.suddenDeath:
+        return AppLocalizations.of(context)!.sudden_death;
+      case GameMode.marathon:
+        return AppLocalizations.of(context)!.marathon;
     }
   }
 

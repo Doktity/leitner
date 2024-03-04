@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:leitner/utils/EnumData.dart';
-import 'package:leitner/utils/DailyMetrics.dart';
+import 'package:leitner/services/card_service.dart';
+import 'package:leitner/utils/enum_data.dart';
+import 'package:leitner/utils/daily_metrics.dart';
 
-import '../business/CardRepository.dart';
-import 'AnswerPage.dart';
-import 'HomePage.dart';
-import 'CardPage.dart';
+import 'answer_page.dart';
+import 'home_page.dart';
+import 'card_page.dart';
 
 class DailyPage extends StatefulWidget {
   final DailyMetrics dailyMetrics;
@@ -20,7 +20,7 @@ class DailyPage extends StatefulWidget {
 class _DailyPageState extends State<DailyPage> {
   final _formKey = GlobalKey<FormState>();
   final reponseController = TextEditingController();
-  final CardRepository _cardRepository = CardRepository();
+  final CardService _cardService = CardService();
   dynamic card = {};
   int periode = 1;
   final String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
@@ -34,8 +34,8 @@ class _DailyPageState extends State<DailyPage> {
 
   Future<void> _loadData() async {
     try {
-      card = await _cardRepository.getRandomCard(userId);
-      periode = await _cardRepository.getUserCardPeriode(userId, card['id']);
+      card = await _cardService.getRandomCard(userId);
+      periode = await _cardService.getUserCardPeriode(userId, card['id']);
     } catch (e) {
       dataState = DataState.empty;
     }
@@ -56,7 +56,7 @@ class _DailyPageState extends State<DailyPage> {
     return Scaffold(
       backgroundColor: Colors.blue.shade50,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.daily),
+        title: Text("${AppLocalizations.of(context)!.daily} - ${widget.dailyMetrics.getGameMode(context)}"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
