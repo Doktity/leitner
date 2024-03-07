@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/pages/gamemode_page.dart';
 import 'package:leitner/pages/settings_page.dart';
 
-import '../business/login_repository.dart';
+import '../services/login_service.dart';
 import 'dare_page.dart';
 import 'login_page.dart';
 import 'pack_page.dart';
@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
     super.key,
   });
 
-  final LoginRepository _loginRepository = LoginRepository();
+  final LoginService _loginRepository = LoginService();
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +25,18 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(AppLocalizations.of(context)!.welcome,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 36,
                     fontFamily: "Mulish"
                 ),
               ),
               const Padding(padding: EdgeInsets.only(top: 20)),
               ElevatedButton.icon(
-                  style: const ButtonStyle(
+                  style: ButtonStyle(
                       padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
                       backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                      fixedSize: MaterialStatePropertyAll(Size(300, 100)),
+                      fixedSize: MaterialStatePropertyAll(Size(MediaQuery.of(context).size.width * 0.8, MediaQuery.of(context).size.height * 0.1)),
+                      maximumSize: MaterialStatePropertyAll(Size(300, 100)),
                       foregroundColor: MaterialStatePropertyAll(Colors.black)
                   ),
                   onPressed: () {
@@ -47,7 +48,7 @@ class HomePage extends StatelessWidget {
                     );
                   },
                   label: Text(AppLocalizations.of(context)!.daily,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: "Mulish",
                         fontSize: 24
                     ),
@@ -56,10 +57,11 @@ class HomePage extends StatelessWidget {
               ),
               const Padding(padding: EdgeInsets.all(20)),
               ElevatedButton.icon(
-                  style: const ButtonStyle(
+                  style: ButtonStyle(
                       padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
                       backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                      fixedSize: MaterialStatePropertyAll(Size(300, 100)),
+                      fixedSize: MaterialStatePropertyAll(Size(MediaQuery.of(context).size.width * 0.8, MediaQuery.of(context).size.height * 0.1)),
+                      maximumSize: MaterialStatePropertyAll(Size(300, 100)),
                       foregroundColor: MaterialStatePropertyAll(Colors.black)
                   ),
                   onPressed: () {
@@ -71,7 +73,7 @@ class HomePage extends StatelessWidget {
                     );
                   },
                   label: Text(AppLocalizations.of(context)!.cards,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: "Mulish",
                         fontSize: 24
                     ),
@@ -80,34 +82,11 @@ class HomePage extends StatelessWidget {
               ),
               const Padding(padding: EdgeInsets.all(20)),
               ElevatedButton.icon(
-                  style: const ButtonStyle(
+                  style: ButtonStyle(
                       padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
                       backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                      fixedSize: MaterialStatePropertyAll(Size(300, 100)),
-                      foregroundColor: MaterialStatePropertyAll(Colors.black)
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => PackPage()
-                        )
-                    );
-                  },
-                  label: Text(AppLocalizations.of(context)!.packs,
-                    style: TextStyle(
-                        fontFamily: "Mulish",
-                        fontSize: 24
-                    ),
-                  ),
-                  icon: const Icon(Icons.collections_bookmark)
-              ),
-              const Padding(padding: EdgeInsets.all(20)),
-              ElevatedButton.icon(
-                  style: const ButtonStyle(
-                      padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
-                      backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                      fixedSize: MaterialStatePropertyAll(Size(300, 100)),
+                      fixedSize: MaterialStatePropertyAll(Size(MediaQuery.of(context).size.width * 0.8, MediaQuery.of(context).size.height * 0.1)),
+                      maximumSize: MaterialStatePropertyAll(Size(300, 100)),
                       foregroundColor: MaterialStatePropertyAll(Colors.black)
                   ),
                   onPressed: () {
@@ -119,7 +98,7 @@ class HomePage extends StatelessWidget {
                     );
                   },
                   label: Text(AppLocalizations.of(context)!.dares,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: "Mulish",
                         fontSize: 24
                     ),
@@ -128,10 +107,36 @@ class HomePage extends StatelessWidget {
               ),
               const Padding(padding: EdgeInsets.all(20)),
               ElevatedButton.icon(
-                  style: const ButtonStyle(
+                  style: ButtonStyle(
                       padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
                       backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                      fixedSize: MaterialStatePropertyAll(Size(300, 100)),
+                      fixedSize: MaterialStatePropertyAll(Size(MediaQuery.of(context).size.width * 0.8, MediaQuery.of(context).size.height * 0.1)),
+                      maximumSize: MaterialStatePropertyAll(Size(300, 100)),
+                      foregroundColor: MaterialStatePropertyAll(Colors.black)
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => PackPage()
+                        )
+                    );
+                  },
+                  label: Text(AppLocalizations.of(context)!.packs,
+                    style: const TextStyle(
+                        fontFamily: "Mulish",
+                        fontSize: 24
+                    ),
+                  ),
+                  icon: const Icon(Icons.collections_bookmark)
+              ),
+              const Padding(padding: EdgeInsets.all(20)),
+              ElevatedButton.icon(
+                  style: ButtonStyle(
+                      padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
+                      backgroundColor: MaterialStatePropertyAll(Colors.blue),
+                      fixedSize: MaterialStatePropertyAll(Size(MediaQuery.of(context).size.width * 0.8, MediaQuery.of(context).size.height * 0.1)),
+                      maximumSize: MaterialStatePropertyAll(Size(300, 100)),
                       foregroundColor: MaterialStatePropertyAll(Colors.black)
                   ),
                   onPressed: () {
@@ -143,7 +148,7 @@ class HomePage extends StatelessWidget {
                     );
                   },
                   label: Text(AppLocalizations.of(context)!.settings,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: "Mulish",
                         fontSize: 24
                     ),

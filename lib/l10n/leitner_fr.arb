@@ -109,17 +109,17 @@
 
     "view": "Voir",
 
-    "chill": "Détente",
-
     "classic": "Classique",
+
+    "survival": "Survie",
 
     "sudden_death": "Mort subite",
 
     "marathon": "Marathon",
 
-    "chill_desc": "Une expérience de quiz détendue et sans pression.",
+    "classic_desc": "Une expérience de quiz détendue et sans pression.",
 
-    "classic_desc": "Mettez-vous au défi avec un mélange équilibré de questions. Recevez un gage si vous perdez tous vos points de vie.",
+    "survival_desc": "Mettez-vous au défi avec un mélange équilibré de questions. Recevez un gage si vous perdez tous vos points de vie.",
 
     "sudden_death_desc": "Enjeux élevés pour chaque question ! Recevez un gage pour chaque réponse incorrecte. Parfait pour ceux qui aiment les défis.",
 

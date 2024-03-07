@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/services/card_service.dart';
 import 'package:leitner/utils/enum_data.dart';
 import 'package:leitner/utils/daily_metrics.dart';
+import 'package:leitner/utils/life_points.dart';
 
 import 'answer_page.dart';
 import 'home_page.dart';
@@ -68,18 +69,24 @@ class _DailyPageState extends State<DailyPage> {
           },
         ),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: (dataState == DataState.loading)
-              ? buildLoadingWidget()
-              : (dataState == DataState.empty)
-                ? buildEmptyWidget(context)
-                : buildContentWidget(context)
-            ),
+          Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: (dataState == DataState.loading)
+                  ? buildLoadingWidget()
+                  : (dataState == DataState.empty)
+                    ? buildEmptyWidget(context)
+                    : buildContentWidget(context)
+                ),
+              ),
+              buildBottomButtons(context)
+            ],
           ),
-          buildBottomButtons(context)
+          if(widget.dailyMetrics.gameMode == GameMode.survival)
+          LifePoints(totalLifePoints: widget.dailyMetrics.totalLifePoint, currentLifePoints: widget.dailyMetrics.currentLifePoint)
         ],
       ),
     );

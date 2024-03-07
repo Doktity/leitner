@@ -34,6 +34,15 @@ class CardRepository {
     return liensSnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
   }
 
+  Future<int> getAvailableCardsCount(String userId) async {
+    DateTime today = DateTime.now();
+    QuerySnapshot liensSnapshot = await liens
+        .where('userId', isEqualTo: userId)
+        .where('nextPlay', isLessThanOrEqualTo: Timestamp.fromDate(today))
+        .get();
+    return liensSnapshot.size;
+  }
+
   Future<int> getUserCardPeriode(String userId, String cardId) async {
     QuerySnapshot querySnapshot = await liens
         .where('userId', isEqualTo: userId)
@@ -48,7 +57,7 @@ class CardRepository {
     }
   }
 
-  void updatePeriode(int periode, DateTime today, DateTime nextPlay, String userId, String cardId) async {
+  Future<void> updatePeriode(int periode, DateTime today, DateTime nextPlay, String userId, String cardId) async {
 
     QuerySnapshot querySnapshot = await liens
         .where('userId', isEqualTo: userId)

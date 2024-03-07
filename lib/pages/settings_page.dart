@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:leitner/business/user_repository.dart';
+import 'package:leitner/services/user_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
@@ -14,7 +17,11 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  late String _selectedLanguage;
+  String _selectedLanguage = "";
+  final TextEditingController usernameController = TextEditingController();
+  final UserService _userService = UserService();
+  String username = "";
+  String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
 
   Map<String, String> get languageMap {
     return {
@@ -27,7 +34,22 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    this._selectedLanguage = widget.selectedLanguage;
+    _selectedLanguage = widget.selectedLanguage;
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    var fetchedUsername = await _userService.getUserName(userId);
+    setState(() {
+      username = fetchedUsername;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    usernameController.dispose();
   }
 
   @override
@@ -41,6 +63,33 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Card(
+                margin: EdgeInsets.all(20),
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: Colors.black,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      username == "" ? Text("Pseudo vide") : Text(username),
+                      ElevatedButton(
+                          onPressed: () {
+                            _showUsernameDialog(context);
+                          },
+                          child: Text("Changer")
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.9,
               child: Card(
@@ -106,5 +155,49 @@ class _SettingsPageState extends State<SettingsPage> {
     setState(() {
       _selectedLanguage = language;
     });
+  }
+
+  void _showUsernameDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Changer de username"),
+            content: TextFormField(
+              decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  labelText: "Pseudo",
+                  hintText: "Entrez votre pseudo",
+                  border: const OutlineInputBorder()
+              ),
+              validator: (value){
+                if (value == null || value.isEmpty){
+                  return AppLocalizations.of(context)!.error_required_fields;
+                }
+                return null;
+              },
+              controller: usernameController,
+            ),
+            actions: [
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.cancel),
+                onPressed: () {
+
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.confirm),
+                onPressed: () async {
+                  await _userService.updateUsername(userId, usernameController.text);
+                  await _loadData();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        }
+    );
   }
 }

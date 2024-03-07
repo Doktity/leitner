@@ -75,12 +75,12 @@ class CardService {
     return _cardRepository.getUserCardPeriode(userId, cardId);
   }
 
-  void updatePeriode(bool isCorrect, int periode, String userId, String cardId) async {
+  Future<void> updatePeriode(bool isCorrect, int periode, String userId, String cardId) async {
     int newPeriode = isCorrect ? periode + 1 : max(1, periode - 1);
     DateTime today = DateTime.now();
     DateTime nextPlay = today.add(Duration(days: newPeriode));
 
-    _cardRepository.updatePeriode(newPeriode, today, nextPlay, userId, cardId);
+    await _cardRepository.updatePeriode(newPeriode, today, nextPlay, userId, cardId);
   }
 
   Future<List<Map<String, dynamic>>> getListCards(List<String> cardIds) async {

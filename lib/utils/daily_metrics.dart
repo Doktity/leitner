@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-enum GameMode { chill, classic, suddenDeath, marathon }
+enum GameMode { classic, survival, suddenDeath, marathon }
 
 class DailyMetrics {
   String userId;
@@ -14,7 +14,8 @@ class DailyMetrics {
   DateTime? sessionEndTime;
   List<String> cardIds = [];
   List<String> dareIds = [];
-  int lifePoint = 5;
+  int totalLifePoint = 5;
+  int currentLifePoint = 5;
   // Other fields as required
 
   DailyMetrics({
@@ -48,14 +49,14 @@ class DailyMetrics {
 
   bool handleGamemodeLogic(bool isCorrect) {
     switch(gameMode) {
-      case GameMode.chill:
+      case GameMode.classic:
         // nothing happens
         return false;
-      case GameMode.classic:
+      case GameMode.survival:
         // Dare if no lifePoint
-        if(!isCorrect) lifePoint--;
-        if(lifePoint == 0) {
-          lifePoint = 5;
+        if(!isCorrect) currentLifePoint--;
+        if(currentLifePoint == 0) {
+          currentLifePoint = totalLifePoint;
           return true;
         }
         return false;
@@ -70,10 +71,10 @@ class DailyMetrics {
 
   String getGameMode(BuildContext context) {
     switch(gameMode) {
-      case GameMode.chill:
-        return AppLocalizations.of(context)!.chill;
       case GameMode.classic:
         return AppLocalizations.of(context)!.classic;
+      case GameMode.survival:
+        return AppLocalizations.of(context)!.survival;
       case GameMode.suddenDeath:
         return AppLocalizations.of(context)!.sudden_death;
       case GameMode.marathon:

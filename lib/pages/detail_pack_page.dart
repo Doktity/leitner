@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/services/card_service.dart';
 import 'package:leitner/services/pack_service.dart';
+import 'package:leitner/services/user_service.dart';
 import 'package:leitner/utils/enum_data.dart';
 
 import '../business/user_repository.dart';
@@ -21,7 +22,7 @@ class _DetailPackPageState extends State<DetailPackPage> {
   final String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
   final CardService _cardService = CardService();
   final PackService _packService = PackService();
-  final UserRepository _userRepository = UserRepository();
+  final UserService _userService = UserService();
   List<Map<String, dynamic>> cards = [];
   String username = "";
   DataState dataState = DataState.loading;
@@ -34,7 +35,7 @@ class _DetailPackPageState extends State<DetailPackPage> {
 
   void _loadData() async {
     try{
-      username = await _userRepository.getUserName(userId);
+      username = await _userService.getUserName(userId);
       List<String> cardIds = widget.pack['ids'].cast<String>();
       cards = await _cardService.getListCards(cardIds);
       isSubscribed = await _packService.isUserSubscribed(userId, widget.pack['id']);

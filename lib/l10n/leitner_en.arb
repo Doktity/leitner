@@ -277,14 +277,14 @@
         "description": "View button"
     },
 
-    "chill": "Chill",
-    "@chill": {
-        "description": "Chill mode"
-    },
-
     "classic": "Classic",
     "@classic": {
         "description": "Classic mode"
+    },
+
+    "survival": "Survival",
+    "@survival": {
+        "description": "Survival mode"
     },
 
     "sudden_death": "Sudden death",
@@ -297,14 +297,14 @@
         "description": "Marathon mode"
     },
 
-    "chill_desc": "A relaxed, no-pressure quiz experience.",
-    "@chill_desc": {
+    "classic_desc": "A relaxed, no-pressure quiz experience.",
+    "@classic_desc": {
         "description": "Chill mode description"
     },
 
-    "classic_desc": "Challenge yourself with a balanced mix of questions. Receive a dare if you lost all your life points.",
-    "@classic_desc": {
-        "description": "Classic mode description"
+    "survival_desc": "Challenge yourself with a balanced mix of questions. Receive a dare if you lost all your life points.",
+    "@survival_desc": {
+        "description": "Survival mode description"
     },
 
     "sudden_death_desc": "High stakes for every question! Get a dare for each incorrect answer. Perfect for those who love a challenge.",

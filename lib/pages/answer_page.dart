@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/pages/stat_page.dart';
 import 'package:leitner/services/dare_service.dart';
+import 'package:leitner/services/user_service.dart';
 import 'package:leitner/utils/daily_metrics.dart';
 
 import '../services/card_service.dart';
@@ -26,10 +27,12 @@ class AnswerPage extends StatefulWidget {
 class _AnswerPageState extends State<AnswerPage> {
   final CardService _cardService = CardService();
   final DareService _dareService = DareService();
+  final UserService _userService = UserService();
 
   Map<String, dynamic> dare = {};
   bool showDareButton = false;
   late bool isCorrect;
+  bool isAvailableCards = false;
 
   bool _isCorrect(String input, String reponse){
     if(input.toLowerCase() == reponse.toLowerCase()){
@@ -43,15 +46,19 @@ class _AnswerPageState extends State<AnswerPage> {
     super.initState();
     isCorrect = _isCorrect(widget.userInput, widget.reponseKey);
     showDareButton = widget.dailyMetrics.handleGamemodeLogic(isCorrect);
-    _manageMetrics();
     _loadData();
   }
 
   void _loadData() async {
+    await _cardService.updatePeriode(isCorrect, widget.periode, widget.userId, widget.cardId);
+    await _userService.updateAvailableCardCount(widget.userId);
+    bool fetchedBool = await _userService.isAvailableCards(widget.userId);
     var fetchedDare = await _dareService.getRandomDare(widget.userId);
     if(mounted) {
       setState(() {
+        isAvailableCards = fetchedBool;
         dare = fetchedDare;
+        _manageMetrics();
       });
     }
   }
@@ -59,13 +66,11 @@ class _AnswerPageState extends State<AnswerPage> {
   void _manageMetrics() {
     widget.dailyMetrics.cardAnswered(isCorrect);
     widget.dailyMetrics.addCardId(widget.cardId);
-    if(showDareButton) widget.dailyMetrics.addDareId(dare["id"]);
+    if(showDareButton) widget.dailyMetrics.addDareId(dare['id']);
   }
 
   @override
   Widget build(BuildContext context) {
-    _cardService.updatePeriode(isCorrect, widget.periode, widget.userId, widget.cardId);
-
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -209,10 +214,15 @@ class _AnswerPageState extends State<AnswerPage> {
       onTap: (index) async {
         
         if (index == 0) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DailyPage(dailyMetrics: widget.dailyMetrics)),
-          );
+          if(isAvailableCards) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DailyPage(dailyMetrics: widget.dailyMetrics)),
+            );
+          } else {
+            _showNoAvailableCardsDialog();
+          }
+
         } else if (index == 1) {
           widget.dailyMetrics.endSession();
           Navigator.push(
@@ -220,6 +230,26 @@ class _AnswerPageState extends State<AnswerPage> {
             MaterialPageRoute(builder: (context) => StatPage(dailyMetrics: widget.dailyMetrics)),
           );
         }
+      },
+    );
+  }
+
+  void _showNoAvailableCardsDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('No Available Cards'),
+          content: Text('There are no cards available to play. Please try again later.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
       },
     );
   }

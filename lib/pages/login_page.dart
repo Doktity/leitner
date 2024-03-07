@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../business/login_repository.dart';
+import '../services/login_service.dart';
 import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,7 +14,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  final LoginRepository _loginRepository = LoginRepository();
+  final LoginService _loginRepository = LoginService();
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +32,11 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton.icon(
-              style: const ButtonStyle(
+              style: ButtonStyle(
                   padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
                   backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                  fixedSize: MaterialStatePropertyAll(Size(400, 100)),
+                  fixedSize: MaterialStatePropertyAll(Size(MediaQuery.of(context).size.width * 0.8, MediaQuery.of(context).size.height * 0.1)),
+                  maximumSize: MaterialStatePropertyAll(Size(400, 100)),
                   foregroundColor: MaterialStatePropertyAll(Colors.black)
               ),
               onPressed: () async {
