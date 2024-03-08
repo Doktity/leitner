@@ -48,7 +48,7 @@ class _GameModePageState extends State<GameModePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Game mode"),
+        title: Text(AppLocalizations.of(context)!.gamemode),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -174,7 +174,7 @@ class _GameModePageState extends State<GameModePage> {
           ),
         );
       },
-      tooltip: "Launch",
+      tooltip: AppLocalizations.of(context)!.launch,
       backgroundColor: Colors.blue,
       child: const Icon(Icons.play_arrow),
     );

@@ -131,6 +131,31 @@
         "description": "Message for card sent"
     },
 
+    "card_deleted": "Card deleted",
+    "@card_deleted": {
+        "description": "Message for card deleted"
+    },
+
+    "delete_card": "Delete a card",
+    "@delete_card": {
+        "description": "Delete a card title"
+    },
+    
+    "dare_sent": "Dare sent",
+    "@dare_sent": {
+        "description": "Message for dare sent"
+    },
+
+    "dare_deleted": "Dare deleted",
+    "@dare_deleted": {
+        "description": "Message for dare deleted"
+    },
+
+    "delete_dare": "Delete a dare",
+    "@delete_dare": {
+        "description": "Delete a dare title"
+    },
+
     "login": "Login",
     "@login": {
         "description": "Login page"
@@ -161,9 +186,14 @@
         "description": "Error message for the label"
     },
 
-    "no_cards": "There is no card available today",
+    "no_cards": "There are no cards available today",
     "@no_cards": {
         "description": "Message when no cards available"
+    },
+
+    "no_cards_title": "No Available Cards",
+    "@no_cards_title": {
+        "description": "No cards title"
     },
 
     "come_back": "Come back tomorrow !",
@@ -315,5 +345,109 @@
     "marathon_desc": "Endurance is key! Face a dare after every question, regardless of your answer. A true test of persistence and resilience.",
     "@marathon_desc": {
         "description": "Marathon mode description"
+    },
+
+    "gamemode": "Game mode",
+    "@gamemode": {
+        "description": "Game mode title"
+    },
+
+    "launch": "Launch",
+    "@launch": {
+        "description": "Launch button"
+    },
+
+    "ok": "OK",
+    "@ok": {
+        "description": "ok."
+    },
+
+    "change_username": "Change username",
+    "@change_username": {
+        "description": "Username modal title"
+    },
+
+    "username": "Username",
+    "@username": {
+        "description": "Message for username"
+    },
+
+    "enter_username": "Enter your username",
+    "@enter_username": {
+        "description": "Message for enter username"
+    },
+
+    "total_cards": "Total Cards played: {totalCards}",
+    "@total_cards": {
+        "description": "Total cards message",
+        "placeholders": {
+            "totalCards": {}
+        }
+    },
+
+    "correct_cards": "Total Cards answered correctly: {correctAnswers}",
+    "@correct_cards": {
+        "description": "Correct cards message",
+        "placeholders": {
+            "correctAnswers": {}
+        }
+    },
+
+    "session_start": "Session start time : {sessionStartTime}",
+    "@session_start": {
+        "description": "Session start time message",
+        "placeholders": {
+            "sessionStartTime": {}
+        }
+    },
+
+    "session_end": "Session end time : {sessionEndTime}",
+    "@session_end": {
+        "description": "Session end time message",
+        "placeholders": {
+            "sessionEndTime": {}
+        }
+    },
+
+    "card_id_list": "List of card IDs : {cardIds}",
+    "@card_id_list": {
+        "description": "Card ids message",
+        "placeholders": {
+            "cardIds": {}
+        }
+    },
+
+    "dare_id_list": "List of dare IDs : {dareIds}",
+    "@dare_id_list": {
+        "description": "Dare ids message",
+        "placeholders": {
+            "dareIds": {}
+        }
+    },
+
+    "total_life": "Initial Life points : {totalLifePoint}",
+    "@total_life": {
+        "description": "Total life point message",
+        "placeholders": {
+            "totalLifePoint": {}
+        }
+    },
+
+    "current_life": "Current Life points : {currentLifePoint}",
+    "@current_life": {
+        "description": "Current life point message",
+        "placeholders": {
+            "currentLifePoint": {}
+        }
+    },
+
+    "stat": "Stat",
+    "@stat": {
+        "description": "Stat page title"
+    },
+
+    "description": "Description",
+    "@description": {
+        "description": "description"
     }
 }

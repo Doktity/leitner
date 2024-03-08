@@ -12,6 +12,24 @@ class DareService {
     return _dareRepository.getAllDares();
   }
 
+  Future<List<Map<String, dynamic>>> getUserDares(String userId) async {
+    List<Map<String, dynamic>> dareLinks = await _dareRepository.getLiensUserDare(userId);
+    List<Map<String, dynamic>> userDares = [];
+
+    for(var link in dareLinks) {
+      String? dareId = link['dareId'];
+      if(dareId != null) {
+        var dareData = await _dareRepository.getDareById(dareId);
+        if(dareData != null) {
+          dareData['id'] = link['dareId'];
+          userDares.add(dareData);
+        }
+      }
+    }
+
+    return userDares;
+  }
+
   Future<Map<String, dynamic>> getRandomDare(String userId) async {
     List<Map<String, dynamic>> liensUserCard = await _dareRepository.getLiensUserDare(userId);
 

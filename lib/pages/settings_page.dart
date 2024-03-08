@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:leitner/business/user_repository.dart';
 import 'package:leitner/services/user_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -162,13 +161,13 @@ class _SettingsPageState extends State<SettingsPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Changer de username"),
+            title: Text(AppLocalizations.of(context)!.change_username),
             content: TextFormField(
               decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  labelText: "Pseudo",
-                  hintText: "Entrez votre pseudo",
+                  labelText: AppLocalizations.of(context)!.username,
+                  hintText: AppLocalizations.of(context)!.enter_username,
                   border: const OutlineInputBorder()
               ),
               validator: (value){

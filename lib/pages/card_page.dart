@@ -6,6 +6,7 @@ import 'package:leitner/services/pack_service.dart';
 import 'package:leitner/utils/enum_data.dart';
 import 'package:collection/collection.dart';
 
+import '../utils/spoiler_text.dart';
 import 'add_card_page.dart';
 import 'home_page.dart';
 
@@ -187,7 +188,14 @@ class _CardPageState extends State<CardPage> {
                                 ExpansionTile(
                                   leading: const FlutterLogo(size: 56.0),
                                   title: Text('$question'),
-                                  subtitle: Text('$reponseKey'),
+                                  subtitle: Row(
+                                    children: [
+                                      for (var categorie in categories)
+                                        Chip(
+                                          label: Text(categorie),
+                                        ),
+                                    ],
+                                  ),
                                   children: [
                                     Container(
                                       padding: const EdgeInsets.all(16.0),
@@ -197,14 +205,17 @@ class _CardPageState extends State<CardPage> {
                                         children: <Widget>[
                                           Row(
                                             children: [
-                                              for (var categorie in categories)
-                                                Chip(
-                                                  label: Text(categorie),
-                                                ),
+                                              Text("${AppLocalizations.of(context)!.answer} : "),
+                                              Expanded(child: SpoilerText(text: reponseKey)),
                                             ],
                                           ),
                                           const SizedBox(height: 10),
-                                          Text(reponseText),
+                                          Row(
+                                            children: [
+                                              Text("${AppLocalizations.of(context)!.description} : "),
+                                              Expanded(child: SpoilerText(text: reponseText)),
+                                            ],
+                                          ),
                                           const SizedBox(height: 20),
                                           if(item['creatorId'] == userId)
                                             Row(
@@ -224,6 +235,7 @@ class _CardPageState extends State<CardPage> {
                                                         foregroundColor: MaterialStatePropertyAll(Colors.black)
                                                     )
                                                 ),
+                                                const SizedBox(width: 10),
                                                 ElevatedButton(
                                                     onPressed: () {
                                                       removeDialog(item["cardId"]);
@@ -277,7 +289,7 @@ class _CardPageState extends State<CardPage> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setStateDialog) {
                 return AlertDialog(
-                  title: Text("Remove"),
+                  title: Text(AppLocalizations.of(context)!.delete_card),
                   content: isLoading
                     ? Row(
                       children: [
@@ -302,6 +314,15 @@ class _CardPageState extends State<CardPage> {
                         await _cardService.deleteCard(cardId);
                         _loadData();
                         setState(() {});
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              AppLocalizations.of(context)!.card_deleted,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
                         Navigator.of(context).pop();
                       },
                     ),

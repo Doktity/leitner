@@ -5,6 +5,7 @@ import 'package:leitner/services/card_service.dart';
 import 'package:leitner/services/pack_service.dart';
 import 'package:leitner/services/user_service.dart';
 import 'package:leitner/utils/enum_data.dart';
+import 'package:leitner/utils/spoiler_text.dart';
 
 import '../business/user_repository.dart';
 
@@ -25,6 +26,7 @@ class _DetailPackPageState extends State<DetailPackPage> {
   final UserService _userService = UserService();
   List<Map<String, dynamic>> cards = [];
   String username = "";
+  String creatorName = "";
   DataState dataState = DataState.loading;
 
   @override
@@ -36,6 +38,7 @@ class _DetailPackPageState extends State<DetailPackPage> {
   void _loadData() async {
     try{
       username = await _userService.getUserName(userId);
+      creatorName = await _userService.getUserName(widget.pack['userId']);
       List<String> cardIds = widget.pack['ids'].cast<String>();
       cards = await _cardService.getListCards(cardIds);
       isSubscribed = await _packService.isUserSubscribed(userId, widget.pack['id']);
@@ -81,7 +84,7 @@ class _DetailPackPageState extends State<DetailPackPage> {
                       trailing: Column(
                         children: [
                           Text(AppLocalizations.of(context)!.cards_number(cards.length)),
-                          Text(username)
+                          Text(creatorName)
                         ],
                       ),
                     )
@@ -111,7 +114,7 @@ class _DetailPackPageState extends State<DetailPackPage> {
                               var card = cards[index];
                               return ListTile(
                                 title: Text(card['question']),
-                                subtitle: Text(card['reponseKey']),
+                                subtitle: SpoilerText(text: card['reponseKey']),
                               );
                             }
                           ),

@@ -258,7 +258,7 @@ class _AddDarePageState extends State<AddDarePage> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  "Dare envoyé",
+                                  AppLocalizations.of(context)!.dare_sent,
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 backgroundColor: Colors.green,

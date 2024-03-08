@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
               style: ButtonStyle(
                   padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
                   backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                  fixedSize: MaterialStatePropertyAll(Size(MediaQuery.of(context).size.width * 0.8, MediaQuery.of(context).size.height * 0.1)),
+                  fixedSize: MaterialStatePropertyAll(Size(MediaQuery.of(context).size.width * 0.8, MediaQuery.of(context).size.height * 0.15)),
                   maximumSize: MaterialStatePropertyAll(Size(400, 100)),
                   foregroundColor: MaterialStatePropertyAll(Colors.black)
               ),

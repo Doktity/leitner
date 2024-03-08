@@ -28,7 +28,7 @@ class _DarePageState extends State<DarePage> {
   }
 
   Future<void> _loadData() async {
-    dares = await _dareService.getAllDares();
+    dares = await _dareService.getUserDares(userId);
     setState(() {}); // Trigger a rebuild after data is loaded
   }
 
@@ -73,20 +73,20 @@ class _DarePageState extends State<DarePage> {
                         ExpansionTile(
                           leading: const FlutterLogo(size: 56.0),
                           title: Text('$name'),
-                          subtitle: Text('$description'),
+                          subtitle: Row(
+                            children: [
+                              for (var categorie in categories)
+                                Chip(
+                                  label: Text(categorie),
+                                ),
+                            ],
+                          ),
                           children: <Widget>[
                             Container(
                               padding: const EdgeInsets.all(16),
                               child: Column(
                                 children: [
-                                  Row(
-                                    children: [
-                                      for (var categorie in categories)
-                                        Chip(
-                                          label: Text(categorie),
-                                        ),
-                                    ],
-                                  ),
+                                  Text('$description'),
                                   SizedBox(height: 20),
                                   if(item['creatorId'] == userId)
                                     Row(
@@ -100,19 +100,20 @@ class _DarePageState extends State<DarePage> {
                                                 ),
                                               );
                                             },
-                                            child: Text("Update"),
+                                            child: Icon(Icons.mode),
                                             style: const ButtonStyle(
-                                                backgroundColor: MaterialStatePropertyAll(Colors.lightBlue),
+                                                backgroundColor: MaterialStatePropertyAll(Colors.cyan),
                                                 foregroundColor: MaterialStatePropertyAll(Colors.black)
                                             )
                                         ),
+                                        const SizedBox(width: 10),
                                         ElevatedButton(
                                           onPressed: () {
                                             removeDialog(item["id"]);
                                           },
-                                          child: Text("Remove"),
+                                          child: Icon(Icons.delete_forever),
                                           style: const ButtonStyle(
-                                              backgroundColor: MaterialStatePropertyAll(Colors.red),
+                                              backgroundColor: MaterialStatePropertyAll(Colors.redAccent),
                                               foregroundColor: MaterialStatePropertyAll(Colors.black)
                                           ),
                                         )
@@ -155,7 +156,7 @@ class _DarePageState extends State<DarePage> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setStateDialog) {
                 return AlertDialog(
-                  title: Text("Remove"),
+                  title: Text(AppLocalizations.of(context)!.delete_dare),
                   content: isLoading
                       ? Row(
                         children: [
@@ -180,6 +181,15 @@ class _DarePageState extends State<DarePage> {
                               await _dareService.deleteDare(dareId);
                               _loadData();
                               setState(() {});
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    AppLocalizations.of(context)!.dare_deleted,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
                               Navigator.of(context).pop();
                             },
                           ),

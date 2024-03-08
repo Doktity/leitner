@@ -53,6 +53,12 @@
 
     "card_sent": "Carte envoyée",
 
+    "card_deleted": "Carte supprimée",
+
+    "dare_sent": "Gage envoyé",
+
+    "dare_deleted": "Gage supprimé",
+
     "login": "Se connecter",
 
     "logout": "Se déconnecter",
@@ -66,6 +72,8 @@
     "error_label_missing": "Ajoutez au moins une catégorie",
 
     "no_cards": "Pas de carte disponible aujourd'hui",
+
+    "no_cards_title": "Pas de cartes",
 
     "come_back": "Revenez demain !",
 
@@ -123,5 +131,37 @@
 
     "sudden_death_desc": "Enjeux élevés pour chaque question ! Recevez un gage pour chaque réponse incorrecte. Parfait pour ceux qui aiment les défis.",
 
-    "marathon_desc": "L'endurance est clé ! Recevez un gage après chaque question, quelle que soit votre réponse. Un véritable test de persévérance et de résilience."
+    "marathon_desc": "L'endurance est clé ! Recevez un gage après chaque question, quelle que soit votre réponse. Un véritable test de persévérance et de résilience.",
+
+    "gamemode": "Mode de jeu",
+
+    "launch": "Lancer",
+
+    "ok": "OK",
+
+    "change_username": "Changer de pseudo",
+
+    "username": "Pseudo",
+
+    "enter_username": "Entrez votre pseudo",
+
+    "total_cards": "Nombre de cartes jouées: {totalCards}",
+
+    "correct_cards": "Nombre de cartes bien répondues: {correctAnswers}",
+
+    "session_start": "Début de la session: {sessionStartTime}",
+
+    "session_end": "Fin de la session: {sessionEndTime}",
+
+    "card_id_list": "Liste des ids de carte: {cardIds}",
+
+    "dare_id_list": "Liste des ids de gage: {dareIds}",
+
+    "total_life": "Point de vie initial: {totalLifePoint}",
+
+    "current_life": "Point de vie actuel: {currentLifePoint}",
+
+    "stat": "Stat",
+
+    "description": "Description"
 }

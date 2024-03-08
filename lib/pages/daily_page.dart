@@ -54,40 +54,43 @@ class _DailyPageState extends State<DailyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blue.shade50,
-      appBar: AppBar(
-        title: Text("${AppLocalizations.of(context)!.daily} - ${widget.dailyMetrics.getGameMode(context)}"),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Navigate to HomePage
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => HomePage()),
-                  (Route<dynamic> route) => false,
-            );
-          },
-        ),
-      ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: (dataState == DataState.loading)
-                  ? buildLoadingWidget()
-                  : (dataState == DataState.empty)
-                    ? buildEmptyWidget(context)
-                    : buildContentWidget(context)
-                ),
-              ),
-              buildBottomButtons(context)
-            ],
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: Colors.blue.shade50,
+        appBar: AppBar(
+          title: Text("${AppLocalizations.of(context)!.daily} - ${widget.dailyMetrics.getGameMode(context)}"),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              // Navigate to HomePage
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => HomePage()),
+                    (Route<dynamic> route) => false,
+              );
+            },
           ),
-          if(widget.dailyMetrics.gameMode == GameMode.survival)
-          LifePoints(totalLifePoints: widget.dailyMetrics.totalLifePoint, currentLifePoints: widget.dailyMetrics.currentLifePoint)
-        ],
+        ),
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: (dataState == DataState.loading)
+                    ? buildLoadingWidget()
+                    : (dataState == DataState.empty)
+                      ? buildEmptyWidget(context)
+                      : buildContentWidget(context)
+                  ),
+                ),
+                buildBottomButtons(context)
+              ],
+            ),
+            if(widget.dailyMetrics.gameMode == GameMode.survival)
+            LifePoints(totalLifePoints: widget.dailyMetrics.totalLifePoint, currentLifePoints: widget.dailyMetrics.currentLifePoint)
+          ],
+        ),
       ),
     );
   }

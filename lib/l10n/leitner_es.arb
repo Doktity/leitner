@@ -53,6 +53,12 @@
 
     "card_sent": "Carta enviada",
 
+    "card_deleted": "Carta eliminada",
+
+    "dare_sent": "Penitencia enviada",
+
+    "dare_deleted": "Penitencia eliminada",
+
     "login": "Iniciar sesión",
 
     "logout": "Cerrar sesión",
@@ -66,6 +72,8 @@
     "error_label_missing": "Escriba al menos una etiqueta",
 
     "no_cards": "No hay ninguna carta disponible hoy",
+
+    "no_cards_title": "No hay cartas disponibles",
 
     "come_back": "¡Vuelve mañana!",
 
@@ -123,5 +131,37 @@
 
     "sudden_death_desc": "¡Alto riesgo en cada pregunta! Obtén una penitencia por cada respuesta incorrecta. Perfecto para los que aman los desafíos.",
 
-    "marathon_desc": "¡La resistencia es clave! Enfrenta una penitencia después de cada pregunta, independientemente de tu respuesta. Una verdadera prueba de persistencia y resistencia."
+    "marathon_desc": "¡La resistencia es clave! Enfrenta una penitencia después de cada pregunta, independientemente de tu respuesta. Una verdadera prueba de persistencia y resistencia.",
+
+    "gamemode": "Modo de juego",
+
+    "launch": "launch",
+
+    "ok": "OK",
+
+    "change_username": "Cambiar nombre de usuario",
+
+    "username": "Nombre de usuario",
+
+    "enter_username": "Escriba el nombre de usuario",
+
+    "total_cards": "Número de cartas jugadas:  {totalCards}",
+
+    "correct_cards": "Número de cartas respondidas correctamente: {correctAnswers}",
+
+    "session_start": "Inicio de la sesión:  {sessionStartTime}",
+
+    "session_end": "Fin de la sesión: {sessionEndTime}",
+
+    "card_id_list": "Lista de IDs de cartas: {cardIds}",
+
+    "dare_id_list": "Lista de IDs de penitencias: {dareIds}",
+
+    "total_life": "Puntos de vida iniciales: {totalLifePoint}",
+
+    "current_life": "Puntos de vida actuales: {currentLifePoint}",
+
+    "stat": "Stat",
+
+    "description": "Descripción"
 }

@@ -239,11 +239,11 @@ class _AnswerPageState extends State<AnswerPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('No Available Cards'),
-          content: Text('There are no cards available to play. Please try again later.'),
+          title: Text(AppLocalizations.of(context)!.no_cards_title),
+          content: Text("${AppLocalizations.of(context)!.no_cards} ${AppLocalizations.of(context)!.come_back}"),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: Text(AppLocalizations.of(context)!.ok),
               onPressed: () {
                 Navigator.of(context).pop();
               },

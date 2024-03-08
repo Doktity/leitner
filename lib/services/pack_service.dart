@@ -25,7 +25,7 @@ class PackService {
   Future<void> addLienCard(String userId, String packId) async {
     Map<String, dynamic>? pack = await getPack(packId);
     if(pack != null) {
-      List<String> cardIds = List<String>.from(pack['cards']);
+      List<String> cardIds = List<String>.from(pack['ids']);
       List<Map<String, dynamic>> cardList = await _cardRepository.getListCards(cardIds);
 
       await _packRepository.addLienCard(userId, packId, cardList);
