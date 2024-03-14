@@ -77,4 +77,21 @@ class UserRepository {
     var userDoc = await users.doc(userId);
     userDoc.update({'username': username});
   }
+
+  Future<void> updateDownloadedPackIds(String userId, List<String> packIds) async {
+    var userDoc = await users.doc(userId);
+    userDoc.update({'downloadedPackIds': packIds});
+  }
+
+  Future<List<String>> getDownloadedPackIds(String userId) async {
+    DocumentSnapshot documentSnapshot  = await users.doc(userId).get();
+    if(documentSnapshot.exists) {
+      Map<String, dynamic> user = documentSnapshot.data() as Map<String, dynamic>;
+      if(user['downloadedPackIds'] is List) {
+        return List<String>.from(user['downloadedPackIds']);
+      }
+    }
+
+    return [];
+  }
 }

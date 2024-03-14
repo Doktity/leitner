@@ -10,9 +10,19 @@ class AppColors {
 
   // Gradient Colors
   static const List<Color> gradientButton = [pastelYellow, pastelGreen];
+  static const List<Color> gradientButtonSec = [AppColors.pastelYellow, AppColors.pastelPink];
   static const Color gradientEnd = pastelPurple;
+  static Color textIndigo = Colors.indigo.shade900;
+  static Color backgroundGreen = Colors.green.shade50;
 
-// Other app-specific colors
-// static const Color primaryColor = Color(0xFF...);
-// static const Color accentColor = Color(0xFF...);
+  static Color pastelGreenLight = pastelGreen.withOpacity(0.7);
+  static Color pastelYellowLight = pastelYellow.withOpacity(0.7);
+  static Color pastelPinkLight = pastelPink.withOpacity(0.7);
+  static Color pastelPurpleLight = pastelPurple.withOpacity(0.7);
+
+  static Color pastelGreenDark = Color.lerp(pastelGreen, Colors.black, 0.2)!;
+  static Color pastelYellowDark = Color.lerp(pastelYellow, Colors.black, 0.2)!;
+  static Color pastelPinkDark = Color.lerp(pastelPink, Colors.black, 0.2)!;
+  static Color pastelPurpleDark = Color.lerp(pastelPurple, Colors.black, 0.2)!;
+
 }

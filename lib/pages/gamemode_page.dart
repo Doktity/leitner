@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:leitner/app_colors.dart';
 import 'package:leitner/services/user_service.dart';
 import 'package:leitner/utils/daily_metrics.dart';
+import 'package:leitner/utils/gradient_button.dart';
 import 'package:leitner/utils/styled_tooltip.dart';
 
 import 'daily_page.dart';
@@ -48,7 +50,7 @@ class _GameModePageState extends State<GameModePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.gamemode),
+        title: Text(AppLocalizations.of(context)!.gamemode, style: TextStyle(color: AppColors.textIndigo, fontSize: 24)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -59,8 +61,17 @@ class _GameModePageState extends State<GameModePage> {
             );
           },
         ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: AppColors.gradientButton,
+                begin: Alignment(-0.8, -1),
+                end: Alignment(0.8, 1),
+              )
+          ),
+        ),
       ),
-      backgroundColor: Colors.blue.shade50,
+      backgroundColor: AppColors.backgroundGreen,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -72,7 +83,7 @@ class _GameModePageState extends State<GameModePage> {
               AppLocalizations.of(context)!.classic,
               Icons.school_sharp,
               AppLocalizations.of(context)!.classic_desc,
-              Colors.green
+              [AppColors.pastelGreenLight, AppColors.pastelGreen]
             ),
             const Padding(padding: EdgeInsets.all(20)),
             _buildGameModeButton(
@@ -80,7 +91,7 @@ class _GameModePageState extends State<GameModePage> {
                 AppLocalizations.of(context)!.survival,
                 Icons.favorite_sharp,
                 AppLocalizations.of(context)!.survival_desc,
-                Colors.amber
+                [AppColors.pastelYellowLight, AppColors.pastelYellow]
             ),
             const Padding(padding: EdgeInsets.all(20)),
             _buildGameModeButton(
@@ -88,7 +99,7 @@ class _GameModePageState extends State<GameModePage> {
                 AppLocalizations.of(context)!.sudden_death,
                 Icons.local_fire_department_sharp,
                 AppLocalizations.of(context)!.sudden_death_desc,
-                Colors.red
+                [AppColors.pastelPinkLight, AppColors.pastelPink]
             ),
             const Padding(padding: EdgeInsets.all(20)),
             _buildGameModeButton(
@@ -96,7 +107,7 @@ class _GameModePageState extends State<GameModePage> {
                 AppLocalizations.of(context)!.marathon,
                 Icons.emoji_events_sharp,
                 AppLocalizations.of(context)!.marathon_desc,
-                Colors.black12
+                [AppColors.pastelPurpleLight, AppColors.pastelPurple]
             ),
 
             Expanded(
@@ -112,23 +123,11 @@ class _GameModePageState extends State<GameModePage> {
     );
   }
 
-  Widget _buildGameModeButton(GameMode mode, String title, IconData icon, String description, Color? color) {
-    return ElevatedButton.icon(
-        style: ButtonStyle(
-            padding: MaterialStatePropertyAll(EdgeInsets.all(20)),
-            backgroundColor: MaterialStatePropertyAll(color),
-            fixedSize: MaterialStatePropertyAll(Size(MediaQuery.of(context).size.width * 0.8, MediaQuery.of(context).size.height * 0.08)),
-            maximumSize: MaterialStatePropertyAll(Size(300, 100)),
-            foregroundColor: MaterialStatePropertyAll(Colors.black)
-        ),
+  Widget _buildGameModeButton(GameMode mode, String title, IconData icon, String description, List<Color> colors) {
+    return GradientButton(
         onPressed: () => selectGameMode(mode, description),
-        label: Text(title,
-          style: const TextStyle(
-              fontFamily: "Mulish",
-              fontSize: 24
-          ),
-        ),
-        icon: Icon(icon)
+        colors: colors,
+        child: GradientButton.buildButtonContent(icon, title),
     );
   }
 
@@ -147,7 +146,7 @@ class _GameModePageState extends State<GameModePage> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.blue, width: 1)
+            border: Border.all(color: AppColors.pastelGreenDark, width: 1)
           ),
           child: SingleChildScrollView(
             child: Text(
@@ -164,19 +163,32 @@ class _GameModePageState extends State<GameModePage> {
   }
 
   Widget _buildLaunchButton(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        DailyMetrics dailyMetrics = DailyMetrics(userId: userId, gameMode: selectedGameMode!);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => DailyPage(dailyMetrics: dailyMetrics),
-          ),
-        );
-      },
-      tooltip: AppLocalizations.of(context)!.launch,
-      backgroundColor: Colors.blue,
-      child: const Icon(Icons.play_arrow),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: AppColors.gradientButton, // Gradient colors
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            )
+        ),
+        child: FloatingActionButton(
+          onPressed: () {
+            DailyMetrics dailyMetrics = DailyMetrics(userId: userId, gameMode: selectedGameMode!);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => DailyPage(dailyMetrics: dailyMetrics),
+              ),
+            );
+          },
+          tooltip: AppLocalizations.of(context)!.launch,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: const Icon(Icons.play_arrow),
+        ),
+      ),
     );
   }
 }

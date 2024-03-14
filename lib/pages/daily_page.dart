@@ -6,6 +6,8 @@ import 'package:leitner/utils/enum_data.dart';
 import 'package:leitner/utils/daily_metrics.dart';
 import 'package:leitner/utils/life_points.dart';
 
+import '../app_colors.dart';
+import '../utils/gradient_button.dart';
 import 'answer_page.dart';
 import 'home_page.dart';
 import 'card_page.dart';
@@ -26,6 +28,7 @@ class _DailyPageState extends State<DailyPage> {
   int periode = 1;
   final String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
   DataState dataState = DataState.loading;
+  Color borderColor = Colors.black;
 
   @override
   void initState() {
@@ -34,6 +37,20 @@ class _DailyPageState extends State<DailyPage> {
   }
 
   Future<void> _loadData() async {
+    switch(widget.dailyMetrics.gameMode) {
+      case GameMode.classic :
+        borderColor = AppColors.pastelGreenDark;
+        break;
+      case GameMode.survival :
+        borderColor = AppColors.pastelYellowDark;
+        break;
+      case GameMode.suddenDeath :
+        borderColor = AppColors.pastelPinkDark;
+        break;
+      case GameMode.marathon :
+        borderColor = AppColors.pastelPurpleDark;
+        break;
+    }
     try {
       card = await _cardService.getRandomCard(userId);
       periode = await _cardService.getUserCardPeriode(userId, card['id']);
@@ -57,9 +74,9 @@ class _DailyPageState extends State<DailyPage> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: Colors.blue.shade50,
+        backgroundColor: AppColors.backgroundGreen,
         appBar: AppBar(
-          title: Text("${AppLocalizations.of(context)!.daily} - ${widget.dailyMetrics.getGameMode(context)}"),
+          title: Text("${AppLocalizations.of(context)!.daily} - ${widget.dailyMetrics.getGameMode(context)}", style: TextStyle(color: AppColors.textIndigo, fontSize: 24)),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -69,6 +86,15 @@ class _DailyPageState extends State<DailyPage> {
                     (Route<dynamic> route) => false,
               );
             },
+          ),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: AppColors.gradientButton,
+                  begin: Alignment(-0.8, -1),
+                  end: Alignment(0.8, 1),
+                )
+            ),
           ),
         ),
         body: Stack(
@@ -98,17 +124,18 @@ class _DailyPageState extends State<DailyPage> {
   buildLoadingWidget() {
     return Container(
       margin: const EdgeInsets.all(20),
-      child: const SizedBox(
+      child: SizedBox(
         height: 500,
         width: double.infinity,
         child: Card(
+          color: AppColors.lightGrey,
           shape: RoundedRectangleBorder(
             side: BorderSide(
-              color: Colors.black,
+              color: borderColor,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(12)),
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
-          child: Center(
+          child: const Center(
             child: CircularProgressIndicator(),
           ),
         ),
@@ -123,11 +150,12 @@ class _DailyPageState extends State<DailyPage> {
         height: 500,
         width: double.infinity,
         child: Card(
-          shape: const RoundedRectangleBorder(
+          color: AppColors.lightGrey,
+          shape: RoundedRectangleBorder(
             side: BorderSide(
-              color: Colors.black,
+              color: borderColor,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(12)),
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -161,11 +189,12 @@ class _DailyPageState extends State<DailyPage> {
         height: 500,
         width: double.infinity,
         child: Card(
-          shape: const RoundedRectangleBorder(
+          color: AppColors.lightGrey,
+          shape: RoundedRectangleBorder(
             side: BorderSide(
-              color: Colors.black,
+              color: borderColor,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(12)),
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -271,7 +300,7 @@ class _DailyPageState extends State<DailyPage> {
               SizedBox(
                 width: double.infinity,
                 height: 50,
-                child: ElevatedButton(
+                child: GradientButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       final reponseInput = reponseController.text;
@@ -293,7 +322,7 @@ class _DailyPageState extends State<DailyPage> {
                       );
                     }
                   },
-                  child: Text(AppLocalizations.of(context)!.send),
+                  child: Text(AppLocalizations.of(context)!.send, style: TextStyle(fontSize: 20, color: AppColors.textIndigo)),
                 ),
               ),
             ],

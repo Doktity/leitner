@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green.shade50,
+      backgroundColor: AppColors.backgroundGreen,
       body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 36,
                     fontFamily: "Mulish",
-                    color: Colors.indigo.shade900
+                    color: AppColors.textIndigo
                 ),
               ),
               const Padding(padding: EdgeInsets.only(top: 20)),
@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => GameModePage()),
                   );
                 },
-                child: _buildButtonContent(Icons.calendar_month, AppLocalizations.of(context)!.daily),
+                child: GradientButton.buildButtonContent(Icons.calendar_month, AppLocalizations.of(context)!.daily),
               ),
               const Padding(padding: EdgeInsets.all(20)),
               GradientButton(
@@ -51,7 +51,7 @@ class HomePage extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => const CardPage()),
                   );
                 },
-                child: _buildButtonContent(Icons.library_books, AppLocalizations.of(context)!.cards),
+                child: GradientButton.buildButtonContent(Icons.library_books, AppLocalizations.of(context)!.cards),
               ),
               const Padding(padding: EdgeInsets.all(20)),
               GradientButton(
@@ -61,7 +61,7 @@ class HomePage extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => DarePage()),
                   );
                 },
-                child: _buildButtonContent(Icons.local_fire_department_sharp, AppLocalizations.of(context)!.dares),
+                child: GradientButton.buildButtonContent(Icons.local_fire_department_sharp, AppLocalizations.of(context)!.dares),
               ),
               const Padding(padding: EdgeInsets.all(20)),
               GradientButton(
@@ -71,7 +71,7 @@ class HomePage extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => PackPage()),
                   );
                 },
-                child: _buildButtonContent(Icons.collections_bookmark, AppLocalizations.of(context)!.packs),
+                child: GradientButton.buildButtonContent(Icons.collections_bookmark, AppLocalizations.of(context)!.packs),
               ),
               const Padding(padding: EdgeInsets.all(20)),
               GradientButton(
@@ -81,7 +81,7 @@ class HomePage extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => SettingsPage(Localizations.localeOf(context).languageCode)),
                   );
                 },
-                child: _buildButtonContent(Icons.settings, AppLocalizations.of(context)!.settings),
+                child: GradientButton.buildButtonContent(Icons.settings, AppLocalizations.of(context)!.settings),
               )
             ],
           )
@@ -112,26 +112,6 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildButtonContent(IconData icon, String text) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: Colors.black),
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Text(
-            text,
-            style: TextStyle(
-              fontFamily: "Mulish",
-              fontSize: 24,
-              color: Colors.indigo.shade900,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

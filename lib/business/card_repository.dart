@@ -119,9 +119,6 @@ class CardRepository {
       "periode": 1,
       "lastPlayed": DateTime.now(),
       "nextPlay": DateTime.now(),
-      "isDownloaded": false,
-      "packId": "",
-      "creatorId" : userId
     };
     batch.set(newLienRef, lienData);
 

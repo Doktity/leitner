@@ -4,7 +4,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:leitner/services/dare_service.dart';
 
+import '../app_colors.dart';
 import '../services/firebase_storage_service.dart';
+import '../utils/gradient_button.dart';
 import '../utils/image_handler.dart';
 import 'dare_page.dart';
 
@@ -68,8 +70,11 @@ class _AddDarePageState extends State<AddDarePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.backgroundGreen,
       appBar: AppBar(
-        title: isCreation ? Text(AppLocalizations.of(context)!.add) : Text("Update"),
+        title: isCreation
+            ? Text(AppLocalizations.of(context)!.add, style: TextStyle(fontSize: 24, color: AppColors.textIndigo))
+            : Text(AppLocalizations.of(context)!.modify, style: TextStyle(fontSize: 24, color: AppColors.textIndigo)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -80,9 +85,18 @@ class _AddDarePageState extends State<AddDarePage> {
             );
           },
         ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: AppColors.gradientButton,
+                begin: Alignment(-0.8, -1),
+                end: Alignment(0.8, 1),
+              )
+          ),
+        ),
       ),
       body: Container(
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Form(
               key: _formKey,
@@ -199,85 +213,93 @@ class _AddDarePageState extends State<AddDarePage> {
                   ),
                   Container(
                     margin: EdgeInsets.only(bottom: 10),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Open dialog for selecting question image
-                          _showDialog();
-                        },
-                        child: Text("Ajouter une image"),
-                      ),
+                    child: GradientButton(
+                      onPressed: () {
+                        // Open dialog for selecting question image
+                        _showDialog();
+                      },
+                      colors: AppColors.gradientButtonSec,
+                      maxWidth: 250,
+                      child: Text(AppLocalizations.of(context)!.add_image, style: TextStyle(fontSize: 16, color: AppColors.textIndigo)),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()){
-                            final name = nameController.text;
-                            final description = descriptionController.text;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text(AppLocalizations.of(context)!.sending)
-                                )
-                            );
-                            FocusScope.of(context).requestFocus(FocusNode());
-
-                            // Id de l'utilisateur connecté
-                            String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
-
-                            if(imageInfo != null){
-                              imgPath = await _storageService.uploadImageToFirebase(imageInfo);
-                            }
-
-                            // Data model pour Card
-                            Map<String, dynamic> dareData = {
-                              "name" : name,
-                              "description" : description,
-                              "imgPath" : imgPath,
-                              "creatorId" : userId,
-                              "dateCreation" : DateTime.now(),
-                              "categories" : categories
-                            };
-
-                            if(isCreation) {
-                              // ajout dans la base de données
-                              _dareService.addDare(userId, dareData);
-                            } else {
-                              // update dans la base de données
-                              _dareService.updateDare(widget.dare!['id'], dareData);
-                            }
-
-
-                            // Override the Snackbar
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  AppLocalizations.of(context)!.dare_sent,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                backgroundColor: Colors.green,
-                              ),
-                            );
-
-                            // Redirect to ListPage after a delay
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => DarePage()),
-                            );
-
-                          }
-                        },
-                        child: Text(AppLocalizations.of(context)!.send)
-                    ),
-                  )
                 ],
               )
+          ),
+        ),
+      ),
+      floatingActionButton: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: AppColors.gradientButton, // Gradient colors
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
+          ),
+          child: FloatingActionButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()){
+                final name = nameController.text;
+                final description = descriptionController.text;
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text(AppLocalizations.of(context)!.sending)
+                    )
+                );
+                FocusScope.of(context).requestFocus(FocusNode());
+
+                // Id de l'utilisateur connecté
+                String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+                if(imageInfo != null){
+                  imgPath = await _storageService.uploadImageToFirebase(imageInfo);
+                }
+
+                // Data model pour Card
+                Map<String, dynamic> dareData = {
+                  "name" : name,
+                  "description" : description,
+                  "imgPath" : imgPath,
+                  "creatorId" : userId,
+                  "dateCreation" : DateTime.now(),
+                  "categories" : categories
+                };
+
+                if(isCreation) {
+                  // ajout dans la base de données
+                  _dareService.addDare(userId, dareData);
+                } else {
+                  // update dans la base de données
+                  _dareService.updateDare(widget.dare!['id'], dareData);
+                }
+
+
+                // Override the Snackbar
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.of(context)!.dare_sent,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+
+                // Redirect to ListPage after a delay
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DarePage()),
+                );
+
+              }
+            },
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            tooltip: AppLocalizations.of(context)!.send,
+            child: const Icon(Icons.play_arrow),
           ),
         ),
       ),

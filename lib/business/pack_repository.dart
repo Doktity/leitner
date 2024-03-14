@@ -16,15 +16,6 @@ class PackRepository {
     }).cast<Map<String, dynamic>>().toList();
   }
 
-  Future<bool> isUserSubscribed(String userId, String packId) async {
-    QuerySnapshot querySnapshot = await liensCard
-        .where('userId', isEqualTo: userId)
-        .where('packId', isEqualTo: packId)
-        .get();
-
-    return querySnapshot.docs.isNotEmpty;
-  }
-
   Future<Map<String, dynamic>?> getPack(String packId) async {
     DocumentSnapshot documentSnapshot  = await packs.doc(packId).get();
     if(documentSnapshot.exists) {
@@ -33,7 +24,7 @@ class PackRepository {
     return null;
   }
 
-  Future<void> addLienCard(String userId, String packId, List<Map<String, dynamic>> cardList) async {
+  Future<void> addLienCard(String userId, List<Map<String, dynamic>> cardList) async {
     for(var card in cardList) {
       await liensCard.add({
         "userId": userId,
@@ -41,20 +32,20 @@ class PackRepository {
         "periode": 1,
         "lastPlayed": DateTime.now(),
         "nextPlay": DateTime.now(),
-        "isDownloaded": true,
-        "packId": packId
       });
     }
   }
 
-  Future<void> removeLienCard(String userId, String packId) async {
-    QuerySnapshot querySnapshot = await liensCard
-        .where('userId', isEqualTo: userId)
-        .where('packId', isEqualTo: packId)
-        .get();
+  Future<void> removeLienCard(String userId, List<String> cardIds) async {
+    for(String cardId in cardIds) {
+      QuerySnapshot querySnapshot = await liensCard
+          .where('userId', isEqualTo: userId)
+          .where('cardId', isEqualTo: cardId)
+          .get();
 
-    for(var doc in querySnapshot.docs) {
-      await liensCard.doc(doc.id).delete();
+      for(var doc in querySnapshot.docs) {
+        await liensCard.doc(doc.id).delete();
+      }
     }
   }
 

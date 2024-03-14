@@ -449,5 +449,30 @@
     "description": "Description",
     "@description": {
         "description": "description"
+    },
+
+    "label": "Label",
+    "@label": {
+        "description": "Label text"
+    },
+
+    "pack": "Pack",
+    "@pack": {
+        "description": "Pack text"
+    },
+
+    "change": "Change",
+    "@change": {
+        "description": "Change button"
+    },
+
+    "no_username": "Empty username",
+    "@no_username": {
+        "description": "Empty username text"
+    },
+
+    "modify": "Modify",
+    "@modify": {
+        "description": "Modify title"
     }
 }

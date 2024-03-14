@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/services/pack_service.dart';
 
+import '../app_colors.dart';
 import '../business/user_repository.dart';
+import '../utils/gradient_button.dart';
 import 'detail_pack_page.dart';
 import 'home_page.dart';
 
@@ -35,13 +37,9 @@ class _PackPageState extends State<PackPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade50,
+      backgroundColor: AppColors.backgroundGreen,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.packs,
-          style: const TextStyle(
-            fontFamily: "Mulish",
-          ),
-        ),
+        title: Text(AppLocalizations.of(context)!.packs, style: TextStyle(color: AppColors.textIndigo, fontSize: 24)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -51,6 +49,15 @@ class _PackPageState extends State<PackPage> {
                   (Route<dynamic> route) => false,
             );
           },
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: AppColors.gradientButton,
+                begin: Alignment(-0.8, -1),
+                end: Alignment(0.8, 1),
+              )
+          ),
         ),
       ),
       body: Column(
@@ -70,10 +77,12 @@ class _PackPageState extends State<PackPage> {
                   final username = item['username'];
 
                   return Card(
+                    color: AppColors.backgroundGreen,
                     child: Column(
                       children: [
                         ExpansionTile(
                           leading: const FlutterLogo(size: 56.0),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                           title: Text('$name'),
                           subtitle: Text('$description'),
                           trailing: Column(
@@ -87,7 +96,9 @@ class _PackPageState extends State<PackPage> {
                               padding: const EdgeInsets.all(16),
                               child: Column(
                                 children: [
-                                  Row(
+                                  Wrap(
+                                    spacing: 5,
+                                    runSpacing: 5,
                                     children: [
                                       for (var categorie in categories)
                                         Chip(
@@ -96,7 +107,7 @@ class _PackPageState extends State<PackPage> {
                                     ],
                                   ),
                                   const SizedBox(height: 20),
-                                  ElevatedButton(
+                                  GradientButton(
                                       onPressed: () {
                                         Navigator.push(
                                             context,
@@ -105,7 +116,11 @@ class _PackPageState extends State<PackPage> {
                                             )
                                         );
                                       },
-                                      child: Text(AppLocalizations.of(context)!.view)
+                                      colors: AppColors.gradientButtonSec,
+                                      widthFactor: 0.2,
+                                      heightFactor: 0.07,
+                                      maxWidth: 100,
+                                      child: Text(AppLocalizations.of(context)!.view, style: TextStyle(color: AppColors.textIndigo, fontSize: 16))
                                   ),
                                 ],
                               ),

@@ -55,9 +55,13 @@
 
     "card_deleted": "Carte supprimée",
 
+    "delete_card": "Supprimer une carte",
+
     "dare_sent": "Gage envoyé",
 
     "dare_deleted": "Gage supprimé",
+
+    "delete_dare": "Supprimer un gage",
 
     "login": "Se connecter",
 
@@ -157,11 +161,21 @@
 
     "dare_id_list": "Liste des ids de gage: {dareIds}",
 
-    "total_life": "Point de vie initial: {totalLifePoint}",
+    "total_life": "{totalLifePoint, plural, zero{Point de vie initial: 0} one{Point de vie initial: 1} other{Points de vie initiaux: {totalLifePoint}}}",
 
-    "current_life": "Point de vie actuel: {currentLifePoint}",
+    "current_life": "{currentLifePoint, plural, zero{Point de vie actuel: 0} one{Point de vie actuel: 1} other{Points de vie actuels: {currentLifePoint}}}",
 
     "stat": "Stat",
 
-    "description": "Description"
+    "description": "Description",
+
+    "label": "Catégorie",
+
+    "pack": "Pack",
+
+    "change": "Changer",
+
+    "no_username": "Pas de pseudo",
+
+    "modify": "Modifier"
 }

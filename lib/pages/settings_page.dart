@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/services/user_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../app_colors.dart';
 import '../main.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -54,9 +55,18 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade50,
+      backgroundColor: AppColors.backgroundGreen,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.settings),
+        title: Text(AppLocalizations.of(context)!.settings, style: TextStyle(color: AppColors.textIndigo, fontSize: 24)),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: AppColors.gradientButton,
+                begin: Alignment(-0.8, -1),
+                end: Alignment(0.8, 1),
+              )
+          ),
+        ),
       ),
       body: Center(
         child: Column(
@@ -77,12 +87,15 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      username == "" ? Text("Pseudo vide") : Text(username),
+                      username == "" ? Text(AppLocalizations.of(context)!.no_username) : Text(username),
                       ElevatedButton(
+                          style: const ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(AppColors.pastelPink)
+                          ),
                           onPressed: () {
                             _showUsernameDialog(context);
                           },
-                          child: Text("Changer")
+                          child: Text(AppLocalizations.of(context)!.change, style: TextStyle(color: AppColors.textIndigo))
                       )
                     ],
                   ),

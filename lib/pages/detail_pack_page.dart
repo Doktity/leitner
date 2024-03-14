@@ -7,7 +7,9 @@ import 'package:leitner/services/user_service.dart';
 import 'package:leitner/utils/enum_data.dart';
 import 'package:leitner/utils/spoiler_text.dart';
 
+import '../app_colors.dart';
 import '../business/user_repository.dart';
+import '../utils/gradient_button.dart';
 
 class DetailPackPage extends StatefulWidget {
   final Map<String, dynamic> pack;
@@ -54,8 +56,10 @@ class _DetailPackPageState extends State<DetailPackPage> {
   Future<void> toggleSubscription() async {
     if(isSubscribed) {
       await _packService.removeLienCard(userId, widget.pack['id']);
+      await _packService.removePackId(userId, widget.pack['id']);
     } else {
       await _packService.addLienCard(userId, widget.pack['id']);
+      await _packService.addPackId(userId, widget.pack['id']);
     }
     setState(() {
       isSubscribed = !isSubscribed;
@@ -67,8 +71,18 @@ class _DetailPackPageState extends State<DetailPackPage> {
     final name = widget.pack['name'] ?? '';
     final description = widget.pack['description'] ?? '';
     return Scaffold(
+      backgroundColor: AppColors.backgroundGreen,
       appBar: AppBar(
-        title: Text(name),
+        title: Text(name, style: TextStyle(fontSize: 24, color: AppColors.textIndigo)),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: AppColors.gradientButton,
+                begin: Alignment(-0.8, -1),
+                end: Alignment(0.8, 1),
+              )
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -143,19 +157,18 @@ class _DetailPackPageState extends State<DetailPackPage> {
             width: double.infinity,
             height: 50,
             child: (dataState == DataState.loaded) 
-                ? ElevatedButton(
+                ? GradientButton(
                   onPressed: () {
                     _showDialog();
                   },
+                  colors: isSubscribed ? [AppColors.pastelPinkLight, AppColors.pastelPink] : [AppColors.pastelGreenLight, AppColors.pastelGreen],
+                  padding: 10,
                   child: Text(
                       isSubscribed ? AppLocalizations.of(context)!.unsubscribe : AppLocalizations.of(context)!.subscribe,
                       style: TextStyle(
-                        fontSize: 24
+                        fontSize: 24,
+                        color: AppColors.textIndigo
                       ),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(isSubscribed ? Colors.red : Colors.green),
-                    foregroundColor: const MaterialStatePropertyAll(Colors.black)
                   ),
                 )
                 : ElevatedButton(onPressed: (){}, child: null,),

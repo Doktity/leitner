@@ -55,9 +55,13 @@
 
     "card_deleted": "Carta eliminada",
 
+    "delete_card": "Eliminar una carta",
+
     "dare_sent": "Penitencia enviada",
 
     "dare_deleted": "Penitencia eliminada",
+
+    "delete_dare": "Eliminar une penitencia",
 
     "login": "Iniciar sesión",
 
@@ -163,5 +167,15 @@
 
     "stat": "Stat",
 
-    "description": "Descripción"
+    "description": "Descripción",
+
+    "label": "Etiqueta",
+
+    "pack": "Paquete",
+
+    "change": "Cambiar",
+
+    "no_username": "No nombre de usuario ",
+
+    "modify": "Modificar"
 }

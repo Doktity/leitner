@@ -4,7 +4,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:leitner/services/card_service.dart';
 
+import '../app_colors.dart';
 import '../services/firebase_storage_service.dart';
+import '../utils/gradient_button.dart';
 import '../utils/image_handler.dart';
 import 'card_page.dart';
 
@@ -76,9 +78,11 @@ class _AddCardPageState extends State<AddCardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade50,
+      backgroundColor: AppColors.backgroundGreen,
       appBar: AppBar(
-        title: isCreation ? Text(AppLocalizations.of(context)!.add) : Text("Update"),
+        title: isCreation
+            ? Text(AppLocalizations.of(context)!.add, style: TextStyle(fontSize: 24, color: AppColors.textIndigo))
+            : Text(AppLocalizations.of(context)!.modify, style: TextStyle(fontSize: 24, color: AppColors.textIndigo)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -89,6 +93,15 @@ class _AddCardPageState extends State<AddCardPage> {
             );
           },
         ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: AppColors.gradientButton,
+                begin: Alignment(-0.8, -1),
+                end: Alignment(0.8, 1),
+              )
+          ),
+        ),
       ),
       body: Container(
         margin: EdgeInsets.all(20),
@@ -98,7 +111,7 @@ class _AddCardPageState extends State<AddCardPage> {
             child: Column(
               children: [
                 Container(
-                  color: Colors.red.shade50,
+                  color: AppColors.pastelPinkLight,
                   margin: const EdgeInsets.only(bottom: 10),
                   child: TextFormField(
                     decoration: InputDecoration(
@@ -118,7 +131,7 @@ class _AddCardPageState extends State<AddCardPage> {
                   ),
                 ),
                 Container(
-                  color: Colors.red.shade50,
+                  color: AppColors.pastelPinkLight,
                   margin: EdgeInsets.only(bottom: 10),
                   child: TextFormField(
                     decoration: InputDecoration(
@@ -138,7 +151,7 @@ class _AddCardPageState extends State<AddCardPage> {
                   ),
                 ),
                 Container(
-                  color: Colors.red.shade50,
+                  color: AppColors.pastelPinkLight,
                   margin: EdgeInsets.only(bottom: 10),
                   child: TextFormField(
                     decoration: InputDecoration(
@@ -153,7 +166,7 @@ class _AddCardPageState extends State<AddCardPage> {
                 ),
                 SizedBox(height: 20),
                 Container(
-                  color: Colors.red.shade50,
+                  color: AppColors.pastelPinkLight,
                   margin: EdgeInsets.only(bottom: 10),
                   child: Autocomplete<String>(
                     optionsBuilder: (TextEditingValue textEditingValue) {
@@ -222,106 +235,114 @@ class _AddCardPageState extends State<AddCardPage> {
                 ),
                 Container(
                   margin: EdgeInsets.only(bottom: 10),
-                  child: Column(
+                  child: Wrap(
+                    spacing: 20,
+                    runSpacing: 20,
                     children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Open dialog for selecting question image
-                            _showDialog('question');
-                          },
-                          child: Text(AppLocalizations.of(context)!.add_question_image),
-                        ),
+                      GradientButton(
+                        onPressed: () {
+                          // Open dialog for selecting question image
+                          _showDialog('question');
+                        },
+                        colors: AppColors.gradientButtonSec,
+                        maxWidth: 250,
+                        child: Text(AppLocalizations.of(context)!.add_question_image, style: TextStyle(fontSize: 16, color: AppColors.textIndigo)),
                       ),
-                      const SizedBox(height: 10), // Spacing
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Open dialog for selecting response image
-                            _showDialog('response');
-                          },
-                          child: Text(AppLocalizations.of(context)!.add_reponse_image),
-                        ),
+                      GradientButton(
+                        onPressed: () {
+                          // Open dialog for selecting response image
+                          _showDialog('response');
+                        },
+                        colors: AppColors.gradientButtonSec,
+                        maxWidth: 250,
+                        child: Text(AppLocalizations.of(context)!.add_reponse_image, style: TextStyle(fontSize: 16, color: AppColors.textIndigo)),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()){
-                        final question = questionController.text;
-                        final reponseKey = reponseKeyController.text;
-                        final reponseText = reponseTextController.text;
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Text(AppLocalizations.of(context)!.sending)
-                            )
-                        );
-                        FocusScope.of(context).requestFocus(FocusNode());
-
-                        // Id de l'utilisateur connecté
-                        String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
-
-                        if(questionImageInfo != null){
-                          questionPath = await _storageService.uploadImageToFirebase(questionImageInfo);
-                        }
-                        if(reponseImageInfo != null){
-                          reponsePath = await _storageService.uploadImageToFirebase(reponseImageInfo);
-                        }
-
-                        // Data model pour Card
-                        Map<String, dynamic> cardData = {
-                          "question" : question,
-                          "reponseKey" : reponseKey,
-                          "reponseText" : reponseText,
-                          "questionImgPath" : questionPath,
-                          "reponseImgPath" : reponsePath,
-                          "dateCreation" : DateTime.now(),
-                          "categorie" : categories
-                        };
-
-                        if(isCreation) {
-                          // ajout dans la base de données
-                          _cardService.addCard(userId, cardData);
-                        } else {
-                          // update dans la base de données
-                          _cardService.updateCard(widget.card!['cardId'], cardData);
-                        }
-
-
-                        // Override the Snackbar
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              AppLocalizations.of(context)!.card_sent,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            backgroundColor: Colors.green,
-                          ),
-                        );
-
-                        // Redirect to ListPage after a delay
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => CardPage()),
-                        );
-
-                      }
-                    },
-                    child: Text(AppLocalizations.of(context)!.send)
-                  ),
-                )
               ],
             )
+          ),
+        ),
+      ),
+      floatingActionButton: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: AppColors.gradientButton, // Gradient colors
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
+          ),
+          child: FloatingActionButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()){
+                final question = questionController.text;
+                final reponseKey = reponseKeyController.text;
+                final reponseText = reponseTextController.text;
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text(AppLocalizations.of(context)!.sending)
+                    )
+                );
+                FocusScope.of(context).requestFocus(FocusNode());
+
+                // Id de l'utilisateur connecté
+                String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+                if(questionImageInfo != null){
+                  questionPath = await _storageService.uploadImageToFirebase(questionImageInfo);
+                }
+                if(reponseImageInfo != null){
+                  reponsePath = await _storageService.uploadImageToFirebase(reponseImageInfo);
+                }
+
+                // Data model pour Card
+                Map<String, dynamic> cardData = {
+                  "question" : question,
+                  "reponseKey" : reponseKey,
+                  "reponseText" : reponseText,
+                  "questionImgPath" : questionPath,
+                  "reponseImgPath" : reponsePath,
+                  "dateCreation" : DateTime.now(),
+                  "categorie" : categories,
+                  "creatorId" : userId
+                };
+
+                if(isCreation) {
+                  // ajout dans la base de données
+                  _cardService.addCard(userId, cardData);
+                } else {
+                  // update dans la base de données
+                  _cardService.updateCard(widget.card!['cardId'], cardData);
+                }
+
+
+                // Override the Snackbar
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.of(context)!.card_sent,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+
+                // Redirect to ListPage after a delay
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CardPage()),
+                );
+
+              }
+            },
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            tooltip: AppLocalizations.of(context)!.send,
+            child: const Icon(Icons.play_arrow),
           ),
         ),
       ),

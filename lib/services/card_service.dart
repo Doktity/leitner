@@ -22,8 +22,6 @@ class CardService {
         var cardData = await _cardRepository.getCardById(cardId);
         if(cardData != null) {
           cardData['cardId'] = cardId;
-          cardData['packId'] = link['packId'];
-          cardData['creatorId'] = link['creatorId'];
           userCards.add(cardData);
         }
       }
