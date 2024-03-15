@@ -4,8 +4,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/app_colors.dart';
 import 'package:leitner/services/user_service.dart';
 import 'package:leitner/utils/daily_metrics.dart';
+import 'package:leitner/utils/gradient_app_bar.dart';
 import 'package:leitner/utils/gradient_button.dart';
-import 'package:leitner/utils/styled_tooltip.dart';
+import 'package:leitner/utils/gradient_floating_action_button.dart';
 
 import 'daily_page.dart';
 import 'home_page.dart';
@@ -49,27 +50,15 @@ class _GameModePageState extends State<GameModePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.gamemode, style: TextStyle(color: AppColors.textIndigo, fontSize: 24)),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Navigate to HomePage
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => HomePage()),
-                  (Route<dynamic> route) => false,
-            );
-          },
-        ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: AppColors.gradientButton,
-                begin: Alignment(-0.8, -1),
-                end: Alignment(0.8, 1),
-              )
-          ),
-        ),
+      appBar: GradientAppBar(
+        title: AppLocalizations.of(context)!.gamemode,
+        onLeadingPressed: () {
+          // Navigate to HomePage
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => HomePage()),
+                (Route<dynamic> route) => false,
+          );
+        },
       ),
       backgroundColor: AppColors.backgroundGreen,
       body: Center(
@@ -163,32 +152,17 @@ class _GameModePageState extends State<GameModePage> {
   }
 
   Widget _buildLaunchButton(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(15),
-      child: Container(
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: AppColors.gradientButton, // Gradient colors
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            )
-        ),
-        child: FloatingActionButton(
-          onPressed: () {
-            DailyMetrics dailyMetrics = DailyMetrics(userId: userId, gameMode: selectedGameMode!);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => DailyPage(dailyMetrics: dailyMetrics),
-              ),
-            );
-          },
-          tooltip: AppLocalizations.of(context)!.launch,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          child: const Icon(Icons.play_arrow),
-        ),
-      ),
+    return GradientFloatingActionButton(
+      onPressed: () {
+        DailyMetrics dailyMetrics = DailyMetrics(userId: userId, gameMode: selectedGameMode!);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => DailyPage(dailyMetrics: dailyMetrics),
+          ),
+        );
+      },
+      icon: Icons.play_arrow,
     );
   }
 }

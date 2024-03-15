@@ -3,6 +3,10 @@ import 'package:leitner/pages/home_page.dart';
 import 'package:leitner/utils/daily_metrics.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../app_colors.dart';
+import '../utils/gradient_app_bar.dart';
+import '../utils/gradient_floating_action_button.dart';
+
 class StatPage extends StatelessWidget {
   final DailyMetrics dailyMetrics;
 
@@ -13,22 +17,21 @@ class StatPage extends StatelessWidget {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.stat),
+        appBar: GradientAppBar(
+          title: AppLocalizations.of(context)!.stat,
           automaticallyImplyLeading: false,
         ),
-        backgroundColor: Colors.blue.shade50,
+        backgroundColor: AppColors.backgroundGreen,
         body: buildMetricsDisplay(context, dailyMetrics),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: GradientFloatingActionButton(
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => HomePage()),
               );
             },
-            backgroundColor: Colors.blue,
             tooltip: AppLocalizations.of(context)!.home,
-            child: const Icon(Icons.home)
+            icon: Icons.home
         ),
       ),
     );
@@ -81,16 +84,8 @@ Widget buildMetricsDisplay(BuildContext context, DailyMetrics metrics) {
                     fontSize: 20
                 ),
               ),
-              if(metrics.gameMode == GameMode.classic) Text(AppLocalizations.of(context)!.total_life(metrics.totalLifePoint),
-                style: const TextStyle(
-                    fontSize: 20
-                ),
-              ),
-              if(metrics.gameMode == GameMode.classic) Text(AppLocalizations.of(context)!.current_life(metrics.currentLifePoint),
-                style: const TextStyle(
-                    fontSize: 20
-                ),
-              )
+              if(metrics.gameMode == GameMode.survival) Text(AppLocalizations.of(context)!.total_life(metrics.totalLifePoint), style: const TextStyle(fontSize: 20)),
+              if(metrics.gameMode == GameMode.survival) Text(AppLocalizations.of(context)!.current_life(metrics.currentLifePoint), style: const TextStyle(fontSize: 20))
             ],
           ),
         ),

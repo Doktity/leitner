@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/pages/gamemode_page.dart';
 import 'package:leitner/pages/settings_page.dart';
 import 'package:leitner/utils/gradient_button.dart';
+import 'package:leitner/utils/gradient_floating_action_button.dart';
 
 import '../services/login_service.dart';
 import 'dare_page.dart';
@@ -86,31 +87,17 @@ class HomePage extends StatelessWidget {
             ],
           )
       ),
-      floatingActionButton: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: AppColors.gradientButton, // Gradient colors
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            )
-          ),
-          child: FloatingActionButton(
-            onPressed: () async {
-              await _loginRepository.signOutGoogle();
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => LoginPage()
-                  )
-              );
-            },
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            child: const Icon(Icons.logout)
-          ),
-        ),
+      floatingActionButton: GradientFloatingActionButton(
+        onPressed: () async {
+          await _loginRepository.signOutGoogle();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => LoginPage()
+              )
+          );
+        },
+        icon: Icons.logout,
       ),
     );
   }

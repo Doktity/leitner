@@ -93,4 +93,8 @@ class DareService {
   Future<void> updateDare(String dareId, Map<String, dynamic> dare) async {
     await _dareRepository.updateDare(dareId, dare);
   }
+
+  Future<List<Map<String, dynamic>>> getListDares(List<String> ids) async {
+    return await _dareRepository.getListDares(ids);
+}
 }

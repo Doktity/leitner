@@ -5,7 +5,9 @@ import 'package:leitner/services/dare_service.dart';
 import 'package:leitner/services/user_service.dart';
 import 'package:leitner/utils/daily_metrics.dart';
 
+import '../app_colors.dart';
 import '../services/card_service.dart';
+import '../utils/gradient_app_bar.dart';
 import 'daily_page.dart';
 
 class AnswerPage extends StatefulWidget {
@@ -74,9 +76,9 @@ class _AnswerPageState extends State<AnswerPage> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: Colors.blue.shade50,
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.answer),
+        backgroundColor: AppColors.backgroundGreen,
+        appBar: GradientAppBar(
+          title: AppLocalizations.of(context)!.answer,
           automaticallyImplyLeading: false,
         ),
         body: Center(
@@ -86,7 +88,7 @@ class _AnswerPageState extends State<AnswerPage> {
               child: Column(
                 children: [
                   Card(
-                    color: isCorrect ? Colors.green : Colors.red,
+                    color: isCorrect ? AppColors.pastelGreen : AppColors.pastelPink,
                     shape: const RoundedRectangleBorder(
                       side: BorderSide(
                         width: 2,

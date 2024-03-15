@@ -6,7 +6,9 @@ import 'package:leitner/services/card_service.dart';
 
 import '../app_colors.dart';
 import '../services/firebase_storage_service.dart';
+import '../utils/gradient_app_bar.dart';
 import '../utils/gradient_button.dart';
+import '../utils/gradient_floating_action_button.dart';
 import '../utils/image_handler.dart';
 import 'card_page.dart';
 
@@ -79,29 +81,17 @@ class _AddCardPageState extends State<AddCardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundGreen,
-      appBar: AppBar(
+      appBar: GradientAppBar(
         title: isCreation
-            ? Text(AppLocalizations.of(context)!.add, style: TextStyle(fontSize: 24, color: AppColors.textIndigo))
-            : Text(AppLocalizations.of(context)!.modify, style: TextStyle(fontSize: 24, color: AppColors.textIndigo)),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Navigate to HomePage
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const CardPage()),
-                  (Route<dynamic> route) => false,
-            );
-          },
-        ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: AppColors.gradientButton,
-                begin: Alignment(-0.8, -1),
-                end: Alignment(0.8, 1),
-              )
-          ),
-        ),
+            ? AppLocalizations.of(context)!.add
+            : AppLocalizations.of(context)!.modify,
+        onLeadingPressed: () {
+          // Navigate to HomePage
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const CardPage()),
+                (Route<dynamic> route) => false,
+          );
+        },
       ),
       body: Container(
         margin: EdgeInsets.all(20),
@@ -265,86 +255,72 @@ class _AddCardPageState extends State<AddCardPage> {
           ),
         ),
       ),
-      floatingActionButton: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: AppColors.gradientButton, // Gradient colors
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              )
-          ),
-          child: FloatingActionButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()){
-                final question = questionController.text;
-                final reponseKey = reponseKeyController.text;
-                final reponseText = reponseTextController.text;
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content: Text(AppLocalizations.of(context)!.sending)
-                    )
-                );
-                FocusScope.of(context).requestFocus(FocusNode());
+      floatingActionButton: GradientFloatingActionButton(
+        onPressed: () async {
+          if (_formKey.currentState!.validate()){
+            final question = questionController.text;
+            final reponseKey = reponseKeyController.text;
+            final reponseText = reponseTextController.text;
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text(AppLocalizations.of(context)!.sending)
+                )
+            );
+            FocusScope.of(context).requestFocus(FocusNode());
 
-                // Id de l'utilisateur connecté
-                String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+            // Id de l'utilisateur connecté
+            String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
 
-                if(questionImageInfo != null){
-                  questionPath = await _storageService.uploadImageToFirebase(questionImageInfo);
-                }
-                if(reponseImageInfo != null){
-                  reponsePath = await _storageService.uploadImageToFirebase(reponseImageInfo);
-                }
+            if(questionImageInfo != null){
+              questionPath = await _storageService.uploadImageToFirebase(questionImageInfo);
+            }
+            if(reponseImageInfo != null){
+              reponsePath = await _storageService.uploadImageToFirebase(reponseImageInfo);
+            }
 
-                // Data model pour Card
-                Map<String, dynamic> cardData = {
-                  "question" : question,
-                  "reponseKey" : reponseKey,
-                  "reponseText" : reponseText,
-                  "questionImgPath" : questionPath,
-                  "reponseImgPath" : reponsePath,
-                  "dateCreation" : DateTime.now(),
-                  "categorie" : categories,
-                  "creatorId" : userId
-                };
+            // Data model pour Card
+            Map<String, dynamic> cardData = {
+              "question" : question,
+              "reponseKey" : reponseKey,
+              "reponseText" : reponseText,
+              "questionImgPath" : questionPath,
+              "reponseImgPath" : reponsePath,
+              "dateCreation" : DateTime.now(),
+              "categorie" : categories,
+              "creatorId" : userId
+            };
 
-                if(isCreation) {
-                  // ajout dans la base de données
-                  _cardService.addCard(userId, cardData);
-                } else {
-                  // update dans la base de données
-                  _cardService.updateCard(widget.card!['cardId'], cardData);
-                }
+            if(isCreation) {
+              // ajout dans la base de données
+              _cardService.addCard(userId, cardData);
+            } else {
+              // update dans la base de données
+              _cardService.updateCard(widget.card!['cardId'], cardData);
+            }
 
 
-                // Override the Snackbar
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      AppLocalizations.of(context)!.card_sent,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    backgroundColor: Colors.green,
-                  ),
-                );
+            // Override the Snackbar
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  AppLocalizations.of(context)!.card_sent,
+                  style: TextStyle(color: Colors.white),
+                ),
+                backgroundColor: Colors.green,
+              ),
+            );
 
-                // Redirect to ListPage after a delay
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CardPage()),
-                );
+            // Redirect to ListPage after a delay
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CardPage()),
+            );
 
-              }
-            },
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            tooltip: AppLocalizations.of(context)!.send,
-            child: const Icon(Icons.play_arrow),
-          ),
-        ),
+          }
+        },
+        tooltip: AppLocalizations.of(context)!.send,
+        icon: Icons.play_arrow,
       ),
     );
   }

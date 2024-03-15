@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/services/card_service.dart';
 import 'package:leitner/utils/enum_data.dart';
 import 'package:leitner/utils/daily_metrics.dart';
+import 'package:leitner/utils/gradient_app_bar.dart';
 import 'package:leitner/utils/life_points.dart';
 
 import '../app_colors.dart';
@@ -75,27 +76,15 @@ class _DailyPageState extends State<DailyPage> {
       canPop: false,
       child: Scaffold(
         backgroundColor: AppColors.backgroundGreen,
-        appBar: AppBar(
-          title: Text("${AppLocalizations.of(context)!.daily} - ${widget.dailyMetrics.getGameMode(context)}", style: TextStyle(color: AppColors.textIndigo, fontSize: 24)),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              // Navigate to HomePage
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => HomePage()),
-                    (Route<dynamic> route) => false,
-              );
-            },
-          ),
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: AppColors.gradientButton,
-                  begin: Alignment(-0.8, -1),
-                  end: Alignment(0.8, 1),
-                )
-            ),
-          ),
+        appBar: GradientAppBar(
+          title: "${AppLocalizations.of(context)!.daily} - ${widget.dailyMetrics.getGameMode(context)}",
+          onLeadingPressed: () {
+            // Navigate to HomePage
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => HomePage()),
+                  (Route<dynamic> route) => false,
+            );
+          },
         ),
         body: Stack(
           children: [

@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../app_colors.dart';
 import '../services/login_service.dart';
+import '../utils/gradient_app_bar.dart';
 import '../utils/gradient_button.dart';
 import 'home_page.dart';
 
@@ -21,17 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.login,
-          style: TextStyle(
-            fontFamily: "Mulish",
-            fontSize: 24,
-            color: AppColors.textIndigo
-          ),
-        ),
-        automaticallyImplyLeading: false,
-        backgroundColor: AppColors.backgroundGreen,
-      ),
+      appBar: GradientAppBar(title: AppLocalizations.of(context)!.login, automaticallyImplyLeading: false),
       backgroundColor: AppColors.backgroundGreen,
       body: Center(
         child: Column(

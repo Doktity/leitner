@@ -6,6 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../app_colors.dart';
 import '../main.dart';
+import '../utils/gradient_app_bar.dart';
+import 'home_page.dart';
 
 class SettingsPage extends StatefulWidget {
   final String selectedLanguage;
@@ -56,17 +58,15 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundGreen,
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.settings, style: TextStyle(color: AppColors.textIndigo, fontSize: 24)),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: AppColors.gradientButton,
-                begin: Alignment(-0.8, -1),
-                end: Alignment(0.8, 1),
-              )
-          ),
-        ),
+      appBar: GradientAppBar(
+        title: AppLocalizations.of(context)!.settings,
+        onLeadingPressed: () {
+          // Navigate to HomePage
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => HomePage()),
+                (Route<dynamic> route) => false,
+          );
+        },
       ),
       body: Center(
         child: Column(

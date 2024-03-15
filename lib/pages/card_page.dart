@@ -8,6 +8,8 @@ import 'package:leitner/services/user_service.dart';
 import 'package:leitner/utils/enum_data.dart';
 import 'package:leitner/utils/gradient_button.dart';
 
+import '../utils/gradient_app_bar.dart';
+import '../utils/gradient_floating_action_button.dart';
 import '../utils/spoiler_text.dart';
 import 'add_card_page.dart';
 import 'home_page.dart';
@@ -86,33 +88,15 @@ class _CardPageState extends State<CardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundGreen,
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.cards,
-          style: TextStyle(
-            color: AppColors.textIndigo,
-            fontFamily: "Mulish",
-            fontSize: 24
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Navigate to HomePage
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => HomePage()),
-                  (Route<dynamic> route) => false,
-            );
-          },
-        ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: AppColors.gradientButton,
-              begin: Alignment(-0.8, -1),
-              end: Alignment(0.8, 1),
-            )
-          ),
-        ),
+      appBar: GradientAppBar(
+        title: AppLocalizations.of(context)!.cards,
+        onLeadingPressed: () {
+          // Navigate to HomePage
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => HomePage()),
+                (Route<dynamic> route) => false,
+          );
+        },
       ),
       body: Column(
         children: [
@@ -221,30 +205,17 @@ class _CardPageState extends State<CardPage> {
           ),
         ],
       ),
-      floatingActionButton: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: AppColors.gradientButton, // Gradient colors
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+      floatingActionButton: GradientFloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => const AddCardPage()
               )
-          ),
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => const AddCardPage()
-                  )
-              );
-            },
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            child: const Icon(Icons.add),
-          ),
-        ),
+          );
+        },
+        tooltip: AppLocalizations.of(context)!.add,
+        icon: Icons.add,
       ),
     );
   }

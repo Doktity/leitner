@@ -1,14 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:leitner/pages/pack_page.dart';
 import 'package:leitner/services/card_service.dart';
+import 'package:leitner/services/dare_service.dart';
 import 'package:leitner/services/pack_service.dart';
 import 'package:leitner/services/user_service.dart';
 import 'package:leitner/utils/enum_data.dart';
 import 'package:leitner/utils/spoiler_text.dart';
 
 import '../app_colors.dart';
-import '../business/user_repository.dart';
+import '../utils/gradient_app_bar.dart';
 import '../utils/gradient_button.dart';
 
 class DetailPackPage extends StatefulWidget {
@@ -26,7 +28,8 @@ class _DetailPackPageState extends State<DetailPackPage> {
   final CardService _cardService = CardService();
   final PackService _packService = PackService();
   final UserService _userService = UserService();
-  List<Map<String, dynamic>> cards = [];
+  final DareService _dareService = DareService();
+  List<Map<String, dynamic>> items = [];
   String username = "";
   String creatorName = "";
   DataState dataState = DataState.loading;
@@ -41,8 +44,12 @@ class _DetailPackPageState extends State<DetailPackPage> {
     try{
       username = await _userService.getUserName(userId);
       creatorName = await _userService.getUserName(widget.pack['userId']);
-      List<String> cardIds = widget.pack['ids'].cast<String>();
-      cards = await _cardService.getListCards(cardIds);
+      List<String> ids = widget.pack['ids'].cast<String>();
+      if(widget.pack['type'] == 'card') {
+        items = await _cardService.getListCards(ids);
+      } else {
+        items = await _dareService.getListDares(ids);
+      }
       isSubscribed = await _packService.isUserSubscribed(userId, widget.pack['id']);
     } catch(e) {
       dataState = DataState.empty;
@@ -72,17 +79,15 @@ class _DetailPackPageState extends State<DetailPackPage> {
     final description = widget.pack['description'] ?? '';
     return Scaffold(
       backgroundColor: AppColors.backgroundGreen,
-      appBar: AppBar(
-        title: Text(name, style: TextStyle(fontSize: 24, color: AppColors.textIndigo)),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: AppColors.gradientButton,
-                begin: Alignment(-0.8, -1),
-                end: Alignment(0.8, 1),
-              )
-          ),
-        ),
+      appBar: GradientAppBar(
+        title: name,
+        onLeadingPressed: () {
+          // Navigate to PackPage
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const PackPage()),
+                (Route<dynamic> route) => false,
+          );
+        },
       ),
       body: Column(
         children: [
@@ -97,7 +102,7 @@ class _DetailPackPageState extends State<DetailPackPage> {
                       subtitle: Text(description),
                       trailing: Column(
                         children: [
-                          Text(AppLocalizations.of(context)!.cards_number(cards.length)),
+                          Text(AppLocalizations.of(context)!.cards_number(items.length)),
                           Text(creatorName)
                         ],
                       ),
@@ -117,19 +122,28 @@ class _DetailPackPageState extends State<DetailPackPage> {
                           Text(
                             AppLocalizations.of(context)!.cards_list,
                             style: TextStyle(
-                              fontSize: 24
+                              fontSize: 24,
+                              color: AppColors.textIndigo
                             ),
                           ),
                           ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: cards.length,
+                            itemCount: items.length,
                             itemBuilder: (context, index) {
-                              var card = cards[index];
-                              return ListTile(
-                                title: Text(card['question']),
-                                subtitle: SpoilerText(text: card['reponseKey']),
-                              );
+                              var item = items[index];
+                              if(widget.pack['type'] == 'card') {
+                                return ListTile(
+                                  title: Text(item['question']),
+                                  subtitle: SpoilerText(text: item['reponseKey']),
+                                );
+                              } else {
+                                return ListTile(
+                                  title: Text(item['name']),
+                                  subtitle: Text(item['description']),
+                                );
+                              }
+
                             }
                           ),
                         ],

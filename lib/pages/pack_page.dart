@@ -4,6 +4,7 @@ import 'package:leitner/services/pack_service.dart';
 
 import '../app_colors.dart';
 import '../business/user_repository.dart';
+import '../utils/gradient_app_bar.dart';
 import '../utils/gradient_button.dart';
 import 'detail_pack_page.dart';
 import 'home_page.dart';
@@ -38,27 +39,15 @@ class _PackPageState extends State<PackPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundGreen,
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.packs, style: TextStyle(color: AppColors.textIndigo, fontSize: 24)),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Navigate to HomePage
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => HomePage()),
-                  (Route<dynamic> route) => false,
-            );
-          },
-        ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: AppColors.gradientButton,
-                begin: Alignment(-0.8, -1),
-                end: Alignment(0.8, 1),
-              )
-          ),
-        ),
+      appBar: GradientAppBar(
+        title: AppLocalizations.of(context)!.packs,
+        onLeadingPressed: () {
+          // Navigate to HomePage
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => HomePage()),
+                (Route<dynamic> route) => false,
+          );
+        },
       ),
       body: Column(
         children: [

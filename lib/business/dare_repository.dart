@@ -82,4 +82,18 @@ class DareRepository {
 
     await batch.commit();
   }
+
+  Future<List<Map<String, dynamic>>> getListDares(List<String> dareIds) async {
+    List<Map<String, dynamic>> daresList = [];
+
+    for(String dareId in dareIds) {
+      DocumentSnapshot dareSnapshot = await dares.doc(dareId).get();
+      if(dareSnapshot.exists) {
+        Map<String, dynamic> dare = dareSnapshot.data() as Map<String, dynamic>;
+        dare['id'] = dareSnapshot.id;
+        daresList.add(dare);
+      }
+    }
+    return daresList;
+  }
 }
