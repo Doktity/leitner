@@ -56,14 +56,16 @@ class GradientButton extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, color: Colors.black),
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Text(
-            text,
-            style: TextStyle(
-              fontFamily: "Mulish",
-              fontSize: 24,
-              color: AppColors.textIndigo,
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Text(
+              text,
+              style: TextStyle(
+                fontFamily: "Mulish",
+                fontSize: 24,
+                color: AppColors.textIndigo,
+              ),
             ),
           ),
         ),

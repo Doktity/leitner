@@ -63,6 +63,7 @@ class _AnswerPageState extends State<AnswerPage> {
         _manageMetrics();
       });
     }
+    print(fetchedBool);
   }
 
   void _manageMetrics() {

@@ -2,12 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:leitner/app_colors.dart';
+import 'package:leitner/services/card_service.dart';
 import 'package:leitner/services/user_service.dart';
 import 'package:leitner/utils/daily_metrics.dart';
 import 'package:leitner/utils/gradient_app_bar.dart';
 import 'package:leitner/utils/gradient_button.dart';
 import 'package:leitner/utils/gradient_floating_action_button.dart';
+import 'package:provider/provider.dart';
 
+import '../services/pack_service.dart';
+import '../services/shared_preferences_service.dart';
 import 'daily_page.dart';
 import 'home_page.dart';
 
@@ -23,8 +27,15 @@ class _GameModePageState extends State<GameModePage> {
   GameMode? selectedGameMode;
   String? selectedDescription;
   bool isAvailableCards = false;
+  List<String> uniqueCategories = [];
+  List<String> packIds = [];
+  Map<String, String> mapPackNameId = {};
+  String selectedCategory = 'All';
+  String selectedPackId = 'All';
 
   final UserService _userService = UserService();
+  final CardService _cardService = CardService();
+  final PackService _packService = PackService();
 
   @override
   void initState() {
@@ -35,6 +46,23 @@ class _GameModePageState extends State<GameModePage> {
   Future<void> _loadData() async {
     await _userService.updateAvailableCardCount(userId);
     bool fetchedBool = await _userService.isAvailableCards(userId);
+
+    List<Map<String, dynamic>> cards = await _cardService.getUserCards(userId);
+    for (var card in cards) {
+      // Extract unique categories
+      if (card['categorie'] != null) {
+        for (var categorie in card['categorie']) {
+          if (!uniqueCategories.contains(categorie)) {
+            uniqueCategories.add(categorie);
+          }
+        }
+      }
+    }
+    packIds = await _userService.getPackIdsByType(userId, "card");
+    for(var packId in packIds) {
+      mapPackNameId[packId] = await _packService.getPackName(packId);
+    }
+
     setState(() {
       isAvailableCards = fetchedBool;
     }); // Trigger a rebuild after data is loaded
@@ -59,6 +87,14 @@ class _GameModePageState extends State<GameModePage> {
                 (Route<dynamic> route) => false,
           );
         },
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              _showSettingsDialog(context);
+            },
+          )
+        ],
       ),
       backgroundColor: AppColors.backgroundGreen,
       body: Center(
@@ -163,6 +199,72 @@ class _GameModePageState extends State<GameModePage> {
         );
       },
       icon: Icons.play_arrow,
+    );
+  }
+
+  void _showSettingsDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Settings"),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('Select Category:'),
+                  DropdownButton<String>(
+                    value: selectedCategory,
+                    onChanged: (String? newValue) {
+                      selectedCategory = newValue ?? 'All';
+                    },
+                    items: ['All', ...uniqueCategories].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value == 'All' ? AppLocalizations.of(context)!.all : value,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  Text('Select Pack:'),
+                  DropdownButton<String>(
+                    value: selectedPackId,
+                    onChanged: (String? newValue) {
+                      selectedPackId = newValue ?? 'All';
+                    },
+                    items: ['All', ...packIds].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value == 'All' ? AppLocalizations.of(context)!.all : mapPackNameId[value]!,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text('Save'),
+                onPressed: () {
+                  // Logic to save the selected filters
+                  // Update state or preferences as needed
+                  final sharedPreferencesService = Provider.of<SharedPreferencesService>(context, listen: false);
+                  sharedPreferencesService.setSelectedCategorie(selectedCategory);
+                  sharedPreferencesService.setSelectedPackId(selectedPackId);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        }
     );
   }
 }

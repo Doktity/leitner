@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:leitner/pages/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:leitner/pages/login_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:leitner/services/shared_preferences_service.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -18,17 +19,21 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? selectedLanguage = prefs.getString('selectedLanguage');
+  final sharedPreferencesService = SharedPreferencesService();
+  await sharedPreferencesService.init();
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-  runApp(MyApp(selectedLanguage: selectedLanguage));
+  runApp(
+      Provider<SharedPreferencesService>(
+        create: (_) => sharedPreferencesService,
+        child: MyApp(),
+      )
+  );
 }
 
 class MyApp extends StatefulWidget {
-  final String? selectedLanguage;
 
-  const MyApp({super.key, this.selectedLanguage});
+  const MyApp({super.key});
 
   static void setLocale(BuildContext context, Locale newLocale) {
     _MyAppState state = context.findAncestorStateOfType<_MyAppState>()!;
@@ -48,7 +53,13 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _selectedLanguage = widget.selectedLanguage;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final sharedPreferencesService = Provider.of<SharedPreferencesService>(context);
+    _selectedLanguage = sharedPreferencesService.getSelectedLanguage();
   }
 
   void setLocale(Locale newLocale) {

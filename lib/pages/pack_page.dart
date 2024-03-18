@@ -106,6 +106,7 @@ class _PackPageState extends State<PackPage> {
                                         );
                                       },
                                       colors: AppColors.gradientButtonSec,
+                                      padding: 5,
                                       widthFactor: 0.2,
                                       heightFactor: 0.07,
                                       maxWidth: 100,

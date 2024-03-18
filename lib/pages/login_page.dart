@@ -43,6 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                 }
               },
               maxWidth: 400,
+              heightFactor: 0.11,
               child: GradientButton.buildButtonContent(Icons.login, AppLocalizations.of(context)!.signin_google),
             )
           ],

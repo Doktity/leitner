@@ -13,6 +13,7 @@ import 'login_page.dart';
 import 'pack_page.dart';
 
 class HomePage extends StatelessWidget {
+
   HomePage({
     super.key,
   });
@@ -79,7 +80,7 @@ class HomePage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => SettingsPage(Localizations.localeOf(context).languageCode)),
+                    MaterialPageRoute(builder: (_) => SettingsPage()),
                   );
                 },
                 child: GradientButton.buildButtonContent(Icons.settings, AppLocalizations.of(context)!.settings),

@@ -70,7 +70,8 @@ class UserRepository {
   }
 
   Future<bool> isAvailableCards(String userId) async {
-    return await getNbAvailableCards(userId) > 0;
+    int count = await getNbAvailableCards(userId);
+    return count > 0;
   }
 
   Future<void> updateUsername(String userId, String username) async {

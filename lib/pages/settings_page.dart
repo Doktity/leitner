@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:leitner/services/shared_preferences_service.dart';
 import 'package:leitner/services/user_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 import '../app_colors.dart';
 import '../main.dart';
@@ -10,9 +11,8 @@ import '../utils/gradient_app_bar.dart';
 import 'home_page.dart';
 
 class SettingsPage extends StatefulWidget {
-  final String selectedLanguage;
 
-  SettingsPage(this.selectedLanguage);
+  SettingsPage();
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -36,8 +36,14 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    _selectedLanguage = widget.selectedLanguage;
     _loadData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final sharedPreferencesService = Provider.of<SharedPreferencesService>(context);
+    _selectedLanguage = sharedPreferencesService.getSelectedLanguage() ?? "fr";
   }
 
   Future<void> _loadData() async {
@@ -150,8 +156,8 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _changeLanguage(String language) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     Locale _newLocale = Locale('fr', 'FR');
+    final sharedPreferencesService = Provider.of<SharedPreferencesService>(context, listen: false);
 
     if (language == 'en') {
       _newLocale = Locale('en', 'US');
@@ -160,7 +166,7 @@ class _SettingsPageState extends State<SettingsPage> {
     }
 
     // Save the selected language
-    await prefs.setString('selectedLanguage', language);
+    sharedPreferencesService.setSelectedLanguage(language);
 
     // Change the language
     MyApp.setLocale(context, _newLocale);
